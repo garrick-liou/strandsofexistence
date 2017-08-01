@@ -19,11 +19,11 @@ var MainMenu = function(game) {};
 MainMenu.prototype = {
    create: function() {        
       console.log('MainMenu create');
-      game.add.sprite(220, 200, 'atlas', 'logo');
+      game.add.sprite(220, 200, 'atlas', 'logo'); //placeholder logo and maybe button text, who knows
       game.add.text(60, 440, 'Press ENTER to Start!', { fontSize: '60px', fill: '#ffffff' });
    },
    update: function() {
-   		if(game.input.keyboard.justPressed(Phaser.Keyboard.ENTER)){
+   		if(game.input.keyboard.justPressed(Phaser.Keyboard.ENTER)){ //press enter to start
    			game.state.start('GameLoop');
    		}
    }
@@ -34,6 +34,7 @@ GameLoop.prototype = {
       console.log('GameLoop create'); 
       background = game.add.sprite(0, 0, 'atlas', 'background');
       background.scale.setTo(0.78125);
+      //scale background, add tiles
       square1_1 = game.add.sprite(5, 305, 'atlas', 'TileColumn1');
       square1_2 = game.add.sprite(5, 400, 'atlas', 'TileColumn1');
       square1_3 = game.add.sprite(5, 495, 'atlas', 'TileColumn1');
@@ -54,12 +55,14 @@ GameLoop.prototype = {
       square6_3 = game.add.sprite(670, 495, 'atlas', 'TileColumn6');
       player1 = game.add.sprite(53, 384, 'atlas', 'Player1_01');
       player2 = game.add.sprite(718, 384, 'atlas', 'Player2_01');
+      //add characters and add character animations
       player1.animations.add('p1_float', Phaser.Animation.generateFrameNames('Player1_', 1, 12, '', 2), 20, true);
       player1.animations.play('p1_float');
       player2.animations.add('p2_float', Phaser.Animation.generateFrameNames('Player2_', 1, 12, '', 2), 20, true);
       player2.animations.play('p2_float');
    },
    update: function(){      
+   	//if each player is not at their edge when a directional button is pressed, move them to the next square
       if(game.input.keyboard.justPressed(Phaser.Keyboard.W)){
       	if (player1.y > 289) {
       		player1.y -= 95;
@@ -106,6 +109,7 @@ GameLoop.prototype = {
 var GameOver = function(game) {};
 GameOver.prototype = {
    create: function(){      
+   	//unused for now
    }
 } 
 
