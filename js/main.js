@@ -20,7 +20,7 @@ MainMenu.prototype = {
    create: function() {        
       console.log('MainMenu create');
       game.add.sprite(220, 200, 'atlas', 'logo');
-      game.add.text(20, 300, 'Press ENTER to Start!', { fontSize: '60px', fill: '#ffffff' });
+      game.add.text(60, 440, 'Press ENTER to Start!', { fontSize: '60px', fill: '#ffffff' });
    },
    update: function() {
    		if(game.input.keyboard.justPressed(Phaser.Keyboard.ENTER)){
@@ -33,28 +33,73 @@ GameLoop.prototype = {
    create: function (){
       console.log('GameLoop create'); 
       background = game.add.sprite(0, 0, 'atlas', 'background');
-      background.scale(0.78125);
-      square1_1 = game.add.sprite(5, 250, 'atlas', 'TileColumn1');
-      square1_2 = game.add.sprite(5, 365, 'atlas', 'TileColumn1');
-      square1_3 = game.add.sprite(5, 480, 'atlas', 'TileColumn1');
-      square2_1 = game.add.sprite(140, 250, 'atlas', 'TileColumn1');
-      square2_2 = game.add.sprite(140, 365, 'atlas', 'TileColumn1');
-      square2_3 = game.add.sprite(140, 480, 'atlas', 'TileColumn1');
-      square3_1 = game.add.sprite(275, 250, 'atlas', 'TileColumn1');
-      square3_2 = game.add.sprite(275, 365, 'atlas', 'TileColumn1');
-      square3_3 = game.add.sprite(275, 480, 'atlas', 'TileColumn1');
-      square4_1 = game.add.sprite(330, 250, 'atlas', 'TileColumn1');
-      square4_2 = game.add.sprite(330, 365, 'atlas', 'TileColumn1');
-      square4_3 = game.add.sprite(330, 480, 'atlas', 'TileColumn1');
-      square5_1 = game.add.sprite(465, 250, 'atlas', 'TileColumn1');
-      square5_2 = game.add.sprite(465, 365, 'atlas', 'TileColumn1');
-      square5_3 = game.add.sprite(465, 480, 'atlas', 'TileColumn1');
-      square6_1 = game.add.sprite(600, 250, 'atlas', 'TileColumn1');
-      square6_2 = game.add.sprite(600, 365, 'atlas', 'TileColumn1');
-      square6_3 = game.add.sprite(600, 480, 'atlas', 'TileColumn1');
+      background.scale.setTo(0.78125);
+      square1_1 = game.add.sprite(5, 305, 'atlas', 'TileColumn1');
+      square1_2 = game.add.sprite(5, 400, 'atlas', 'TileColumn1');
+      square1_3 = game.add.sprite(5, 495, 'atlas', 'TileColumn1');
+      square2_1 = game.add.sprite(135, 305, 'atlas', 'TileColumn2');
+      square2_2 = game.add.sprite(135, 400, 'atlas', 'TileColumn2');
+      square2_3 = game.add.sprite(135, 495, 'atlas', 'TileColumn2');
+      square3_1 = game.add.sprite(265, 305, 'atlas', 'TileColumn3');
+      square3_2 = game.add.sprite(265, 400, 'atlas', 'TileColumn3');
+      square3_3 = game.add.sprite(265, 495, 'atlas', 'TileColumn3');
+      square4_1 = game.add.sprite(410, 305, 'atlas', 'TileColumn4');
+      square4_2 = game.add.sprite(410, 400, 'atlas', 'TileColumn4');
+      square4_3 = game.add.sprite(410, 495, 'atlas', 'TileColumn4');
+      square5_1 = game.add.sprite(540, 305, 'atlas', 'TileColumn5');
+      square5_2 = game.add.sprite(540, 400, 'atlas', 'TileColumn5');
+      square5_3 = game.add.sprite(540, 495, 'atlas', 'TileColumn5');
+      square6_1 = game.add.sprite(670, 305, 'atlas', 'TileColumn6');
+      square6_2 = game.add.sprite(670, 400, 'atlas', 'TileColumn6');
+      square6_3 = game.add.sprite(670, 495, 'atlas', 'TileColumn6');
+      player1 = game.add.sprite(53, 384, 'atlas', 'Player1_01');
+      player2 = game.add.sprite(718, 384, 'atlas', 'Player2_01');
+      player1.animations.add('p1_float', Phaser.Animation.generateFrameNames('Player1_', 1, 12, '', 2), 20, true);
+      player1.animations.play('p1_float');
+      player2.animations.add('p2_float', Phaser.Animation.generateFrameNames('Player2_', 1, 12, '', 2), 20, true);
+      player2.animations.play('p2_float');
    },
    update: function(){      
-      
+      if(game.input.keyboard.justPressed(Phaser.Keyboard.W)){
+      	if (player1.y > 289) {
+      		player1.y -= 95;
+      	}
+      }
+      if(game.input.keyboard.justPressed(Phaser.Keyboard.S)){
+      	if (player1.y < 479) {
+      		player1.y += 95;
+      	}
+      }
+      if(game.input.keyboard.justPressed(Phaser.Keyboard.A)){
+      	if (player1.x > 53) {
+      		player1.x -= 130;
+      	}
+      }
+      if(game.input.keyboard.justPressed(Phaser.Keyboard.D)){
+      	if (player1.x < 313) {
+      		player1.x += 130;
+      	}
+      }
+      if(game.input.keyboard.justPressed(Phaser.Keyboard.UP)){
+      	if (player2.y > 289) {
+      		player2.y -= 95;
+      	}
+      }
+      if(game.input.keyboard.justPressed(Phaser.Keyboard.DOWN)){
+      	if (player2.y < 479) {
+      		player2.y += 95;
+      	}
+      }
+      if(game.input.keyboard.justPressed(Phaser.Keyboard.LEFT)){
+      	if (player2.x > 458) {
+      		player2.x -= 130;
+      	}
+      }
+      if(game.input.keyboard.justPressed(Phaser.Keyboard.RIGHT)){
+      	if (player2.x < 718) {
+      		player2.x += 130;
+      	}
+      }
    }
 }
 
@@ -64,7 +109,7 @@ GameOver.prototype = {
    }
 } 
 
-
+game.state.add('LoadScreen', LoadScreen);
 game.state.add('MainMenu', MainMenu); //load states
 game.state.add('GameLoop', GameLoop);
 game.state.add('GameOver', GameOver);
