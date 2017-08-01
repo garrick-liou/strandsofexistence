@@ -1,19 +1,9 @@
-var game = new Phaser.Game(800, 400, Phaser.AUTO);
-var score = 0;
-var scoring = 0;
-var diffCounter = 0;
-var difficulty;
-var scoreText;
+var game = new Phaser.Game(800, 600, Phaser.AUTO);
 var LoadScreen = function(game) {};
 LoadScreen.prototype = {
    preload: function() {
-      console.log('LoadScreen preload');
-      // assets lead to both audio and texture atlas
+      console.log('LoadScreen preload');      
       game.load.path = 'assets/';
-      game.load.audio('bgm', ['audio/bgm.mp3', 'audio/bgm.ogg']);
-      game.load.audio('boom', ['audio/boom.mp3', 'audio/boom.ogg']);
-      game.load.audio('click', ['audio/click.mp3', 'audio/click.ogg']);      
-      //load all the assets of the game
       game.load.atlas('atlas', 'img/atlas.png', 'img/atlas.json');
       // creates the cursors object that allows the program to read keyboard input
       cursors = game.input.keyboard.createCursorKeys();
@@ -28,113 +18,96 @@ LoadScreen.prototype = {
 var MainMenu = function(game) {};
 MainMenu.prototype = {
    create: function() {        
-      console.log('MainMenu create');   
-      bgm = game.add.audio('bgm');  
-      click = game.add.audio('click');
-      boom = game.add.audio('boom');
-      //play the music
-      bgm.loopFull(0.06);  
-      // this is a faded background for the title screen
-      background = game.add.tileSprite(0, -250, 1600, 1600, 'atlas', 'nebula');
-      background.scale.setTo(0.5, 0.5);
-      background.alpha = 0.2;
-      game.add.sprite(game.world.centerX - 350, 100, 'atlas', 'title');
-      startButton = game.add.button(game.world.centerX - 60, 300, 'atlas', startClick, this, 'StartNorm', 'StartNorm', 'StartPress');
+      console.log('MainMenu create');
+      game.add.sprite(220, 200, 'atlas', 'logo');
+      game.add.text(60, 440, 'Press ENTER to Start!', { fontSize: '60px', fill: '#ffffff' });
    },
    update: function() {
-
+   		if(game.input.keyboard.justPressed(Phaser.Keyboard.ENTER)){
+   			game.state.start('GameLoop');
+   		}
    }
 }
 var GameLoop = function(game) {};
 GameLoop.prototype = {
    create: function (){
-      console.log('GameLoop create'); //brighten the main background
-      background = game.add.tileSprite(0, -250, 1600, 1600, 'atlas', 'nebula');
-      background.scale.setTo(0.5, 0.5);
-      background.alpha = 0.6;
-      // adds two star backgrounds that give appearance of movement
-      game.bg1 = game.add.tileSprite(0, 0, 800, 600, 'atlas', 'stars01');
-      game.bg2 = game.add.tileSprite(0, 0, 1600, 1200, 'atlas', 'stars02');
-      player = game.add.sprite(10, this.world.centerY, 'atlas', 'PlayerFly1');
-      player.scale.setTo(0.8, 0.8);
-      game.physics.arcade.enable(player); //adds physics
-      player.body.collideWorldBounds = true;
-      player.animations.add('fly', Phaser.Animation.generateFrameNames('PlayerFly', 1, 4, '', 1), 30, true);   
-      player.animations.play('fly');
-      asteroids = game.add.group();         
-      asteroids.enableBody = true;
-      scoreText = game.add.text(8, 8, 'score: 0', { fontSize: '16px', fill: '#ffffff' }); // display score, time based      
+      console.log('GameLoop create'); 
+      background = game.add.sprite(0, 0, 'atlas', 'background');
+      background.scale.setTo(0.78125);
+      square1_1 = game.add.sprite(5, 305, 'atlas', 'TileColumn1');
+      square1_2 = game.add.sprite(5, 400, 'atlas', 'TileColumn1');
+      square1_3 = game.add.sprite(5, 495, 'atlas', 'TileColumn1');
+      square2_1 = game.add.sprite(135, 305, 'atlas', 'TileColumn2');
+      square2_2 = game.add.sprite(135, 400, 'atlas', 'TileColumn2');
+      square2_3 = game.add.sprite(135, 495, 'atlas', 'TileColumn2');
+      square3_1 = game.add.sprite(265, 305, 'atlas', 'TileColumn3');
+      square3_2 = game.add.sprite(265, 400, 'atlas', 'TileColumn3');
+      square3_3 = game.add.sprite(265, 495, 'atlas', 'TileColumn3');
+      square4_1 = game.add.sprite(410, 305, 'atlas', 'TileColumn4');
+      square4_2 = game.add.sprite(410, 400, 'atlas', 'TileColumn4');
+      square4_3 = game.add.sprite(410, 495, 'atlas', 'TileColumn4');
+      square5_1 = game.add.sprite(540, 305, 'atlas', 'TileColumn5');
+      square5_2 = game.add.sprite(540, 400, 'atlas', 'TileColumn5');
+      square5_3 = game.add.sprite(540, 495, 'atlas', 'TileColumn5');
+      square6_1 = game.add.sprite(670, 305, 'atlas', 'TileColumn6');
+      square6_2 = game.add.sprite(670, 400, 'atlas', 'TileColumn6');
+      square6_3 = game.add.sprite(670, 495, 'atlas', 'TileColumn6');
+      player1 = game.add.sprite(53, 384, 'atlas', 'Player1_01');
+      player2 = game.add.sprite(718, 384, 'atlas', 'Player2_01');
+      player1.animations.add('p1_float', Phaser.Animation.generateFrameNames('Player1_', 1, 12, '', 2), 20, true);
+      player1.animations.play('p1_float');
+      player2.animations.add('p2_float', Phaser.Animation.generateFrameNames('Player2_', 1, 12, '', 2), 20, true);
+      player2.animations.play('p2_float');
    },
    update: function(){      
-      background.tilePosition.x -= .1;
-      game.bg1.tilePosition.x -= 2;
-      game.bg2.tilePosition.x -= 5; //moves backgrounds
-      player.body.velocity.y = 0;
-      if(cursors.up.isDown){
-         player.body.velocity.y = -500; 
-      } else if(cursors.down.isDown){
-         player.body.velocity.y = 500;
-      } //movement of player
-      scoring += 1;
-      diffCounter += 1;
-      if (scoring == 50) {
-         score += 1;
-         scoreText.text = 'score: ' + score; //scoring, 1 point per 50 frames
-         scoring = 0;
+      if(game.input.keyboard.justPressed(Phaser.Keyboard.W)){
+      	if (player1.y > 289) {
+      		player1.y -= 95;
+      	}
       }
-      //these loops are for the increasing difficulty of the game, as the game continues, asteroids spawn faster
-      difficulty = (60 / Math.pow((score/10) + 1, 0.5));
-      if (diffCounter > difficulty) {
-         spawnAsteroid();
-         diffCounter = 0;        
+      if(game.input.keyboard.justPressed(Phaser.Keyboard.S)){
+      	if (player1.y < 479) {
+      		player1.y += 95;
+      	}
       }
-      // and move faster
-      asteroids.forEach(function(asteroid){
-         asteroid.x -= 200/difficulty;
-         if (asteroid.x < -70){
-            asteroid.kill(); // if the asteroid moves beyond the left border, destroy it
-         }
-      });
-     game.physics.arcade.overlap(player, asteroids, hitAsteroid, null, this);
+      if(game.input.keyboard.justPressed(Phaser.Keyboard.A)){
+      	if (player1.x > 53) {
+      		player1.x -= 130;
+      	}
+      }
+      if(game.input.keyboard.justPressed(Phaser.Keyboard.D)){
+      	if (player1.x < 313) {
+      		player1.x += 130;
+      	}
+      }
+      if(game.input.keyboard.justPressed(Phaser.Keyboard.UP)){
+      	if (player2.y > 289) {
+      		player2.y -= 95;
+      	}
+      }
+      if(game.input.keyboard.justPressed(Phaser.Keyboard.DOWN)){
+      	if (player2.y < 479) {
+      		player2.y += 95;
+      	}
+      }
+      if(game.input.keyboard.justPressed(Phaser.Keyboard.LEFT)){
+      	if (player2.x > 458) {
+      		player2.x -= 130;
+      	}
+      }
+      if(game.input.keyboard.justPressed(Phaser.Keyboard.RIGHT)){
+      	if (player2.x < 718) {
+      		player2.x += 130;
+      	}
+      }
    }
 }
 
 var GameOver = function(game) {};
 GameOver.prototype = {
-   create: function(){
-      game.alpha = 0.6; //dim the screen, and add a button that starts again
-      newButton = game.add.button(game.world.centerX - 60, 250, 'atlas', startClick, this, 'StartNorm', 'StartNorm', 'StartPress');
-      gameOverText = game.add.text(65, 100, 'Game Over', { fontSize: '120px', fill: '#ffffff' });
+   create: function(){      
    }
-}
-
-function startClick() {     //on a button click, reset all relevant variables and start the game again
-   click.play('', 0, 0.3);
-   score = 0;
-   scoring = 0;
-   diffCounter = 0; 
-   game.state.start('GameLoop');
-}
-
-function spawnAsteroid() {
-   if (score % 4 == 0) { // randomize look of asteroid, position of asteroid, and spin. 
-      var asteroid = game.add.sprite(800, Math.random() * 540, 'atlas', 'asteroid1');
-   } else if (score % 4 == 1) {
-      var asteroid = game.add.sprite(800, Math.random() * 540, 'atlas', 'asteroid2');
-   } else if (score % 4 == 2) {
-      var asteroid = game.add.sprite(800, Math.random() * 540, 'atlas', 'asteroid3');
-   } else {
-      var asteroid = game.add.sprite(800, Math.random() * 540, 'atlas', 'asteroid4');
-   }
-   asteroids.add(asteroid);
-   asteroid.anchor.setTo(0.5);
-   asteroid.body.angularVelocity = Math.random() * 60;
-}
-
-function hitAsteroid(){ //if you hit an asteroid, go to the game over state
-   boom.play('', 1, 0.3);
-   game.state.start('GameOver');
-}
+} 
 
 game.state.add('LoadScreen', LoadScreen);
 game.state.add('MainMenu', MainMenu); //load states
