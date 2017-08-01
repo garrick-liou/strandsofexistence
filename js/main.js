@@ -56,6 +56,7 @@ GameLoop.prototype = {
       player1 = game.add.sprite(53, 384, 'atlas', 'Player1_01');
       player2 = game.add.sprite(718, 384, 'atlas', 'Player2_01');
       //add characters and add character animations
+      //the floating characters are at the center of their squares
       player1.animations.add('p1_float', Phaser.Animation.generateFrameNames('Player1_', 1, 12, '', 2), 20, true);
       player1.animations.play('p1_float');
       player2.animations.add('p2_float', Phaser.Animation.generateFrameNames('Player2_', 1, 12, '', 2), 20, true);
