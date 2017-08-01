@@ -19,7 +19,7 @@ var MainMenu = function(game) {};
 MainMenu.prototype = {
    create: function() {        
       console.log('MainMenu create');
-      game.add.sprite(220, 200, 'atlas', 'logo'); //placeholder logo and maybe button text, who knows
+      game.add.sprite(230, 200, 'atlas', 'logo'); //placeholder logo and maybe button text, who knows
       game.add.text(60, 440, 'Press ENTER to Start!', { fontSize: '60px', fill: '#ffffff' });
    },
    update: function() {
