@@ -54,7 +54,7 @@ GameLoop.prototype = {
       square6_2 = game.add.sprite(670, 400, 'atlas', 'TileColumn6');
       square6_3 = game.add.sprite(670, 495, 'atlas', 'TileColumn6');
       player1 = new Player(game, 'atlas', 'Player1_01', 1);
-      
+
       player2 = new Player(game, 'atlas', 'Player2_01', 2);
       game.add.existing(player1);
       game.add.existing(player2);
@@ -70,7 +70,39 @@ GameLoop.prototype = {
         
    }
 }
-
+var ActionPhase = function(game) {};
+ActionPhase.prototype = {
+   create: function(){
+      if (player1.x == 53){         
+         player1.startX = 1;
+      } else if (player1.x = 183){
+         player1.startX = 2;
+      } else {
+         player1.startX = 3;
+      }
+      if (player1.y == 289) {
+         player1.startY = 1;
+      } else if (player1.y == 393) {
+         player1.startY = 2;
+      } else {
+         player1.startY = 3;
+      }
+      if (player2.x == 53){         
+         player2.startX = 1;
+      } else if (player2.x = 183){
+         player2.startX = 2;
+      } else {
+         player2.startX = 3;
+      }
+      if (player2.y == 458) {
+         player2.startY = 1;
+      } else if (player2.y == 588) {
+         player2.startY = 2;
+      } else {
+         player2.startY = 3;
+      }
+   },
+}
 var GameOver = function(game) {};
 GameOver.prototype = {
    create: function(){      
