@@ -6,7 +6,7 @@ function Player(game, key, frame, number){
 		Phaser.Sprite.call(this, game, 718, 384, key, frame);
 		console.log('player2 make');
 	}
-	
+	this.number = number;
 	game.physics.enable(this);
 
 }
@@ -15,7 +15,7 @@ Player.prototype = Object.create(Phaser.Sprite.prototype);
 Player.prototype.constructor = Player;
 
 Player.prototype.update = function() { //set the movement to the right, then when R is pressed flip sprite and move left
-	if(number == 1) {
+	if(this.number == 1) {
 		if(game.input.keyboard.justPressed(Phaser.Keyboard.W)){
       	if (player1.y > 289) {
       		player1.y -= 95;
@@ -36,7 +36,7 @@ Player.prototype.update = function() { //set the movement to the right, then whe
       		player1.x += 130;
       	}
       }
-    } else if (number == 2) {
+    } else if (this.number == 2) {
     	if(game.input.keyboard.justPressed(Phaser.Keyboard.UP)){
       	if (player2.y > 289) {
       		player2.y -= 95;
