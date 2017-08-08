@@ -53,8 +53,11 @@ GameLoop.prototype = {
       square6_1 = game.add.sprite(670, 305, 'atlas', 'TileColumn6');
       square6_2 = game.add.sprite(670, 400, 'atlas', 'TileColumn6');
       square6_3 = game.add.sprite(670, 495, 'atlas', 'TileColumn6');
-      player1 = game.add.sprite(53, 384, 'atlas', 'Player1_01');
-      player2 = game.add.sprite(718, 384, 'atlas', 'Player2_01');
+      player1 = new Player(game, 'atlas', 'Player1_01', 1);
+
+      player2 = new Player(game, 'atlas', 'Player2_01', 2);
+      game.add.existing(player1);
+      game.add.existing(player2);
       //add characters and add character animations
       //the floating characters are at the center of their squares
       player1.animations.add('p1_float', Phaser.Animation.generateFrameNames('Player1_', 1, 12, '', 2), 20, true);
@@ -64,49 +67,8 @@ GameLoop.prototype = {
    },
    update: function(){      
    	//if each player is not at their edge when a directional button is pressed, move them to the next square
-      if(game.input.keyboard.justPressed(Phaser.Keyboard.W)){
-      	if (player1.y > 289) {
-      		player1.y -= 95;
-      	}
-      }
-      if(game.input.keyboard.justPressed(Phaser.Keyboard.S)){
-      	if (player1.y < 479) {
-      		player1.y += 95;
-      	}
-      }
-      if(game.input.keyboard.justPressed(Phaser.Keyboard.A)){
-      	if (player1.x > 53) {
-      		player1.x -= 130;
-      	}
-      }
-      if(game.input.keyboard.justPressed(Phaser.Keyboard.D)){
-      	if (player1.x < 313) {
-      		player1.x += 130;
-      	}
-      }
-      if(game.input.keyboard.justPressed(Phaser.Keyboard.UP)){
-      	if (player2.y > 289) {
-      		player2.y -= 95;
-      	}
-      }
-      if(game.input.keyboard.justPressed(Phaser.Keyboard.DOWN)){
-      	if (player2.y < 479) {
-      		player2.y += 95;
-      	}
-      }
-      if(game.input.keyboard.justPressed(Phaser.Keyboard.LEFT)){
-      	if (player2.x > 458) {
-      		player2.x -= 130;
-      	}
-      }
-      if(game.input.keyboard.justPressed(Phaser.Keyboard.RIGHT)){
-      	if (player2.x < 718) {
-      		player2.x += 130;
-      	}
-      }
    }
 }
-
 var GameOver = function(game) {};
 GameOver.prototype = {
    create: function(){      
