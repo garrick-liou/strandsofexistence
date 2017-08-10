@@ -22,6 +22,7 @@ function Player(game, number){
       
       game.physics.enable(this);
       game.add.existing(this);
+      this.health = 5;
       
       //add characters and add character animations
       //the floating characters are at the center of their squares
