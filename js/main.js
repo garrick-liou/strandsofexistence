@@ -1,7 +1,7 @@
 var game = new Phaser.Game(800, 600, Phaser.AUTO);
 var turnCounter = 0;
 var phaseCounter = 0;
-var attackCounter = 0;
+var lastAttack = null;
 var squares, buttons;
 var p1attacks, p2attacks;
 var player1, player2, background;
@@ -184,37 +184,32 @@ function bgclick(){
 }
 
 function button1Click(x, y) { //when one of the buttons created by the previous function is created
-	//console.log('im here');
 	player1.x = -77 + 130*x; //move the player to a certain spot depending on where the button was
 	player1.y = 194 + 95*y;
 	player1.xCoord = x;
 	player1.yCoord = y;
 	
 	buttonGroup.forEachAlive(function (c) { c.kill(); });
-	//player2.inputEnabled = true;
 
-	//turnCounter = 1;
 	phaseCounter = 2;
 }
 function button2Click(x, y) { // same with player 2
-	//console.log('im here 2');
 	player2.x = -62 + 130*x;
 	player2.y = 194 + 95*y;
 	player2.yCoord = y;
 	player2.xCoord = x;
 
 	buttonGroup.forEachAlive(function (c) { c.kill(); });
-	//player1.inputEnabled = true;
 	phaseCounter = 2;
 }
 
-function attP1A(x, y) {
+function attP1A(x, y) { // 1 attacks the row that the player is on, on the enemy player's side
 	for(var i = 0; i < 3; i++){
-		if(y == i+1){
+		if(y == i + 1){
 			for(j = 3; j < 6; j++){
 				var d = damageGroup.create(squares[i][j].x, squares[i][j].y, 'atlas', 'DamageTile');
-				d.xCoord = j;
-				d.yCoord = i;
+				d.xCoord = j + 1;
+				d.yCoord = i + 1;
 			}
 		}
 	}
@@ -222,22 +217,22 @@ function attP1A(x, y) {
 function attP2A(x, y) {
 	for(var i = 0; i < 3; i++){
 		if(i + 1 == y){
-			for(j = 1; j < 3; j++){
+			for(j = 0; j < 3; j++){
 				var d = damageGroup.create(squares[i][j].x, squares[i][j].y, 'atlas', 'DamageTile');
-				d.xCoord = j;
-				d.yCoord = i;
+				d.xCoord = j + 1;
+				d.yCoord = i + 1;
 			}
 		}
 	}
 }
 
-function attP1B(x, y) { // 2 attacks the row 3 spaces away, and highlights the tiles to be hit
+function attP1B(x, y) { // 2 attacks the column 3 spaces away, and highlights the tiles to be hit
 	for(var j = 3; j < 6; j++){
 		if(j - 2 == x){
 			for(var i = 0; i < 3; i++){
 				var d = damageGroup.create(squares[i][j].x, squares[i][j].y, 'atlas', 'DamageTile');
-				d.xCoord = j;
-				d.yCoord = i;
+				d.xCoord = j + 1;
+				d.yCoord = i + 1;
 			}
 		}
 	}
@@ -248,83 +243,73 @@ function attP2B(x, y) {
 		if(j + 4 == x){
 			for(var i = 0; i < 3; i++){
 				var d = damageGroup.create(squares[i][j].x, squares[i][j].y, 'atlas', 'DamageTile');
-				d.xCoord = j;
-				d.yCoord = i;
+				d.xCoord = j + 1;
+				d.yCoord = i + 1;
 			}
 		}
 	}
 }
 
 function attP1C(x, y) { // attack 3 attacks the square directly across from you, 3 tiles away
-	var d = damageGroup.create(130*x + 280, 95*y + 210, 'atlas', 'DamageTile');
+	var d = damageGroup.create(squares[y-1][x+2].x, squares[y-1][x+2].y, 'atlas', 'DamageTile');
 	d.xCoord = x + 3;
 	d.yCoord = y;
 }
 
 function attP2C(x, y) {	
-	var d = damageGroup.create(130*x - 515, 95*y + 210, 'atlas', 'DamageTile');
+	var d = damageGroup.create(squares[y-1][x-4].x, squares[y-1][x-4].y, 'atlas', 'DamageTile');
 	d.xCoord = x - 3;
 	d.yCoord = y;
 }
 
-p1attacks = [attP1A, attP1B, attP1C];
-p2attacks = [attP2A, attP2B, attP2C];
+p1attacks = [
+	{fn:attP1A, dmg:1},
+	{fn:attP1B, dmg:1},
+	{fn:attP1C, dmg:2}];
+p2attacks = [
+	{fn:attP2A, dmg:1},
+	{fn:attP2B, dmg:1},
+	{fn:attP2C, dmg:2}];
 
 function doAttack(number){
 	phaseCounter = 3;
-	attackCounter = number;
 
 	for(var i = damageGroup.getFirstAlive(); i != null; i = damageGroup.getFirstAlive()) i.destroy(); //delete all damage tile sprites
 
 	if (turnCounter == 0) {
-		p1attacks[number-1](player1.xCoord, player1.yCoord);
+		lastAttack = p1attacks[number - 1];
+		lastAttack.fn(player1.xCoord, player1.yCoord);
 	} else if (turnCounter == 1) {
-		p2attacks[number-1](player2.xCoord, player2.yCoord);
+		lastAttack = p2attacks[number - 1];
+		lastAttack.fn(player2.xCoord, player2.yCoord);
 	}
 }
 
-function confirmPressed() { //when enter is pressed, check to see which attack button was pressed last, and check to see if the attack hits
-	if (attackCounter == 1) { //an attempt was made to make this use sprite overlap checking, but it didn't work well with the irregular player sprite
-		if (turnCounter == 0) { //so it simply checks the squares as expected
-			if (player1.yCoord == player2.yCoord) {
-				player2.health -= 1;
-			}
-		} else if (turnCounter == 1) {
-			if (player1.yCoord == player2.yCoord) {
-				player1.health -= 1;
-			}
+function confirmPressed() { //when enter is pressed, check to see which attack button was pressed last, check to see if the attack hits, and apply appropriate damage
+	var hit = false;
+	if(turnCounter == 0){
+		//check if the x/y coordinates set earlier match for any damage squares
+		damageGroup.forEachAlive(function(sqr){
+			if(player2.xCoord == sqr.xCoord && player2.yCoord == sqr.yCoord) hit = true;
+		});
+
+		if(hit) player2.health -= lastAttack.dmg;
+
+		turnCounter = 1; //if it was player 1's turn, make it player 2's turn
+		player2.inputEnabled = true; //let player 2 click on their character
+	} else if(turnCounter == 1){
+		damageGroup.forEachAlive(function(sqr){
+			if(player1.xCoord == sqr.xCoord && player1.yCoord == sqr.yCoord) hit = true;
+		});
+		if(hit){
+			player1.health -= lastAttack.dmg;
 		}
-	} else if (attackCounter == 2) {
-		if (turnCounter == 0) {
-			if (player2.xCoord == player1.xCoord + 3) {
-				player2.health -= 1;
-			}
-		} else if (turnCounter == 1) {
-			if (player1.xCoord == player2.xCoord - 3) {
-				player1.health -= 1;
-			}
-		}
-	} else if (attackCounter == 3) { //attack 3 requires more precise positioning, and thus deals more damage
-		if (turnCounter == 0) {
-			if (player2.xCoord == player1.xCoord + 3 || player2.yCoord == player1.yCoord) {
-				player2.health -= 2;
-			}
-		} else if (turnCounter == 1) {
-			if (player1.xCoord == player2.xCoord - 3 || player1.yCoord == player1.yCoord) {
-				player1.health -= 2;
-			}
-		}
+		turnCounter = 0;
+		player1.inputEnabled = true;
 	}
 
 	for(var i = damageGroup.getFirstAlive(); i != null; i = damageGroup.getFirstAlive()) i.destroy(); //delete all damage tile sprites
 
-	if (turnCounter == 0) {
-		turnCounter = 1; //if it was player 1's turn, make it player 2's turn
-		player2.inputEnabled = true;
-	} else {
-		turnCounter = 0; //vice versa
-		player1.inputEnabled = true;
-	}
 	phaseCounter = 0; //and reset the phase to move phase
 }
 
