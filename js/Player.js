@@ -1,4 +1,5 @@
-function Player(game, key, frame, number){
+function Player(game, number){
+      //the information about the y position is consistent between players
       this.maxy = 479;
       this.miny = 289;
       this.yCoord = 2;
@@ -7,21 +8,20 @@ function Player(game, key, frame, number){
             this.maxx = 313;
             this.minx = 53;
             this.xCoord = 1;
-		Phaser.Sprite.call(this, game, 53, 384, key, frame);
+		Phaser.Sprite.call(this, game, 53, 384, 'atlas', 'Player1_01');
 	} else {
             number = 2;
             this.keys = {u:Phaser.Keyboard.UP, l:Phaser.Keyboard.LEFT, d:Phaser.Keyboard.DOWN, r:Phaser.Keyboard.RIGHT};
             this.maxx = 718;
             this.minx = 458;
             this.xCoord = 6;
-		Phaser.Sprite.call(this, game, 718, 384, key, frame);
+		Phaser.Sprite.call(this, game, 718, 384, 'atlas', 'Player2_01');
 	}
+      //store number still in case we find out that we need it stored for something
+      this.number = number;
       
-	this.number = number;
       game.physics.enable(this);
-
       game.add.existing(this);
-      this.inputEnabled = true;
       
       //add characters and add character animations
       //the floating characters are at the center of their squares
