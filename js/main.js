@@ -198,7 +198,7 @@ function p1click() { //when the player 1 sprite is clicked
 			buttonGroup.add(button1_2);
 			} else if (player1.yCoord == 3) {
 			button1_2 = game.add.button(square1_2.x, square1_2.y, 'atlas', function() {button1Click(1,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
-			button2_3 = game.add.button(square2_1.x, square2_1.y, 'atlas', function() {button1Click(2,3)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button2_3 = game.add.button(square2_3.x, square2_3.y, 'atlas', function() {button1Click(2,3)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
 			button1_3 = game.add.button(square1_3.x, square1_3.y, 'atlas', function() {button1Click(1,3)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
 			buttonGroup.add(button1_2); // adds the buttons to the relevant group, for easy deleting
 			buttonGroup.add(button2_3);
@@ -412,8 +412,8 @@ function attP2A(x, y) {
 		damageGroup.add(damage3_2);
 	} else if (y == 3) {
 		damage1_3 = game.add.sprite(square1_3.x, square1_3.y, 'atlas', 'DamageTile');
-		damage2_3 = game.add.sprite(square1_3.x, square1_3.y, 'atlas', 'DamageTile');
-		damage3_3 = game.add.sprite(square1_3.x, square1_3.y, 'atlas', 'DamageTile');
+		damage2_3 = game.add.sprite(square2_3.x, square2_3.y, 'atlas', 'DamageTile');
+		damage3_3 = game.add.sprite(square3_3.x, square3_3.y, 'atlas', 'DamageTile');
 		damageGroup.add(damage1_3);
 		damageGroup.add(damage2_3);
 		damageGroup.add(damage3_3);
