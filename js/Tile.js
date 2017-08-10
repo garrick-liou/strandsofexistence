@@ -11,8 +11,6 @@ function Button(game, x, y, xCoord, yCoord, group, func){
     game.add.existing(this);
     group.add(this);
     this.kill();
-    this.xCoord = xCoord;
-    this.yCoord = yCoord;
 }
 Button.prototype = Object.create(Phaser.Button.prototype);
 Button.prototype.constructor = Button;
