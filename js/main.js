@@ -81,7 +81,6 @@ GameOver.prototype = {
 
 function btnReset(xIndex, yIndex){
 	let btn = buttons[yIndex][xIndex];
-	console.log(btn);
 	//The "kill" function just stops phaser from paying attention to the object. It's still around.
 	//The "reset" function makes it show up and stuff again.
 	btn.reset(btn.x, btn.y);
