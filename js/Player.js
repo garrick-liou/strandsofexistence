@@ -6,7 +6,7 @@ function Player(game, key, frame, number){
 	}
 	this.number = number;
 	game.physics.enable(this);
-
+      this.health = 5;
 }
 
 Player.prototype = Object.create(Phaser.Sprite.prototype);
