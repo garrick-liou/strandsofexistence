@@ -1,54 +1,87 @@
-function Player(game, number){
-      //the information about the y position is consistent between players
-      this.maxy = 479;
-      this.miny = 289;
-      this.yCoord = 2;
-	if (number == 1){
-            this.keys = {u:Phaser.Keyboard.W, l:Phaser.Keyboard.A, d:Phaser.Keyboard.S, r:Phaser.Keyboard.D};
-            this.maxx = 313;
-            this.minx = 53;
-            this.xCoord = 1;
-		Phaser.Sprite.call(this, game, 53, 384, 'atlas', 'Player1_01');
-	} else {
-            number = 2;
-            this.keys = {u:Phaser.Keyboard.UP, l:Phaser.Keyboard.LEFT, d:Phaser.Keyboard.DOWN, r:Phaser.Keyboard.RIGHT};
-            this.maxx = 718;
-            this.minx = 458;
-            this.xCoord = 6;
-		Phaser.Sprite.call(this, game, 718, 384, 'atlas', 'Player2_01');
-	}
-      //store number still in case we find out that we need it stored for something
-      this.number = number;
-      
-      game.physics.enable(this);
-      game.add.existing(this);
+function Player(game, key, frame, number){
+	if (number == 1){		
+		Phaser.Sprite.call(this, game, 53, 384, key, frame);
+	} else if (number == 2){
+		Phaser.Sprite.call(this, game, 718, 384, key, frame);
+	} else if (number == 3) {
+            Phaser.Sprite.call(this, game, 53, 289, key, frame);
+      } else if (number == 4){
+            Phaser.Sprite.call(this, game, 718, 289, key, frame);
+      } else if (number == 5) {
+            Phaser.Sprite.call(this, game, 53, 479, key, frame);       
+      } else if (number == 6){
+            Phaser.Sprite.call(this, game, 718, 479, key, frame);
+      }
+	this.number = number;
+	game.physics.enable(this);
       this.health = 5;
-      
-      //add characters and add character animations
-      //the floating characters are at the center of their squares
-      this.animations.add('float', Phaser.Animation.generateFrameNames('Player'+number+'_', 1, 12, '', 2), 20, true);
-      this.animations.play('float');
-
 }
 
 Player.prototype = Object.create(Phaser.Sprite.prototype);
 Player.prototype.constructor = Player;
 
 Player.prototype.update = function() { //set the movement to the right, then when R is pressed flip sprite and move left
-      if(game.input.keyboard.justPressed(this.keys.u) && this.y > this.miny){
-            this.y -= 95;
-            this.yCoord -= 1;
+      if (this.x == 53) {
+            this.xCoord = 1;
+      } else if (this.x == 183) {
+            this.xCoord = 2;
+      } else if (this.x == 313) {
+            this.xCoord = 3;
+      } else if (this.x == 458) {
+            this.xCoord = 4;
+      } else if (this.x == 588) {
+            this.xCoord = 5;
+       } else if (this.x == 718) {
+       this.xCoord = 6;
+         }
+      if (this.y == 289) {
+            this.yCoord = 1;
+      } else if (this.y == 384) {
+            this.yCoord = 2;
+      } else if (this.y == 479) {
+            this.yCoord = 3;
       }
-      if(game.input.keyboard.justPressed(this.keys.d) && this.y < this.maxy){
-            this.y += 95;
-            this.yCoord += 1;
+	if(this.number == 1) {
+	     if(game.input.keyboard.justPressed(Phaser.Keyboard.W)){
+      	     if (this.y > 289) {
+      		    this.y -= 95;
+      	     }
+            }
+      if(game.input.keyboard.justPressed(Phaser.Keyboard.S)){
+      	if (this.y < 479) {
+      		this.y += 95;
+      	}
       }
-      if(game.input.keyboard.justPressed(this.keys.l) && this.x > this.minx){
-            this.x -= 130;
-            this.xCoord -= 1;
+      if(game.input.keyboard.justPressed(Phaser.Keyboard.A)){
+      	if (this.x > 53) {
+      		this.x -= 130;
+      	}
       }
-      if(game.input.keyboard.justPressed(this.keys.r) && this.x < this.maxx){
-            this.x += 130;
-            this.xCoord += 1;
+      if(game.input.keyboard.justPressed(Phaser.Keyboard.D)){
+      	if (this.x < 313) {
+      		this.x += 130;
+      	     }
+            }
+      } else if (this.number == 2) {
+    	       if(game.input.keyboard.justPressed(Phaser.Keyboard.UP)){
+      	     if (this.y > 289) {
+      		this.y -= 95;
+      	}
       }
+            if(game.input.keyboard.justPressed(Phaser.Keyboard.DOWN)){
+      	     if (this.y < 479) {
+      		this.y += 95;
+      	}
+      }
+            if(game.input.keyboard.justPressed(Phaser.Keyboard.LEFT)){
+      	     if (this.x > 458) {
+      		this.x -= 130;
+      	}
+      }
+            if(game.input.keyboard.justPressed(Phaser.Keyboard.RIGHT)){
+      	     if (this.x < 718) {
+      		this.x += 130;
+      	}
+      }
+    }
 }
