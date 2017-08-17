@@ -18,7 +18,7 @@ var button5_2;
 var button5_3;
 var button6_1;
 var button6_2;
-var button6_3Kappa;
+var button6_3;
 
 var LoadScreen = function(game) {};
 LoadScreen.prototype = {
@@ -290,6 +290,7 @@ function p2click() {
 			}
 		}
 	}
+   phaseCounter = 1;
 }
 
 function button1Click(x, y) {
