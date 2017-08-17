@@ -3,7 +3,15 @@ function Player(game, key, frame, number){
 		Phaser.Sprite.call(this, game, 53, 384, key, frame);
 	} else if (number == 2){
 		Phaser.Sprite.call(this, game, 718, 384, key, frame);
-	}
+	} else if (number == 3) {
+            Phaser.Sprite.call(this, game, 53, 289, key, frame);
+      } else if (number == 4){
+            Phaser.Sprite.call(this, game, 718, 289, key, frame);
+      } else if (number == 5) {
+            Phaser.Sprite.call(this, game, 53, 479, key, frame);       
+      } else if (number == 6){
+            Phaser.Sprite.call(this, game, 718, 479, key, frame);
+      }
 	this.number = number;
 	game.physics.enable(this);
       this.health = 5;

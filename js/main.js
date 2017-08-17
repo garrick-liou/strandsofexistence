@@ -2,6 +2,9 @@ var game = new Phaser.Game(800, 600, Phaser.AUTO);
 var turnCounter = 0;
 var phaseCounter = 0;
 var attackCounter = 0;
+var p1Player = 0;
+var p2Player = 0;
+var winner = 0;
 var button1_1;
 var button1_2;
 var button1_3;
@@ -19,7 +22,7 @@ var button5_2;
 var button5_3;
 var button6_1;
 var button6_2;
-var button6_3Kappa;
+var button6_3;
 
 var LoadScreen = function(game) {};
 LoadScreen.prototype = {
@@ -102,50 +105,127 @@ GameLoop.prototype = {
       buttonGroup = game.add.group();
       damageGroup = game.add.group();
       damageGroup.enableBody = true;
+      playerGroup = game.add.group();
       player1 = new Player(game, 'atlas', 'Player1_01', 1);
       player2 = new Player(game, 'atlas', 'Player2_01', 2);
+      player3 = new Player(game, 'atlas', 'Player1_01', 3);
+      player4 = new Player(game, 'atlas', 'Player2_01', 4);
+      player5 = new Player(game, 'atlas', 'Player1_01', 5);
+      player6 = new Player(game, 'atlas', 'Player2_01', 6);
+      playerGroup.add(player1);
+      playerGroup.add(player2);
+      playerGroup.add(player3);
+      playerGroup.add(player4);
+      playerGroup.add(player5);
+      playerGroup.add(player6);
       game.add.existing(player1);
       player1.inputEnabled = true;
       game.add.existing(player2);
       player2.inputEnabled = true;
+      game.add.existing(player1);
+      player3.inputEnabled = true;
+      game.add.existing(player2);
+      player4.inputEnabled = true;
+      game.add.existing(player1);
+      player5.inputEnabled = true;
+      game.add.existing(player2);
+      player6.inputEnabled = true;
       //add characters and add character animations
       //the floating characters are at the center of their squares
       player1.animations.add('p1_float', Phaser.Animation.generateFrameNames('Player1_', 1, 12, '', 2), 20, true);
       player1.animations.play('p1_float');
       player2.animations.add('p2_float', Phaser.Animation.generateFrameNames('Player2_', 1, 12, '', 2), 20, true);
       player2.animations.play('p2_float');
+      player3.animations.add('p1_float', Phaser.Animation.generateFrameNames('Player1_', 1, 12, '', 2), 20, true);
+      player3.animations.play('p1_float');
+      player4.animations.add('p2_float', Phaser.Animation.generateFrameNames('Player2_', 1, 12, '', 2), 20, true);
+      player4.animations.play('p2_float');
+      player5.animations.add('p1_float', Phaser.Animation.generateFrameNames('Player1_', 1, 12, '', 2), 20, true);
+      player5.animations.play('p1_float');
+      player6.animations.add('p2_float', Phaser.Animation.generateFrameNames('Player2_', 1, 12, '', 2), 20, true);
+      player6.animations.play('p2_float');
       player1Text = game.add.text(25, 25, 'Player 1 Health: ', { fontSize: '32px', fill: '#ffffff'});
       player2Text = game.add.text(500, 25, 'Player 2 Health: ',  { fontSize: '32px', fill: '#ffffff'});
-      text = game.add.text(320, 50, '', { fontSize: '12px', fill: '#ffffff'} )
+      player3Text = game.add.text(25, 70, 'Player 3 Health: ', { fontSize: '32px', fill: '#ffffff'});
+      player4Text = game.add.text(500, 70, 'Player 4 Health: ',  { fontSize: '32px', fill: '#ffffff'});
+      player5Text = game.add.text(25, 115, 'Player 5 Health: ', { fontSize: '32px', fill: '#ffffff'});
+      player6Text = game.add.text(500, 115, 'Player 6 Health: ',  { fontSize: '32px', fill: '#ffffff'});
+      text = game.add.text(320, 50, '', { fontSize: '12px', fill: '#ffffff'} );
+      text2 = game.add.text(320, 90, '', { fontSize: '12px', fill: '#ffffff'} );
    },
    update: function(){    
    		//which player is moving?
     player1.events.onInputDown.add(p1click, this);   		
-   	player2.events.onInputDown.add(p2click, this);   		
+   	player2.events.onInputDown.add(p2click, this);   	
+   	player3.events.onInputDown.add(p3click, this);   		
+   	player4.events.onInputDown.add(p4click, this);   
+   	player5.events.onInputDown.add(p5click, this);   		
+   	player6.events.onInputDown.add(p6click, this);   	
    	player1Text.text = 'Player 1 Health: ' + player1.health;
    	player2Text.text = 'Player 2 Health: ' + player2.health; // showing the health of each
-   	//text.text = 'phase: ' + phaseCounter + ' turn: ' + turnCounter + ' attack: ' + attackCounter;
+   	player3Text.text = 'Player 3 Health: ' + player3.health;
+   	player4Text.text = 'Player 4 Health: ' + player4.health;
+   	player5Text.text = 'Player 5 Health: ' + player5.health;
+   	player6Text.text = 'Player 6 Health: ' + player6.health;
+   	text.text = 'phase: ' + phaseCounter + ' turn: ' + turnCounter + ' attack: ' + attackCounter;
+   	text2.text = 'player1: ' + p1Player + ' player2: ' + p2Player;
    	if (phaseCounter > 1 && phaseCounter < 4) { // if the player has already moved
    		if(game.input.keyboard.justPressed(Phaser.Keyboard.ONE)) { //wait for attack button input, 1, 2, or 3 and go to appropriate attack function
    			attackCounter = 1;
    			if (turnCounter == 0) {
-   				attP1A(player1.xCoord, player1.yCoord); 
+   				if (p1Player == 1) {
+   					attP1A(player1.xCoord, player1.yCoord); 
+   				} else if (p1Player == 3) {
+   					attP1A(player3.xCoord, player3.yCoord); 
+   				} else if (p1Player == 5) {
+   					attP1A(player5.xCoord, player5.yCoord); 
+   				}
    			} else if (turnCounter == 1) {
-   				attP2A(player2.xCoord, player2.yCoord);
+   				if (p2Player == 2) {
+   					attP2A(player2.xCoord, player2.yCoord);
+   				} else if (p2Player == 4) {
+   					attP2A(player4.xCoord, player4.yCoord);   					
+   				} else if (p2Player == 6) {
+   					attP2A(player6.xCoord, player6.yCoord);   					
+   				}
    			}
    		} else if (game.input.keyboard.justPressed(Phaser.Keyboard.TWO)) {
    			attackCounter = 2;
    			if (turnCounter == 0) {
-   				attP1B(player1.xCoord, player1.yCoord); 
+   				if (p1Player == 1) {
+   					attP1B(player1.xCoord, player1.yCoord); 
+   				} else if (p1Player == 3) {
+   					attP1B(player3.xCoord, player3.yCoord); 
+   				} else if (p1Player == 5) {
+   					attP1B(player5.xCoord, player5.yCoord); 
+   				}
    			} else if (turnCounter == 1) {
-   				attP2B(player2.xCoord, player2.yCoord);
+   				if (p2Player == 2) {
+   					attP2B(player2.xCoord, player2.yCoord);
+   				} else if (p2Player == 4) {
+   					attP2B(player4.xCoord, player4.yCoord);   					
+   				} else if (p2Player == 6) {
+   					attP2B(player6.xCoord, player6.yCoord);   					
+   				}
    			}
    		} else if (game.input.keyboard.justPressed(Phaser.Keyboard.THREE)) {
    			attackCounter = 3;
    			if (turnCounter == 0) {
-   				attP1C(player1.xCoord, player1.yCoord); 
+   				if (p1Player == 1) {
+   					attP1C(player1.xCoord, player1.yCoord); 
+   				} else if (p1Player == 3) {
+   					attP1C(player3.xCoord, player3.yCoord); 
+   				} else if (p1Player == 5) {
+   					attP1C(player5.xCoord, player5.yCoord); 
+   				}
    			} else if (turnCounter == 1) {
-   				attP2C(player2.xCoord, player2.yCoord);
+   				if (p2Player == 2) {
+   					attP2C(player2.xCoord, player2.yCoord);
+   				} else if (p2Player == 4) {
+   					attP2C(player4.xCoord, player4.yCoord);   					
+   				} else if (p2Player == 6) {
+   					attP2C(player6.xCoord, player6.yCoord);   					
+   				}
    			}
    		}     		
    	}
@@ -154,18 +234,40 @@ GameLoop.prototype = {
    			confirmPressed();
    		}
    	}
-   	if (player1.health == 0 || player2.health == 0) {
+   	if (player1.health == 0) {
+   		player1.kill();
+   	}
+   	if (player2.health == 0) {
+   		player2.kill();
+   	}
+   	if (player3.health == 0) {
+   		player3.kill();
+   	}
+   	if (player4.health == 0) {
+   		player4.kill();
+   	}
+   	if (player5.health == 0) {
+   		player5.kill();
+   	}
+   	if (player6.health == 0) {
+   		player6.kill();
+   	}
+   	if (player1.health == 0 && player3.health == 0 && player5.health == 0) {
+   		winner = 2;
+   		game.state.start('GameOver');
+   	} else if (player2.health == 0 && player4.health == 0 && player6.health == 0) {
+   		winner = 1;
    		game.state.start('GameOver');
    	}
-   }
+    }
 }
 var GameOver = function(game) {};
 GameOver.prototype = {
    create: function(){      
    	//show victory/loss screen
-   	if (player1.health == 0) {
+   	if (winner == 2) {
    		game.add.sprite(0, 0, 'atlas', 'P2Win');
-   	} else if (player2.health == 0) {
+   	} else if (winner == 1) {
    		game.add.sprite(0, 0, 'atlas', 'P1Win');
    	}
    },
@@ -177,13 +279,21 @@ GameOver.prototype = {
 } 
 
 function p1click() { //when the player 1 sprite is clicked
-	if (phaseCounter == 0 && turnCounter == 0) {
+	buttonGroup.forEachAlive(function (c) { c.kill(); });
+	if (phaseCounter < 2 && turnCounter == 0) {
+		p1Player = 1;
 		phaseCounter = 1;
 		if (player1.xCoord == 1) { //make buttons around character when clicked to show possible moves (this can probably be simplified a LOT)
 			if (player1.yCoord == 1) {
 			button1_2 = game.add.button(square1_2.x, square1_2.y, 'atlas', function() {button1Click(1,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
 			button2_1 = game.add.button(square2_1.x, square2_1.y, 'atlas', function() {button1Click(2,1)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
 			button1_1 = game.add.button(square1_1.x, square1_1.y, 'atlas', function() {button1Click(1,1)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button1_2.xCoord = 1;
+			button1_2.yCoord = 2;
+			button2_1.xCoord = 2;
+			button2_1.yCoord = 1;
+			button1_1.xCoord = 1;
+			button1_1.yCoord = 1;
 			buttonGroup.add(button1_2);
 			buttonGroup.add(button2_1);
 			buttonGroup.add(button1_1);
@@ -192,6 +302,14 @@ function p1click() { //when the player 1 sprite is clicked
 			button1_3 = game.add.button(square1_3.x, square1_3.y, 'atlas', function() {button1Click(1,3)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
 			button2_2 = game.add.button(square2_2.x, square2_2.y, 'atlas', function() {button1Click(2,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
 			button1_2 = game.add.button(square1_2.x, square1_2.y, 'atlas', function() {button1Click(1,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button1_1.xCoord = 1;
+			button1_1.yCoord = 1;
+			button1_3.xCoord = 1;
+			button1_3.yCoord = 3;
+			button2_2.xCoord = 2;
+			button2_2.yCoord = 2;
+			button1_2.xCoord = 1;
+			button1_2.yCoord = 2;
 			buttonGroup.add(button1_1);
 			buttonGroup.add(button1_3);
 			buttonGroup.add(button2_2);
@@ -203,6 +321,12 @@ function p1click() { //when the player 1 sprite is clicked
 			buttonGroup.add(button1_2); // adds the buttons to the relevant group, for easy deleting
 			buttonGroup.add(button2_3);
 			buttonGroup.add(button1_3);
+			button1_3.xCoord = 1;
+			button1_3.yCoord = 3;
+			button2_3.xCoord = 2;
+			button2_3.yCoord = 3;
+			button1_2.xCoord = 1;
+			button1_2.yCoord = 2;
 			} // this all does the same stuff
 		} else if (player1.xCoord == 2) {
 			if (player1.yCoord == 1) {
@@ -210,6 +334,14 @@ function p1click() { //when the player 1 sprite is clicked
 			button3_1 = game.add.button(square3_1.x, square3_1.y, 'atlas', function() {button1Click(3,1)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
 			button2_2 = game.add.button(square2_2.x, square2_2.y, 'atlas', function() {button1Click(2,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
 			button2_1 = game.add.button(square2_1.x, square2_1.y, 'atlas', function() {button1Click(2,1)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button1_1.xCoord = 1;
+			button1_1.yCoord = 1;
+			button3_1.xCoord = 3;
+			button3_1.yCoord = 1;
+			button2_2.xCoord = 2;
+			button2_2.yCoord = 2;
+			button2_1.xCoord = 2;
+			button2_1.yCoord = 1;
 			buttonGroup.add(button1_1);
 			buttonGroup.add(button3_1);
 			buttonGroup.add(button2_2);
@@ -220,6 +352,16 @@ function p1click() { //when the player 1 sprite is clicked
 			button3_2 = game.add.button(square3_2.x, square3_2.y, 'atlas', function() {button1Click(3,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
 			button2_3 = game.add.button(square2_3.x, square2_3.y, 'atlas', function() {button1Click(2,3)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
 			button2_2 = game.add.button(square2_2.x, square2_2.y, 'atlas', function() {button1Click(2,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button2_1.xCoord = 2;
+			button2_1.yCoord = 1;
+			button1_2.xCoord = 1;
+			button1_2.yCoord = 2;
+			button2_2.xCoord = 2;
+			button2_2.yCoord = 2;
+			button1_2.xCoord = 1;
+			button1_2.yCoord = 2;
+			button2_3.xCoord = 2;
+			button2_3.yCoord = 3;
 			buttonGroup.add(button2_1);
 			buttonGroup.add(button1_2);
 			buttonGroup.add(button3_2);
@@ -230,6 +372,14 @@ function p1click() { //when the player 1 sprite is clicked
 			button3_3 = game.add.button(square3_3.x, square3_3.y, 'atlas', function() {button1Click(3,3)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
 			button2_2 = game.add.button(square2_2.x, square2_2.y, 'atlas', function() {button1Click(2,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
 			button2_3 = game.add.button(square2_3.x, square2_3.y, 'atlas', function() {button1Click(2,3)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button1_3.xCoord = 1;
+			button1_3.yCoord = 3;
+			button3_3.xCoord = 3;
+			button3_3.yCoord = 3;
+			button2_2.xCoord = 2;
+			button2_2.yCoord = 2;
+			button2_3.xCoord = 2;
+			button2_3.yCoord = 3;
 			buttonGroup.add(button1_3);
 			buttonGroup.add(button3_3);
 			buttonGroup.add(button2_2);
@@ -240,6 +390,12 @@ function p1click() { //when the player 1 sprite is clicked
 			button3_2 = game.add.button(square3_2.x, square3_2.y, 'atlas', function() {button1Click(3,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
 			button2_1 = game.add.button(square2_1.x, square2_1.y, 'atlas', function() {button1Click(2,1)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
 			button3_1 = game.add.button(square3_1.x, square3_1.y, 'atlas', function() {button1Click(3,1)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button3_2.xCoord = 3;
+			button3_2.yCoord = 2;
+			button2_1.xCoord = 2;
+			button2_1.yCoord = 1;
+			button3_1.xCoord = 3;
+			button3_1.yCoord = 1;
 			buttonGroup.add(button3_2);
 			buttonGroup.add(button2_1);
 			buttonGroup.add(button3_1);
@@ -248,6 +404,14 @@ function p1click() { //when the player 1 sprite is clicked
 			button3_3 = game.add.button(square3_3.x, square3_3.y, 'atlas', function() {button1Click(3,3)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
 			button2_2 = game.add.button(square2_2.x, square2_2.y, 'atlas', function() {button1Click(2,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
 			button3_2 = game.add.button(square3_2.x, square3_2.y, 'atlas', function() {button1Click(3,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button3_1.xCoord = 3;
+			button3_1.yCoord = 1;
+			button3_3.xCoord = 3;
+			button3_3.yCoord = 3;
+			button2_2.xCoord = 2;
+			button2_2.yCoord = 2;
+			button3_2.xCoord = 3;
+			button3_2.yCoord = 2;
 			buttonGroup.add(button3_1);
 			buttonGroup.add(button3_3);
 			buttonGroup.add(button2_2);
@@ -256,22 +420,38 @@ function p1click() { //when the player 1 sprite is clicked
 			button3_2 = game.add.button(square3_2.x, square3_2.y, 'atlas', function() {button1Click(3,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
 			button2_3 = game.add.button(square2_3.x, square2_3.y, 'atlas', function() {button1Click(2,3)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
 			button3_3 = game.add.button(square3_3.x, square3_3.y, 'atlas', function() {button1Click(3,3)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button3_2.xCoord = 3;
+			button3_2.yCoord = 2;
+			button2_3.xCoord = 2;
+			button2_3.yCoord = 3;
+			button3_3.xCoord = 3;
+			button3_3.yCoord = 3;
 			buttonGroup.add(button3_2);
 			buttonGroup.add(button2_3);
 			buttonGroup.add(button3_3);
 			}
 		}	
 	}
+
+	buttonGroup.forEachAlive(function (c) { if((c.xCoord == player3.xCoord && c.yCoord == player3.yCoord) || (c.xCoord == player5.xCoord && c.yCoord == player5.yCoord)){ c.kill(); } });
 }
 
 function p2click() { //do the same with when player 2 is clicked
-	if (phaseCounter == 0 && turnCounter == 1) {
+	buttonGroup.forEachAlive(function (c) { c.kill(); });
+	if (phaseCounter < 2 && turnCounter == 1) {
+		p2Player = 2;
 		phaseCounter = 1;
 		if (player2.xCoord == 4) {
 			if (player2.yCoord == 1) {
 			button4_2 = game.add.button(square4_2.x, square4_2.y, 'atlas', function() {button2Click(4,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
 			button5_1 = game.add.button(square5_1.x, square5_1.y, 'atlas', function() {button2Click(5,1)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
 			button4_1 = game.add.button(square4_1.x, square4_1.y, 'atlas', function() {button2Click(4,1)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button4_2.xCoord = 4;
+			button4_2.yCoord = 2;
+			button5_1.xCoord = 5;
+			button5_1.yCoord = 1;
+			button4_1.xCoord = 4;
+			button4_1.yCoord = 1;
 			buttonGroup.add(button4_2);
 			buttonGroup.add(button5_1);
 			buttonGroup.add(button4_1);
@@ -280,6 +460,14 @@ function p2click() { //do the same with when player 2 is clicked
 			button4_3 = game.add.button(square4_3.x, square4_3.y, 'atlas', function() {button2Click(4,3)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
 			button5_2 = game.add.button(square5_2.x, square5_2.y, 'atlas', function() {button2Click(5,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
 			button4_2 = game.add.button(square4_2.x, square4_2.y, 'atlas', function() {button2Click(4,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button4_1.xCoord = 4;
+			button4_1.yCoord = 1;
+			button4_3.xCoord = 4;
+			button4_3.yCoord = 3;
+			button5_2.xCoord = 5;
+			button5_2.yCoord = 2;
+			button4_2.xCoord = 4;
+			button4_2.yCoord = 2;
 			buttonGroup.add(button4_1);
 			buttonGroup.add(button4_3);
 			buttonGroup.add(button5_2);
@@ -288,6 +476,12 @@ function p2click() { //do the same with when player 2 is clicked
 			button4_2 = game.add.button(square4_2.x, square4_2.y, 'atlas', function() {button2Click(4,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
 			button5_3 = game.add.button(square5_1.x, square5_1.y, 'atlas', function() {button2Click(5,3)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
 			button4_3 = game.add.button(square4_3.x, square4_3.y, 'atlas', function() {button2Click(4,3)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button4_2.xCoord = 4;
+			button4_2.yCoord = 2;
+			button5_3.xCoord = 5;
+			button5_3.yCoord = 3;
+			button4_3.xCoord = 4;
+			button4_3.yCoord = 3;
 			buttonGroup.add(button4_2);
 			buttonGroup.add(button5_3);
 			buttonGroup.add(button4_3);
@@ -298,6 +492,14 @@ function p2click() { //do the same with when player 2 is clicked
 			button6_1 = game.add.button(square6_1.x, square6_1.y, 'atlas', function() {button2Click(6,1)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
 			button5_2 = game.add.button(square5_2.x, square5_2.y, 'atlas', function() {button2Click(5,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
 			button5_1 = game.add.button(square5_1.x, square5_1.y, 'atlas', function() {button2Click(5,1)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button4_1.xCoord = 4;
+			button4_1.yCoord = 1;
+			button6_1.xCoord = 6;
+			button6_1.yCoord = 1;
+			button5_2.xCoord = 5;
+			button5_2.yCoord = 2;
+			button5_1.xCoord = 5;
+			button5_1.yCoord = 1;
 			buttonGroup.add(button4_1);
 			buttonGroup.add(button6_1);
 			buttonGroup.add(button5_2);
@@ -308,6 +510,16 @@ function p2click() { //do the same with when player 2 is clicked
 			button6_2 = game.add.button(square6_2.x, square6_2.y, 'atlas', function() {button2Click(6,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
 			button5_3 = game.add.button(square5_3.x, square5_3.y, 'atlas', function() {button2Click(5,3)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
 			button5_2 = game.add.button(square5_2.x, square5_2.y, 'atlas', function() {button2Click(5,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button5_1.xCoord = 5;
+			button5_1.yCoord = 1;
+			button4_2.xCoord = 4;
+			button4_2.yCoord = 2;
+			button6_2.xCoord = 6;
+			button6_2.yCoord = 2;
+			button5_3.xCoord = 5;
+			button5_3.yCoord = 3;
+			button5_2.xCoord = 5;
+			button5_2.yCoord = 2;
 			buttonGroup.add(button5_1);
 			buttonGroup.add(button4_2);
 			buttonGroup.add(button6_2);
@@ -318,6 +530,14 @@ function p2click() { //do the same with when player 2 is clicked
 			button6_3 = game.add.button(square6_3.x, square6_3.y, 'atlas', function() {button2Click(6,3)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
 			button5_2 = game.add.button(square5_2.x, square5_2.y, 'atlas', function() {button2Click(5,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
 			button5_3 = game.add.button(square5_3.x, square5_3.y, 'atlas', function() {button2Click(5,3)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button4_3.xCoord = 4;
+			button4_3.yCoord = 3;
+			button6_3.xCoord = 6;
+			button6_3.yCoord = 3;
+			button5_2.xCoord = 5;
+			button5_2.yCoord = 2;
+			button5_3.xCoord = 5;
+			button5_3.yCoord = 3;
 			buttonGroup.add(button4_3);
 			buttonGroup.add(button6_3);
 			buttonGroup.add(button5_2);
@@ -328,6 +548,12 @@ function p2click() { //do the same with when player 2 is clicked
 			button6_2 = game.add.button(square6_2.x, square6_2.y, 'atlas', function() {button2Click(6,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
 			button5_1 = game.add.button(square5_1.x, square5_1.y, 'atlas', function() {button2Click(5,1)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
 			button6_1 = game.add.button(square6_1.x, square6_1.y, 'atlas', function() {button2Click(6,1)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button6_2.xCoord = 6;
+			button6_2.yCoord = 2;
+			button5_1.xCoord = 5;
+			button5_1.yCoord = 1;
+			button6_1.xCoord = 6;
+			button6_1.yCoord = 1;
 			buttonGroup.add(button6_2);
 			buttonGroup.add(button5_1);
 			buttonGroup.add(button6_1);
@@ -336,6 +562,14 @@ function p2click() { //do the same with when player 2 is clicked
 			button6_3 = game.add.button(square6_3.x, square6_3.y, 'atlas', function() {button2Click(6,3)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
 			button5_2 = game.add.button(square5_2.x, square5_2.y, 'atlas', function() {button2Click(5,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
 			button6_2 = game.add.button(square6_2.x, square6_2.y, 'atlas', function() {button2Click(6,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button6_1.xCoord = 6;
+			button6_1.yCoord = 1;
+			button6_3.xCoord = 6;
+			button6_3.yCoord = 3;
+			button5_2.xCoord = 5;
+			button5_2.yCoord = 2;
+			button6_2.xCoord = 6;
+			button6_2.yCoord = 2;
 			buttonGroup.add(button6_1);
 			buttonGroup.add(button6_3);
 			buttonGroup.add(button5_2);
@@ -344,25 +578,675 @@ function p2click() { //do the same with when player 2 is clicked
 			button6_2 = game.add.button(square6_2.x, square6_2.y, 'atlas', function() {button2Click(6,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
 			button5_3 = game.add.button(square5_3.x, square5_3.y, 'atlas', function() {button2Click(5,3)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
 			button6_3 = game.add.button(square6_3.x, square6_3.y, 'atlas', function() {button2Click(6,3)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button6_2.xCoord = 6;
+			button6_2.yCoord = 2;
+			button5_3.xCoord = 5;
+			button5_3.yCoord = 3;
+			button6_3.xCoord = 6;
+			button6_3.yCoord = 3;
 			buttonGroup.add(button6_2);
 			buttonGroup.add(button5_3);
 			buttonGroup.add(button6_3);
 			}
 		}
 	} 
+	buttonGroup.forEachAlive(function (c) { if((c.xCoord == player4.xCoord && c.yCoord == player4.yCoord) || (c.xCoord == player6.xCoord && c.yCoord == player6.yCoord)){ c.kill(); } });
 }
 
+function p3click() { //when the player 1 sprite is clicked
+	buttonGroup.forEachAlive(function (c) { c.kill(); });
+	if (phaseCounter < 2 && turnCounter == 0) {
+		p1Player = 3;
+		phaseCounter = 1;
+		if (player3.xCoord == 1) { //make buttons around character when clicked to show possible moves (this can probably be simplified a LOT)
+			if (player3.yCoord == 1) {
+			button1_2 = game.add.button(square1_2.x, square1_2.y, 'atlas', function() {button1Click(1,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button2_1 = game.add.button(square2_1.x, square2_1.y, 'atlas', function() {button1Click(2,1)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button1_1 = game.add.button(square1_1.x, square1_1.y, 'atlas', function() {button1Click(1,1)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button1_2.xCoord = 1;
+			button1_2.yCoord = 2;
+			button2_1.xCoord = 2;
+			button2_1.yCoord = 1;
+			button1_1.xCoord = 1;
+			button1_1.yCoord = 1;
+			buttonGroup.add(button1_2);
+			buttonGroup.add(button2_1);
+			buttonGroup.add(button1_1);
+			} else if (player3.yCoord == 2) {
+			button1_1 = game.add.button(square1_1.x, square1_1.y, 'atlas', function() {button1Click(1,1)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button1_3 = game.add.button(square1_3.x, square1_3.y, 'atlas', function() {button1Click(1,3)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button2_2 = game.add.button(square2_2.x, square2_2.y, 'atlas', function() {button1Click(2,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button1_2 = game.add.button(square1_2.x, square1_2.y, 'atlas', function() {button1Click(1,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button1_1.xCoord = 1;
+			button1_1.yCoord = 1;
+			button1_3.xCoord = 1;
+			button1_3.yCoord = 3;
+			button2_2.xCoord = 2;
+			button2_2.yCoord = 2;
+			button1_2.xCoord = 1;
+			button1_2.yCoord = 2;
+			buttonGroup.add(button1_1);
+			buttonGroup.add(button1_3);
+			buttonGroup.add(button2_2);
+			buttonGroup.add(button1_2);
+			} else if (player3.yCoord == 3) {
+			button1_2 = game.add.button(square1_2.x, square1_2.y, 'atlas', function() {button1Click(1,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button2_3 = game.add.button(square2_3.x, square2_3.y, 'atlas', function() {button1Click(2,3)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button1_3 = game.add.button(square1_3.x, square1_3.y, 'atlas', function() {button1Click(1,3)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			buttonGroup.add(button1_2); // adds the buttons to the relevant group, for easy deleting
+			buttonGroup.add(button2_3);
+			buttonGroup.add(button1_3);
+			button1_3.xCoord = 1;
+			button1_3.yCoord = 3;
+			button2_3.xCoord = 2;
+			button2_3.yCoord = 3;
+			button1_2.xCoord = 1;
+			button1_2.yCoord = 2;
+			} // this all does the same stuff
+		} else if (player3.xCoord == 2) {
+			if (player3.yCoord == 1) {
+			button1_1 = game.add.button(square1_1.x, square1_1.y, 'atlas', function() {button1Click(1,1)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button3_1 = game.add.button(square3_1.x, square3_1.y, 'atlas', function() {button1Click(3,1)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button2_2 = game.add.button(square2_2.x, square2_2.y, 'atlas', function() {button1Click(2,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button2_1 = game.add.button(square2_1.x, square2_1.y, 'atlas', function() {button1Click(2,1)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button1_1.xCoord = 1;
+			button1_1.yCoord = 1;
+			button3_1.xCoord = 3;
+			button3_1.yCoord = 1;
+			button2_2.xCoord = 2;
+			button2_2.yCoord = 2;
+			button2_1.xCoord = 2;
+			button2_1.yCoord = 1;
+			buttonGroup.add(button1_1);
+			buttonGroup.add(button3_1);
+			buttonGroup.add(button2_2);
+			buttonGroup.add(button2_1);
+			} else if (player3.yCoord == 2) {
+			button2_1 = game.add.button(square2_1.x, square2_1.y, 'atlas', function() {button1Click(2,1)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button1_2 = game.add.button(square1_2.x, square1_2.y, 'atlas', function() {button1Click(1,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button3_2 = game.add.button(square3_2.x, square3_2.y, 'atlas', function() {button1Click(3,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button2_3 = game.add.button(square2_3.x, square2_3.y, 'atlas', function() {button1Click(2,3)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button2_2 = game.add.button(square2_2.x, square2_2.y, 'atlas', function() {button1Click(2,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button2_1.xCoord = 2;
+			button2_1.yCoord = 1;
+			button1_2.xCoord = 1;
+			button1_2.yCoord = 2;
+			button2_2.xCoord = 2;
+			button2_2.yCoord = 2;
+			button1_2.xCoord = 1;
+			button1_2.yCoord = 2;
+			button2_3.xCoord = 2;
+			button2_3.yCoord = 3;
+			buttonGroup.add(button2_1);
+			buttonGroup.add(button1_2);
+			buttonGroup.add(button3_2);
+			buttonGroup.add(button2_3);
+			buttonGroup.add(button2_2);
+			} else if (player3.yCoord == 3) {
+			button1_3 = game.add.button(square1_3.x, square1_3.y, 'atlas', function() {button1Click(1,3)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button3_3 = game.add.button(square3_3.x, square3_3.y, 'atlas', function() {button1Click(3,3)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button2_2 = game.add.button(square2_2.x, square2_2.y, 'atlas', function() {button1Click(2,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button2_3 = game.add.button(square2_3.x, square2_3.y, 'atlas', function() {button1Click(2,3)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button1_3.xCoord = 1;
+			button1_3.yCoord = 3;
+			button3_3.xCoord = 3;
+			button3_3.yCoord = 3;
+			button2_2.xCoord = 2;
+			button2_2.yCoord = 2;
+			button2_3.xCoord = 2;
+			button2_3.yCoord = 3;
+			buttonGroup.add(button1_3);
+			buttonGroup.add(button3_3);
+			buttonGroup.add(button2_2);
+			buttonGroup.add(button2_3);
+			}
+		} else if (player3.xCoord == 3) {
+			if (player3.yCoord == 1) {	
+			button3_2 = game.add.button(square3_2.x, square3_2.y, 'atlas', function() {button1Click(3,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button2_1 = game.add.button(square2_1.x, square2_1.y, 'atlas', function() {button1Click(2,1)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button3_1 = game.add.button(square3_1.x, square3_1.y, 'atlas', function() {button1Click(3,1)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button3_2.xCoord = 3;
+			button3_2.yCoord = 2;
+			button2_1.xCoord = 2;
+			button2_1.yCoord = 1;
+			button3_1.xCoord = 3;
+			button3_1.yCoord = 1;
+			buttonGroup.add(button3_2);
+			buttonGroup.add(button2_1);
+			buttonGroup.add(button3_1);
+			} else if (player3.yCoord == 2) {
+			button3_1 = game.add.button(square3_1.x, square3_1.y, 'atlas', function() {button1Click(3,1)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button3_3 = game.add.button(square3_3.x, square3_3.y, 'atlas', function() {button1Click(3,3)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button2_2 = game.add.button(square2_2.x, square2_2.y, 'atlas', function() {button1Click(2,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button3_2 = game.add.button(square3_2.x, square3_2.y, 'atlas', function() {button1Click(3,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button3_1.xCoord = 3;
+			button3_1.yCoord = 1;
+			button3_3.xCoord = 3;
+			button3_3.yCoord = 3;
+			button2_2.xCoord = 2;
+			button2_2.yCoord = 2;
+			button3_2.xCoord = 3;
+			button3_2.yCoord = 2;
+			buttonGroup.add(button3_1);
+			buttonGroup.add(button3_3);
+			buttonGroup.add(button2_2);
+			buttonGroup.add(button3_2);
+			} else if (player3.yCoord == 3) {
+			button3_2 = game.add.button(square3_2.x, square3_2.y, 'atlas', function() {button1Click(3,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button2_3 = game.add.button(square2_3.x, square2_3.y, 'atlas', function() {button1Click(2,3)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button3_3 = game.add.button(square3_3.x, square3_3.y, 'atlas', function() {button1Click(3,3)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button3_2.xCoord = 3;
+			button3_2.yCoord = 2;
+			button2_3.xCoord = 2;
+			button2_3.yCoord = 3;
+			button3_3.xCoord = 3;
+			button3_3.yCoord = 3;
+			buttonGroup.add(button3_2);
+			buttonGroup.add(button2_3);
+			buttonGroup.add(button3_3);
+			}
+		}	
+	}
+	buttonGroup.forEachAlive(function (c) { if((c.xCoord == player1.xCoord && c.yCoord == player1.yCoord) || (c.xCoord == player5.xCoord && c.yCoord == player5.yCoord)){ c.kill(); } });
+}
+
+function p4click() { //do the same with when player 2 is clicked
+	buttonGroup.forEachAlive(function (c) { c.kill(); });
+	if (phaseCounter < 2 && turnCounter == 1) {
+		p2Player = 4;
+		phaseCounter = 1;
+		if (player4.xCoord == 4) {
+			if (player4.yCoord == 1) {
+			button4_2 = game.add.button(square4_2.x, square4_2.y, 'atlas', function() {button2Click(4,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button5_1 = game.add.button(square5_1.x, square5_1.y, 'atlas', function() {button2Click(5,1)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button4_1 = game.add.button(square4_1.x, square4_1.y, 'atlas', function() {button2Click(4,1)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button4_2.xCoord = 4;
+			button4_2.yCoord = 2;
+			button5_1.xCoord = 5;
+			button5_1.yCoord = 1;
+			button4_1.xCoord = 4;
+			button4_1.yCoord = 1;
+			buttonGroup.add(button4_2);
+			buttonGroup.add(button5_1);
+			buttonGroup.add(button4_1);
+			} else if (player4.yCoord == 2) {
+			button4_1 = game.add.button(square4_1.x, square4_1.y, 'atlas', function() {button2Click(4,1)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button4_3 = game.add.button(square4_3.x, square4_3.y, 'atlas', function() {button2Click(4,3)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button5_2 = game.add.button(square5_2.x, square5_2.y, 'atlas', function() {button2Click(5,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button4_2 = game.add.button(square4_2.x, square4_2.y, 'atlas', function() {button2Click(4,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button4_1.xCoord = 4;
+			button4_1.yCoord = 1;
+			button4_3.xCoord = 4;
+			button4_3.yCoord = 3;
+			button5_2.xCoord = 5;
+			button5_2.yCoord = 2;
+			button4_2.xCoord = 4;
+			button4_2.yCoord = 2;
+			buttonGroup.add(button4_1);
+			buttonGroup.add(button4_3);
+			buttonGroup.add(button5_2);
+			buttonGroup.add(button4_2);
+			} else if (player4.yCoord == 3) {
+			button4_2 = game.add.button(square4_2.x, square4_2.y, 'atlas', function() {button2Click(4,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button5_3 = game.add.button(square5_1.x, square5_1.y, 'atlas', function() {button2Click(5,3)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button4_3 = game.add.button(square4_3.x, square4_3.y, 'atlas', function() {button2Click(4,3)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button4_2.xCoord = 4;
+			button4_2.yCoord = 2;
+			button5_3.xCoord = 5;
+			button5_3.yCoord = 3;
+			button4_3.xCoord = 4;
+			button4_3.yCoord = 3;
+			buttonGroup.add(button4_2);
+			buttonGroup.add(button5_3);
+			buttonGroup.add(button4_3);
+			}
+		} else if (player4.xCoord == 5) {
+			if (player4.yCoord == 1) {
+			button4_1 = game.add.button(square4_1.x, square4_1.y, 'atlas', function() {button2Click(4,1)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button6_1 = game.add.button(square6_1.x, square6_1.y, 'atlas', function() {button2Click(6,1)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button5_2 = game.add.button(square5_2.x, square5_2.y, 'atlas', function() {button2Click(5,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button5_1 = game.add.button(square5_1.x, square5_1.y, 'atlas', function() {button2Click(5,1)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button4_1.xCoord = 4;
+			button4_1.yCoord = 1;
+			button6_1.xCoord = 6;
+			button6_1.yCoord = 1;
+			button5_2.xCoord = 5;
+			button5_2.yCoord = 2;
+			button5_1.xCoord = 5;
+			button5_1.yCoord = 1;
+			buttonGroup.add(button4_1);
+			buttonGroup.add(button6_1);
+			buttonGroup.add(button5_2);
+			buttonGroup.add(button5_1);
+			} else if (player4.yCoord == 2) {
+			button5_1 = game.add.button(square5_1.x, square5_1.y, 'atlas', function() {button2Click(5,1)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button4_2 = game.add.button(square4_2.x, square4_2.y, 'atlas', function() {button2Click(4,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button6_2 = game.add.button(square6_2.x, square6_2.y, 'atlas', function() {button2Click(6,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button5_3 = game.add.button(square5_3.x, square5_3.y, 'atlas', function() {button2Click(5,3)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button5_2 = game.add.button(square5_2.x, square5_2.y, 'atlas', function() {button2Click(5,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button5_1.xCoord = 5;
+			button5_1.yCoord = 1;
+			button4_2.xCoord = 4;
+			button4_2.yCoord = 2;
+			button6_2.xCoord = 6;
+			button6_2.yCoord = 2;
+			button5_3.xCoord = 5;
+			button5_3.yCoord = 3;
+			button5_2.xCoord = 5;
+			button5_2.yCoord = 2;
+			buttonGroup.add(button5_1);
+			buttonGroup.add(button4_2);
+			buttonGroup.add(button6_2);
+			buttonGroup.add(button5_3);
+			buttonGroup.add(button5_2);
+			} else if (player4.yCoord == 3) {
+			button4_3 = game.add.button(square4_3.x, square4_3.y, 'atlas', function() {button2Click(4,3)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button6_3 = game.add.button(square6_3.x, square6_3.y, 'atlas', function() {button2Click(6,3)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button5_2 = game.add.button(square5_2.x, square5_2.y, 'atlas', function() {button2Click(5,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button5_3 = game.add.button(square5_3.x, square5_3.y, 'atlas', function() {button2Click(5,3)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button4_3.xCoord = 4;
+			button4_3.yCoord = 3;
+			button6_3.xCoord = 6;
+			button6_3.yCoord = 3;
+			button5_2.xCoord = 5;
+			button5_2.yCoord = 2;
+			button5_3.xCoord = 5;
+			button5_3.yCoord = 3;
+			buttonGroup.add(button4_3);
+			buttonGroup.add(button6_3);
+			buttonGroup.add(button5_2);
+			buttonGroup.add(button5_3);
+			}
+		} else if (player4.xCoord == 6) {
+			if (player4.yCoord == 1) {	
+			button6_2 = game.add.button(square6_2.x, square6_2.y, 'atlas', function() {button2Click(6,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button5_1 = game.add.button(square5_1.x, square5_1.y, 'atlas', function() {button2Click(5,1)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button6_1 = game.add.button(square6_1.x, square6_1.y, 'atlas', function() {button2Click(6,1)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button6_2.xCoord = 6;
+			button6_2.yCoord = 2;
+			button5_1.xCoord = 5;
+			button5_1.yCoord = 1;
+			button6_1.xCoord = 6;
+			button6_1.yCoord = 1;
+			buttonGroup.add(button6_2);
+			buttonGroup.add(button5_1);
+			buttonGroup.add(button6_1);
+			} else if (player4.yCoord == 2) {
+			button6_1 = game.add.button(square6_1.x, square6_1.y, 'atlas', function() {button2Click(6,1)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button6_3 = game.add.button(square6_3.x, square6_3.y, 'atlas', function() {button2Click(6,3)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button5_2 = game.add.button(square5_2.x, square5_2.y, 'atlas', function() {button2Click(5,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button6_2 = game.add.button(square6_2.x, square6_2.y, 'atlas', function() {button2Click(6,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button6_1.xCoord = 6;
+			button6_1.yCoord = 1;
+			button6_3.xCoord = 6;
+			button6_3.yCoord = 3;
+			button5_2.xCoord = 5;
+			button5_2.yCoord = 2;
+			button6_2.xCoord = 6;
+			button6_2.yCoord = 2;
+			buttonGroup.add(button6_1);
+			buttonGroup.add(button6_3);
+			buttonGroup.add(button5_2);
+			buttonGroup.add(button6_2);
+			} else if (player4.yCoord == 3) {
+			button6_2 = game.add.button(square6_2.x, square6_2.y, 'atlas', function() {button2Click(6,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button5_3 = game.add.button(square5_3.x, square5_3.y, 'atlas', function() {button2Click(5,3)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button6_3 = game.add.button(square6_3.x, square6_3.y, 'atlas', function() {button2Click(6,3)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button6_2.xCoord = 6;
+			button6_2.yCoord = 2;
+			button5_3.xCoord = 5;
+			button5_3.yCoord = 3;
+			button6_3.xCoord = 6;
+			button6_3.yCoord = 3;
+			buttonGroup.add(button6_2);
+			buttonGroup.add(button5_3);
+			buttonGroup.add(button6_3);
+			}
+		}
+	} 
+	buttonGroup.forEachAlive(function (c) { if((c.xCoord == player2.xCoord && c.yCoord == player2.yCoord) || (c.xCoord == player6.xCoord && c.yCoord == player6.yCoord)){ c.kill(); } });
+}
+
+function p5click() { //when the player 1 sprite is clicked
+	buttonGroup.forEachAlive(function (c) { c.kill(); });
+	if (phaseCounter < 2 && turnCounter == 0) {
+		p1Player = 5;
+		phaseCounter = 1;
+		if (player5.xCoord == 1) { //make buttons around character when clicked to show possible moves (this can probably be simplified a LOT)
+			if (player5.yCoord == 1) {
+			button1_2 = game.add.button(square1_2.x, square1_2.y, 'atlas', function() {button1Click(1,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button2_1 = game.add.button(square2_1.x, square2_1.y, 'atlas', function() {button1Click(2,1)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button1_1 = game.add.button(square1_1.x, square1_1.y, 'atlas', function() {button1Click(1,1)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button1_2.xCoord = 1;
+			button1_2.yCoord = 2;
+			button2_1.xCoord = 2;
+			button2_1.yCoord = 1;
+			button1_1.xCoord = 1;
+			button1_1.yCoord = 1;
+			buttonGroup.add(button1_2);
+			buttonGroup.add(button2_1);
+			buttonGroup.add(button1_1);
+			} else if (player5.yCoord == 2) {
+			button1_1 = game.add.button(square1_1.x, square1_1.y, 'atlas', function() {button1Click(1,1)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button1_3 = game.add.button(square1_3.x, square1_3.y, 'atlas', function() {button1Click(1,3)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button2_2 = game.add.button(square2_2.x, square2_2.y, 'atlas', function() {button1Click(2,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button1_2 = game.add.button(square1_2.x, square1_2.y, 'atlas', function() {button1Click(1,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button1_1.xCoord = 1;
+			button1_1.yCoord = 1;
+			button1_3.xCoord = 1;
+			button1_3.yCoord = 3;
+			button2_2.xCoord = 2;
+			button2_2.yCoord = 2;
+			button1_2.xCoord = 1;
+			button1_2.yCoord = 2;
+			buttonGroup.add(button1_1);
+			buttonGroup.add(button1_3);
+			buttonGroup.add(button2_2);
+			buttonGroup.add(button1_2);
+			} else if (player5.yCoord == 3) {
+			button1_2 = game.add.button(square1_2.x, square1_2.y, 'atlas', function() {button1Click(1,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button2_3 = game.add.button(square2_3.x, square2_3.y, 'atlas', function() {button1Click(2,3)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button1_3 = game.add.button(square1_3.x, square1_3.y, 'atlas', function() {button1Click(1,3)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			buttonGroup.add(button1_2); // adds the buttons to the relevant group, for easy deleting
+			buttonGroup.add(button2_3);
+			buttonGroup.add(button1_3);
+			button1_3.xCoord = 1;
+			button1_3.yCoord = 3;
+			button2_3.xCoord = 2;
+			button2_3.yCoord = 3;
+			button1_2.xCoord = 1;
+			button1_2.yCoord = 2;
+			} // this all does the same stuff
+		} else if (player5.xCoord == 2) {
+			if (player5.yCoord == 1) {
+			button1_1 = game.add.button(square1_1.x, square1_1.y, 'atlas', function() {button1Click(1,1)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button3_1 = game.add.button(square3_1.x, square3_1.y, 'atlas', function() {button1Click(3,1)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button2_2 = game.add.button(square2_2.x, square2_2.y, 'atlas', function() {button1Click(2,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button2_1 = game.add.button(square2_1.x, square2_1.y, 'atlas', function() {button1Click(2,1)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button1_1.xCoord = 1;
+			button1_1.yCoord = 1;
+			button3_1.xCoord = 3;
+			button3_1.yCoord = 1;
+			button2_2.xCoord = 2;
+			button2_2.yCoord = 2;
+			button2_1.xCoord = 2;
+			button2_1.yCoord = 1;
+			buttonGroup.add(button1_1);
+			buttonGroup.add(button3_1);
+			buttonGroup.add(button2_2);
+			buttonGroup.add(button2_1);
+			} else if (player5.yCoord == 2) {
+			button2_1 = game.add.button(square2_1.x, square2_1.y, 'atlas', function() {button1Click(2,1)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button1_2 = game.add.button(square1_2.x, square1_2.y, 'atlas', function() {button1Click(1,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button3_2 = game.add.button(square3_2.x, square3_2.y, 'atlas', function() {button1Click(3,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button2_3 = game.add.button(square2_3.x, square2_3.y, 'atlas', function() {button1Click(2,3)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button2_2 = game.add.button(square2_2.x, square2_2.y, 'atlas', function() {button1Click(2,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button2_1.xCoord = 2;
+			button2_1.yCoord = 1;
+			button1_2.xCoord = 1;
+			button1_2.yCoord = 2;
+			button2_2.xCoord = 2;
+			button2_2.yCoord = 2;
+			button1_2.xCoord = 1;
+			button1_2.yCoord = 2;
+			button2_3.xCoord = 2;
+			button2_3.yCoord = 3;
+			buttonGroup.add(button2_1);
+			buttonGroup.add(button1_2);
+			buttonGroup.add(button3_2);
+			buttonGroup.add(button2_3);
+			buttonGroup.add(button2_2);
+			} else if (player5.yCoord == 3) {
+			button1_3 = game.add.button(square1_3.x, square1_3.y, 'atlas', function() {button1Click(1,3)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button3_3 = game.add.button(square3_3.x, square3_3.y, 'atlas', function() {button1Click(3,3)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button2_2 = game.add.button(square2_2.x, square2_2.y, 'atlas', function() {button1Click(2,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button2_3 = game.add.button(square2_3.x, square2_3.y, 'atlas', function() {button1Click(2,3)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button1_3.xCoord = 1;
+			button1_3.yCoord = 3;
+			button3_3.xCoord = 3;
+			button3_3.yCoord = 3;
+			button2_2.xCoord = 2;
+			button2_2.yCoord = 2;
+			button2_3.xCoord = 2;
+			button2_3.yCoord = 3;
+			buttonGroup.add(button1_3);
+			buttonGroup.add(button3_3);
+			buttonGroup.add(button2_2);
+			buttonGroup.add(button2_3);
+			}
+		} else if (player5.xCoord == 3) {
+			if (player5.yCoord == 1) {	
+			button3_2 = game.add.button(square3_2.x, square3_2.y, 'atlas', function() {button1Click(3,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button2_1 = game.add.button(square2_1.x, square2_1.y, 'atlas', function() {button1Click(2,1)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button3_1 = game.add.button(square3_1.x, square3_1.y, 'atlas', function() {button1Click(3,1)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button3_2.xCoord = 3;
+			button3_2.yCoord = 2;
+			button2_1.xCoord = 2;
+			button2_1.yCoord = 1;
+			button3_1.xCoord = 3;
+			button3_1.yCoord = 1;
+			buttonGroup.add(button3_2);
+			buttonGroup.add(button2_1);
+			buttonGroup.add(button3_1);
+			} else if (player5.yCoord == 2) {
+			button3_1 = game.add.button(square3_1.x, square3_1.y, 'atlas', function() {button1Click(3,1)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button3_3 = game.add.button(square3_3.x, square3_3.y, 'atlas', function() {button1Click(3,3)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button2_2 = game.add.button(square2_2.x, square2_2.y, 'atlas', function() {button1Click(2,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button3_2 = game.add.button(square3_2.x, square3_2.y, 'atlas', function() {button1Click(3,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button3_1.xCoord = 3;
+			button3_1.yCoord = 1;
+			button3_3.xCoord = 3;
+			button3_3.yCoord = 3;
+			button2_2.xCoord = 2;
+			button2_2.yCoord = 2;
+			button3_2.xCoord = 3;
+			button3_2.yCoord = 2;
+			buttonGroup.add(button3_1);
+			buttonGroup.add(button3_3);
+			buttonGroup.add(button2_2);
+			buttonGroup.add(button3_2);
+			} else if (player5.yCoord == 3) {
+			button3_2 = game.add.button(square3_2.x, square3_2.y, 'atlas', function() {button1Click(3,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button2_3 = game.add.button(square2_3.x, square2_3.y, 'atlas', function() {button1Click(2,3)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button3_3 = game.add.button(square3_3.x, square3_3.y, 'atlas', function() {button1Click(3,3)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button3_2.xCoord = 3;
+			button3_2.yCoord = 2;
+			button2_3.xCoord = 2;
+			button2_3.yCoord = 3;
+			button3_3.xCoord = 3;
+			button3_3.yCoord = 3;
+			buttonGroup.add(button3_2);
+			buttonGroup.add(button2_3);
+			buttonGroup.add(button3_3);
+			}
+		}	
+	}
+	buttonGroup.forEachAlive(function (c) { if((c.xCoord == player1.xCoord && c.yCoord == player1.yCoord) || (c.xCoord == player3.xCoord && c.yCoord == player3.yCoord)){ c.kill(); } });
+}
+
+function p6click() { //do the same with when player 2 is clicked
+	buttonGroup.forEachAlive(function (c) { c.kill(); });
+	if (phaseCounter < 2 && turnCounter == 1) {
+		p2Player = 6;
+		phaseCounter = 1;
+		if (player6.xCoord == 4) {
+			if (player6.yCoord == 1) {
+			button4_2 = game.add.button(square4_2.x, square4_2.y, 'atlas', function() {button2Click(4,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button5_1 = game.add.button(square5_1.x, square5_1.y, 'atlas', function() {button2Click(5,1)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button4_1 = game.add.button(square4_1.x, square4_1.y, 'atlas', function() {button2Click(4,1)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button4_2.xCoord = 4;
+			button4_2.yCoord = 2;
+			button5_1.xCoord = 5;
+			button5_1.yCoord = 1;
+			button4_1.xCoord = 4;
+			button4_1.yCoord = 1;
+			buttonGroup.add(button4_2);
+			buttonGroup.add(button5_1);
+			buttonGroup.add(button4_1);
+			} else if (player6.yCoord == 2) {
+			button4_1 = game.add.button(square4_1.x, square4_1.y, 'atlas', function() {button2Click(4,1)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button4_3 = game.add.button(square4_3.x, square4_3.y, 'atlas', function() {button2Click(4,3)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button5_2 = game.add.button(square5_2.x, square5_2.y, 'atlas', function() {button2Click(5,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button4_2 = game.add.button(square4_2.x, square4_2.y, 'atlas', function() {button2Click(4,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button4_1.xCoord = 4;
+			button4_1.yCoord = 1;
+			button4_3.xCoord = 4;
+			button4_3.yCoord = 3;
+			button5_2.xCoord = 5;
+			button5_2.yCoord = 2;
+			button4_2.xCoord = 4;
+			button4_2.yCoord = 2;
+			buttonGroup.add(button4_1);
+			buttonGroup.add(button4_3);
+			buttonGroup.add(button5_2);
+			buttonGroup.add(button4_2);
+			} else if (player6.yCoord == 3) {
+			button4_2 = game.add.button(square4_2.x, square4_2.y, 'atlas', function() {button2Click(4,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button5_3 = game.add.button(square5_1.x, square5_1.y, 'atlas', function() {button2Click(5,3)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button4_3 = game.add.button(square4_3.x, square4_3.y, 'atlas', function() {button2Click(4,3)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button4_2.xCoord = 4;
+			button4_2.yCoord = 2;
+			button5_3.xCoord = 5;
+			button5_3.yCoord = 3;
+			button4_3.xCoord = 4;
+			button4_3.yCoord = 3;
+			buttonGroup.add(button4_2);
+			buttonGroup.add(button5_3);
+			buttonGroup.add(button4_3);
+			}
+		} else if (player6.xCoord == 5) {
+			if (player6.yCoord == 1) {
+			button4_1 = game.add.button(square4_1.x, square4_1.y, 'atlas', function() {button2Click(4,1)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button6_1 = game.add.button(square6_1.x, square6_1.y, 'atlas', function() {button2Click(6,1)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button5_2 = game.add.button(square5_2.x, square5_2.y, 'atlas', function() {button2Click(5,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button5_1 = game.add.button(square5_1.x, square5_1.y, 'atlas', function() {button2Click(5,1)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button4_1.xCoord = 4;
+			button4_1.yCoord = 1;
+			button6_1.xCoord = 6;
+			button6_1.yCoord = 1;
+			button5_2.xCoord = 5;
+			button5_2.yCoord = 2;
+			button5_1.xCoord = 5;
+			button5_1.yCoord = 1;
+			buttonGroup.add(button4_1);
+			buttonGroup.add(button6_1);
+			buttonGroup.add(button5_2);
+			buttonGroup.add(button5_1);
+			} else if (player6.yCoord == 2) {
+			button5_1 = game.add.button(square5_1.x, square5_1.y, 'atlas', function() {button2Click(5,1)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button4_2 = game.add.button(square4_2.x, square4_2.y, 'atlas', function() {button2Click(4,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button6_2 = game.add.button(square6_2.x, square6_2.y, 'atlas', function() {button2Click(6,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button5_3 = game.add.button(square5_3.x, square5_3.y, 'atlas', function() {button2Click(5,3)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button5_2 = game.add.button(square5_2.x, square5_2.y, 'atlas', function() {button2Click(5,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button5_1.xCoord = 5;
+			button5_1.yCoord = 1;
+			button4_2.xCoord = 4;
+			button4_2.yCoord = 2;
+			button6_2.xCoord = 6;
+			button6_2.yCoord = 2;
+			button5_3.xCoord = 5;
+			button5_3.yCoord = 3;
+			button5_2.xCoord = 5;
+			button5_2.yCoord = 2;
+			buttonGroup.add(button5_1);
+			buttonGroup.add(button4_2);
+			buttonGroup.add(button6_2);
+			buttonGroup.add(button5_3);
+			buttonGroup.add(button5_2);
+			} else if (player6.yCoord == 3) {
+			button4_3 = game.add.button(square4_3.x, square4_3.y, 'atlas', function() {button2Click(4,3)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button6_3 = game.add.button(square6_3.x, square6_3.y, 'atlas', function() {button2Click(6,3)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button5_2 = game.add.button(square5_2.x, square5_2.y, 'atlas', function() {button2Click(5,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button5_3 = game.add.button(square5_3.x, square5_3.y, 'atlas', function() {button2Click(5,3)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button4_3.xCoord = 4;
+			button4_3.yCoord = 3;
+			button6_3.xCoord = 6;
+			button6_3.yCoord = 3;
+			button5_2.xCoord = 5;
+			button5_2.yCoord = 2;
+			button5_3.xCoord = 5;
+			button5_3.yCoord = 3;
+			buttonGroup.add(button4_3);
+			buttonGroup.add(button6_3);
+			buttonGroup.add(button5_2);
+			buttonGroup.add(button5_3);
+			}
+		} else if (player6.xCoord == 6) {
+			if (player6.yCoord == 1) {	
+			button6_2 = game.add.button(square6_2.x, square6_2.y, 'atlas', function() {button2Click(6,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button5_1 = game.add.button(square5_1.x, square5_1.y, 'atlas', function() {button2Click(5,1)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button6_1 = game.add.button(square6_1.x, square6_1.y, 'atlas', function() {button2Click(6,1)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button6_2.xCoord = 6;
+			button6_2.yCoord = 2;
+			button5_1.xCoord = 5;
+			button5_1.yCoord = 1;
+			button6_1.xCoord = 6;
+			button6_1.yCoord = 1;
+			buttonGroup.add(button6_2);
+			buttonGroup.add(button5_1);
+			buttonGroup.add(button6_1);
+			} else if (player6.yCoord == 2) {
+			button6_1 = game.add.button(square6_1.x, square6_1.y, 'atlas', function() {button2Click(6,1)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button6_3 = game.add.button(square6_3.x, square6_3.y, 'atlas', function() {button2Click(6,3)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button5_2 = game.add.button(square5_2.x, square5_2.y, 'atlas', function() {button2Click(5,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button6_2 = game.add.button(square6_2.x, square6_2.y, 'atlas', function() {button2Click(6,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button6_1.xCoord = 6;
+			button6_1.yCoord = 1;
+			button6_3.xCoord = 6;
+			button6_3.yCoord = 3;
+			button5_2.xCoord = 5;
+			button5_2.yCoord = 2;
+			button6_2.xCoord = 6;
+			button6_2.yCoord = 2;
+			buttonGroup.add(button6_1);
+			buttonGroup.add(button6_3);
+			buttonGroup.add(button5_2);
+			buttonGroup.add(button6_2);
+			} else if (player6.yCoord == 3) {
+			button6_2 = game.add.button(square6_2.x, square6_2.y, 'atlas', function() {button2Click(6,2)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button5_3 = game.add.button(square5_3.x, square5_3.y, 'atlas', function() {button2Click(5,3)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button6_3 = game.add.button(square6_3.x, square6_3.y, 'atlas', function() {button2Click(6,3)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+			button6_2.xCoord = 6;
+			button6_2.yCoord = 2;
+			button5_3.xCoord = 5;
+			button5_3.yCoord = 3;
+			button6_3.xCoord = 6;
+			button6_3.yCoord = 3;
+			buttonGroup.add(button6_2);
+			buttonGroup.add(button5_3);
+			buttonGroup.add(button6_3);
+			}
+		}
+	} 
+	buttonGroup.forEachAlive(function (c) { if((c.xCoord == player2.xCoord && c.yCoord == player2.yCoord) || (c.xCoord == player4.xCoord && c.yCoord == player4.yCoord)){ c.kill(); } });
+}
 function button1Click(x, y) { //when one of the buttons created by the previous function is created
 	//console.log('im here');
-	player1.x = -77 + 130*x; //move the player to a certain spot depending on where the button was
-	player1.y = 194 + 95*y;
+	if(p1Player == 1) {		
+		player1.x = -77 + 130*x; //move the player to a certain spot depending on where the button was
+		player1.y = 194 + 95*y;
+	} else if(p1Player == 3) {		
+		player3.x = -77 + 130*x; //move the player to a certain spot depending on where the button was
+		player3.y = 194 + 95*y;
+	} else if(p1Player == 5) {		
+		player5.x = -77 + 130*x; //move the player to a certain spot depending on where the button was
+		player5.y = 194 + 95*y;
+	}
 	buttonGroup.forEachAlive(function (c) { c.kill(); }); // delete the existing buttons, waiting for next move phase
 	phaseCounter = 2; //increment phase counter to attack phase
 }
 function button2Click(x, y) { // same with player 2
 	//console.log('im here 2');
-	player2.x = -62 + 130*x;
-	player2.y = 194 + 95*y;
+	if(p2Player == 2) {
+		player2.x = -62 + 130*x;
+		player2.y = 194 + 95*y;
+	} else if(p2Player == 4) {
+		player4.x = -62 + 130*x;
+		player4.y = 194 + 95*y;
+	} if(p2Player == 6) {
+		player6.x = -62 + 130*x;
+		player6.y = 194 + 95*y;
+	}	
 	buttonGroup.forEachAlive(function (c) { c.kill(); });
 	phaseCounter = 2;
 }
@@ -490,33 +1374,200 @@ function attP2C(x, y) {
 function confirmPressed() { //when enter is pressed, check to see which attack button was pressed last, and check to see if the attack hits
 	if (attackCounter == 1) { //an attempt was made to make this use sprite overlap checking, but it didn't work well with the irregular player sprite
 		if (turnCounter == 0) { //so it simply checks the squares as expected
-			if (player1.yCoord == player2.yCoord) {
-				player2.health -= 1;
-			}
+			if (p1Player == 1) {
+				if (player1.yCoord == player2.yCoord) {
+					player2.health -= 1;
+				}
+				if (player1.yCoord == player4.yCoord) {
+					player4.health -= 1;
+				}
+				if (player1.yCoord == player6.yCoord) {
+					player6.health -= 1;
+				}
+			} else if (p1Player == 3) {
+				if (player3.yCoord == player2.yCoord) {
+					player2.health -= 1;
+				}
+				if (player3.yCoord == player4.yCoord) {
+					player4.health -= 1;
+				} 
+				if (player3.yCoord == player6.yCoord) {
+					player6.health -= 1;
+				}
+			} else if (p1Player == 1) {
+				if (player5.yCoord == player2.yCoord) {
+					player5.health -= 1;
+				}
+				if (player5.yCoord == player4.yCoord) {
+					player4.health -= 1;
+				} 
+				if (player5.yCoord == player6.yCoord) {
+					player6.health -= 1;
+				}
+			}			
 		} else if (turnCounter == 1) {
-			if (player1.yCoord == player2.yCoord) {
-				player1.health -= 1;
-			}
+			if (p2Player == 2) {
+				if (player1.yCoord == player2.yCoord) {
+					player1.health -= 1;
+				} 
+				if (player3.yCoord == player2.yCoord) {
+					player3.health -= 1;
+				} 
+				if (player3.yCoord == player2.yCoord) {
+					player5.health -= 1;
+				}
+			} else if (p2Player == 4) {
+				if (player1.yCoord == player4.yCoord) {
+					player1.health -= 1;
+				} 
+				if (player3.yCoord == player4.yCoord) {
+					player3.health -= 1;
+				} 
+				if (player5.yCoord == player4.yCoord) {
+					player3.health -= 1;
+				}
+			} else if (p2Player == 6) {
+				if (player1.yCoord == player6.yCoord) {
+					player1.health -= 1;
+				} if (player3.yCoord == player6.yCoord) {
+					player3.health -= 1;
+				} if (player5.yCoord == player6.yCoord) {
+					player5.health -= 1;
+				}
+			}	
 		}
 	} else if (attackCounter == 2) {
 		if (turnCounter == 0) {
-			if (player2.xCoord == player1.xCoord + 3) {
-				player2.health -= 1;
-			}
+			if (p1Player == 1) {
+				if (player2.xCoord == player1.xCoord + 3) {
+					player2.health -= 1;
+				} 
+				if (player4.xCoord == player1.xCoord + 3) {
+					player4.health -= 1;
+				} 
+				if (player6.xCoord == player1.xCoord + 3) {
+					player6.health -= 1;
+				}
+			} else if (p1Player == 3) {
+				if (player2.xCoord == player3.xCoord + 3) {
+					player2.health -= 1;
+				} 
+				if (player4.xCoord == player3.xCoord + 3) {
+					player4.health -= 1;
+				} 
+				if (player6.xCoord == player3.xCoord + 3) {
+					player6.health -= 1;
+				}
+			} else if (p1Player == 5) {
+				if (player2.xCoord == player5.xCoord + 3) {
+					player2.health -= 1;
+				} 
+				if (player4.xCoord == player5.xCoord + 3) {
+					player4.health -= 1;
+				} 
+				if (player6.xCoord == player5.xCoord + 3) {
+					player6.health -= 1;
+				}
+			}			
 		} else if (turnCounter == 1) {
-			if (player1.xCoord == player2.xCoord - 3) {
-				player1.health -= 1;
+			if (p2Player == 2){
+				if (player1.xCoord == player2.xCoord - 3) {
+					player1.health -= 1;
+				}
+				if (player3.xCoord == player2.xCoord - 3) {
+					player3.health -= 1;
+				}
+				if (player5.xCoord == player2.xCoord - 3) {
+					player5.health -= 1;
+				}
+			} else if (p2Player == 4){
+				if (player1.xCoord == player4.xCoord - 3) {
+					player1.health -= 1;
+				}
+				if (player3.xCoord == player4.xCoord - 3) {
+					player3.health -= 1;
+				}
+				if (player5.xCoord == player4.xCoord - 3) {
+					player5.health -= 1;
+				}			
+			} else if (p2Player == 6){
+				if (player1.xCoord == player6.xCoord - 3) {
+					player1.health -= 1;
+				}
+				if (player3.xCoord == player6.xCoord - 3) {
+					player3.health -= 1;
+				}
+				if (player5.xCoord == player6.xCoord - 3) {
+					player5.health -= 1;
+				}
 			}
 		}
 	} else if (attackCounter == 3) { //attack 3 requires more precise positioning, and thus deals more damage
 		if (turnCounter == 0) {
-			if (player2.xCoord == player1.xCoord + 3 || player2.yCoord == player1.yCoord) {
-				player2.health -= 2;
+			if (p1Player == 1) {
+				if (player2.xCoord == player1.xCoord + 3 && player2.yCoord == player1.yCoord) {
+					player2.health -= 2;
+				}
+				if (player4.xCoord == player1.xCoord + 3 && player4.yCoord == player1.yCoord) {
+					player4.health -= 2;
+				}				
+				if (player6.xCoord == player1.xCoord + 3 && player6.yCoord == player1.yCoord) {
+					player6.health -= 2;
+				}
+			} else if (p1Player == 3) {
+				if (player2.xCoord == player3.xCoord + 3 && player2.yCoord == player3.yCoord) {
+					player2.health -= 2;
+				}
+				if (player4.xCoord == player3.xCoord + 3 && player4.yCoord == player3.yCoord) {
+					player4.health -= 2;
+				}				
+				if (player6.xCoord == player3.xCoord + 3 && player6.yCoord == player3.yCoord) {
+					player6.health -= 2;
+				}
+			} else if (p1Player == 5) {
+				if (player2.xCoord == player5.xCoord + 3 && player2.yCoord == player5.yCoord) {
+					player2.health -= 2;
+				}
+				if (player4.xCoord == player5.xCoord + 3 && player4.yCoord == player5.yCoord) {
+					player4.health -= 2;
+				}				
+				if (player6.xCoord == player5.xCoord + 3 && player6.yCoord == player5.yCoord) {
+					player6.health -= 2;
+				}
 			}
 		} else if (turnCounter == 1) {
-			if (player1.xCoord == player2.xCoord - 3 || player1.yCoord == player1.yCoord) {
-				player1.health -= 2;
+			if (p2Player == 2) {
+				if (player1.xCoord == player2.xCoord - 3 && player1.yCoord == player2.yCoord) {
+					player1.health -= 2;
+				}
+				if (player3.xCoord == player2.xCoord - 3 && player5.yCoord == player2.yCoord) {
+					player3.health -= 2;
+				}
+				if (player5.xCoord == player2.xCoord - 3 && player5.yCoord == player2.yCoord) {
+					player5.health -= 2;
+				}
+			} else if (p2Player == 4) {
+				if (player1.xCoord == player4.xCoord - 3 && player1.yCoord == player4.yCoord) {
+					player1.health -= 2;
+				}
+				if (player3.xCoord == player4.xCoord - 3 && player5.yCoord == player4.yCoord) {
+					player3.health -= 2;
+				}
+				if (player5.xCoord == player4.xCoord - 3 && player5.yCoord == player4.yCoord) {
+					player5.health -= 2;
+				}
+			} else if (p2Player == 6) {
+				if (player1.xCoord == player6.xCoord - 3 && player1.yCoord == player6.yCoord) {
+					player1.health -= 2;
+				}
+				if (player3.xCoord == player6.xCoord - 3 && player5.yCoord == player6.yCoord) {
+					player3.health -= 2;
+				}
+				if (player5.xCoord == player6.xCoord - 3 && player5.yCoord == player6.yCoord) {
+					player5.health -= 2;
+				}
 			}
+			
 		}
 	}
 	
