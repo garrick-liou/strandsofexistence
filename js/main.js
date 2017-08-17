@@ -71,6 +71,7 @@ var GameLoop = function(game) {};
 GameLoop.prototype = {
    create: function (){
       console.log('GameLoop create'); 
+      turnCounter = 0;
       background = game.add.sprite(0, 0, 'atlas', 'background');
       background.scale.setTo(0.78125);
       //scale background, add tiles
@@ -106,12 +107,15 @@ GameLoop.prototype = {
       damageGroup = game.add.group();
       damageGroup.enableBody = true;
       playerGroup = game.add.group();
+      lifeBarGroup = game.add.group();
+      borderBarGroup = game.add.group();
+      damageBarGroup = game.add.group();
       player1 = new Player(game, 'atlas', 'Player1_01', 1);
       player2 = new Player(game, 'atlas', 'Player2_01', 2);
-      player3 = new Player(game, 'atlas', 'Player1_01', 3);
-      player4 = new Player(game, 'atlas', 'Player2_01', 4);
-      player5 = new Player(game, 'atlas', 'Player1_01', 5);
-      player6 = new Player(game, 'atlas', 'Player2_01', 6);
+      player3 = new Player(game, 'atlas', 'Player3_01', 3);
+      player4 = new Player(game, 'atlas', 'Player4_01', 4);
+      player5 = new Player(game, 'atlas', 'Player5_01', 5);
+      player6 = new Player(game, 'atlas', 'Player6_01', 6);
       playerGroup.add(player1);
       playerGroup.add(player2);
       playerGroup.add(player3);
@@ -130,28 +134,54 @@ GameLoop.prototype = {
       player5.inputEnabled = true;
       game.add.existing(player2);
       player6.inputEnabled = true;
+      p3lifeBar = game.add.sprite(25, 25, 'atlas', 'lifeBar');
+      p3borderBar = game.add.sprite(25, 25, 'atlas', 'borderBar');
+      p3damageBar = game.add.sprite(25, 25, 'atlas', 'damageBar');
+      p1lifeBar = game.add.sprite(25, 75, 'atlas', 'lifeBar');
+      p1borderBar = game.add.sprite(25, 75, 'atlas', 'borderBar');
+      p1damageBar = game.add.sprite(25, 75, 'atlas', 'damageBar');
+      p5lifeBar = game.add.sprite(25, 125, 'atlas', 'lifeBar');
+      p5borderBar = game.add.sprite(25, 125, 'atlas', 'borderBar');
+      p5damageBar = game.add.sprite(25, 125, 'atlas', 'damageBar');
+      p4lifeBar = game.add.sprite(578, 25, 'atlas', 'lifeBar');
+      p4borderBar = game.add.sprite(578, 25, 'atlas', 'borderBar');
+      p4damageBar = game.add.sprite(578, 25, 'atlas', 'damageBar');
+      p2lifeBar = game.add.sprite(578, 75, 'atlas', 'lifeBar');
+      p2borderBar = game.add.sprite(578, 75, 'atlas', 'borderBar');
+      p2damageBar = game.add.sprite(578, 75, 'atlas', 'damageBar');
+      p6lifeBar = game.add.sprite(578, 125, 'atlas', 'lifeBar');
+      p6borderBar = game.add.sprite(578, 125, 'atlas', 'borderBar');
+      p6damageBar = game.add.sprite(578, 125, 'atlas', 'damageBar');
+      damageBarGroup.add(p1damageBar);
+      damageBarGroup.add(p2damageBar);
+      damageBarGroup.add(p3damageBar);
+      damageBarGroup.add(p4damageBar);
+      damageBarGroup.add(p5damageBar);
+      damageBarGroup.add(p6damageBar);
+      //damageBarGroup.forEachAlive(function(c) { c.scale.x = 0; });
       //add characters and add character animations
       //the floating characters are at the center of their squares
       player1.animations.add('p1_float', Phaser.Animation.generateFrameNames('Player1_', 1, 12, '', 2), 20, true);
       player1.animations.play('p1_float');
       player2.animations.add('p2_float', Phaser.Animation.generateFrameNames('Player2_', 1, 12, '', 2), 20, true);
       player2.animations.play('p2_float');
-      player3.animations.add('p1_float', Phaser.Animation.generateFrameNames('Player1_', 1, 12, '', 2), 20, true);
-      player3.animations.play('p1_float');
-      player4.animations.add('p2_float', Phaser.Animation.generateFrameNames('Player2_', 1, 12, '', 2), 20, true);
-      player4.animations.play('p2_float');
-      player5.animations.add('p1_float', Phaser.Animation.generateFrameNames('Player1_', 1, 12, '', 2), 20, true);
-      player5.animations.play('p1_float');
-      player6.animations.add('p2_float', Phaser.Animation.generateFrameNames('Player2_', 1, 12, '', 2), 20, true);
-      player6.animations.play('p2_float');
-      player1Text = game.add.text(25, 25, 'Player 1 Health: ', { fontSize: '32px', fill: '#ffffff'});
+      player3.animations.add('p3_float', Phaser.Animation.generateFrameNames('Player3_', 1, 12, '', 2), 20, true);
+      player3.animations.play('p3_float');
+      player4.animations.add('p4_float', Phaser.Animation.generateFrameNames('Player4_', 1, 12, '', 2), 20, true);
+      player4.animations.play('p4_float');
+      player5.animations.add('p5_float', Phaser.Animation.generateFrameNames('Player5_', 1, 12, '', 2), 20, true);
+      player5.animations.play('p5_float');
+      player6.animations.add('p6_float', Phaser.Animation.generateFrameNames('Player6_', 1, 12, '', 2), 20, true);
+      player6.animations.play('p6_float');
+      /*player1Text = game.add.text(25, 25, 'Player 1 Health: ', { fontSize: '32px', fill: '#ffffff'});
       player2Text = game.add.text(500, 25, 'Player 2 Health: ',  { fontSize: '32px', fill: '#ffffff'});
       player3Text = game.add.text(25, 70, 'Player 3 Health: ', { fontSize: '32px', fill: '#ffffff'});
       player4Text = game.add.text(500, 70, 'Player 4 Health: ',  { fontSize: '32px', fill: '#ffffff'});
       player5Text = game.add.text(25, 115, 'Player 5 Health: ', { fontSize: '32px', fill: '#ffffff'});
       player6Text = game.add.text(500, 115, 'Player 6 Health: ',  { fontSize: '32px', fill: '#ffffff'});
+
       text = game.add.text(320, 50, '', { fontSize: '12px', fill: '#ffffff'} );
-      text2 = game.add.text(320, 90, '', { fontSize: '12px', fill: '#ffffff'} );
+      text2 = game.add.text(320, 90, '', { fontSize: '12px', fill: '#ffffff'} );*/
    },
    update: function(){    
    		//which player is moving?
@@ -161,14 +191,14 @@ GameLoop.prototype = {
    	player4.events.onInputDown.add(p4click, this);   
    	player5.events.onInputDown.add(p5click, this);   		
    	player6.events.onInputDown.add(p6click, this);   	
-   	player1Text.text = 'Player 1 Health: ' + player1.health;
+   	/*player1Text.text = 'Player 1 Health: ' + player1.health;
    	player2Text.text = 'Player 2 Health: ' + player2.health; // showing the health of each
    	player3Text.text = 'Player 3 Health: ' + player3.health;
    	player4Text.text = 'Player 4 Health: ' + player4.health;
    	player5Text.text = 'Player 5 Health: ' + player5.health;
    	player6Text.text = 'Player 6 Health: ' + player6.health;
    	text.text = 'phase: ' + phaseCounter + ' turn: ' + turnCounter + ' attack: ' + attackCounter;
-   	text2.text = 'player1: ' + p1Player + ' player2: ' + p2Player;
+   	text2.text = 'player1: ' + p1Player + ' player2: ' + p2Player;*/
    	if (phaseCounter > 1 && phaseCounter < 4) { // if the player has already moved
    		if(game.input.keyboard.justPressed(Phaser.Keyboard.ONE)) { //wait for attack button input, 1, 2, or 3 and go to appropriate attack function
    			attackCounter = 1;
@@ -234,22 +264,46 @@ GameLoop.prototype = {
    			confirmPressed();
    		}
    	}
-   	if (player1.health == 0) {
+   	if (player1.health <= 0) {
+   		player1.x = 0;
+   		player1.y = 0;
+   		player1.x = 0;
+   		player1.y = 0;
    		player1.kill();
    	}
-   	if (player2.health == 0) {
+   	if (player2.health <= 0) {
+   		player2.x = 0;
+   		player2.y = 0;
+   		player2.xCoord = 0;
+   		player2.yCoord = 0;
    		player2.kill();
    	}
-   	if (player3.health == 0) {
+   	if (player3.health <= 0) {
+   		player3.x = 0;
+   		player3.y = 0;
+   		player3.xCoord = 0;
+   		player3.yCoord = 0;
    		player3.kill();
    	}
-   	if (player4.health == 0) {
+   	if (player4.health <= 0) {
+   		player4.x = 0;
+   		player4.y = 0;
+   		player4.xCoord = 0;
+   		player4.yCoord = 0;
    		player4.kill();
    	}
-   	if (player5.health == 0) {
+   	if (player5.health <= 0) {
+   		player5.x = 0;
+   		player5.y = 0;
+   		player5.xCoord = 0;
+   		player5.yCoord = 0;
    		player5.kill();
    	}
-   	if (player6.health == 0) {
+   	if (player6.health <= 0) {
+   		player6.x = 0;
+   		player6.y = 0;
+   		player6.xCoord = 0;
+   		player6.yCoord = 0;
    		player6.kill();
    	}
    	if (player1.health == 0 && player3.health == 0 && player5.health == 0) {
@@ -259,7 +313,44 @@ GameLoop.prototype = {
    		winner = 1;
    		game.state.start('GameOver');
    	}
-    }
+   	if(player1.health >= 0) {
+   		p1lifeBar.scale.x = player1.health/5;
+   	} else {
+   		player1.health = 0;
+   	}   	  
+   	if(player2.health >= 0) {
+   		p2lifeBar.scale.x = player2.health/5;
+   	} else {
+   		player2.health = 0;
+   	}   	 
+   	if(player3.health >= 0) {
+   		p3lifeBar.scale.x = player3.health/5;
+   	} else {
+   		player3.health = 0;
+   	}   
+   	if(player4.health >= 0) {
+   		p4lifeBar.scale.x = player4.health/5;
+   	} else {
+   		player4.health = 0;
+   	}    
+   	if(player5.health >= 0) {
+   		p5lifeBar.scale.x = player5.health/5;
+   	} else {
+   		player5.health = 0;
+   	}    
+   	if(player6.health >= 0) {
+   		p6lifeBar.scale.x = player6.health/5;
+   	} else {
+   		player6.health = 0;
+   	}   
+   	damageBarGroup.forEachAlive(function(c) {   		
+   		if (c.scale.x > 0) {
+   			c.scale.x -= .003;
+   		} else {
+   			c.scale.x = 0;
+   		}
+   	})   	
+	}
 }
 var GameOver = function(game) {};
 GameOver.prototype = {
@@ -1377,62 +1468,98 @@ function confirmPressed() { //when enter is pressed, check to see which attack b
 			if (p1Player == 1) {
 				if (player1.yCoord == player2.yCoord) {
 					player2.health -= 1;
+					p2damageBar.x = 578 + (196 * (player2.health * 0.2));
+					p2damageBar.scale.x = 0.2;					
 				}
 				if (player1.yCoord == player4.yCoord) {
 					player4.health -= 1;
+					p4damageBar.x = 578 + (196 * (player4.health * 0.2));
+					p4damageBar.scale.x = 0.2;	
 				}
 				if (player1.yCoord == player6.yCoord) {
 					player6.health -= 1;
+					p6damageBar.x = 578 + (196 * (player6.health * 0.2));
+					p6damageBar.scale.x = 0.2;	
 				}
 			} else if (p1Player == 3) {
 				if (player3.yCoord == player2.yCoord) {
 					player2.health -= 1;
+					p2damageBar.x = 578 + (196 * (player2.health * 0.2));
+					p2damageBar.scale.x = 0.2;	
 				}
 				if (player3.yCoord == player4.yCoord) {
 					player4.health -= 1;
+					p4damageBar.x = 578 + (196 * (player4.health * 0.2));
+					p4damageBar.scale.x = 0.2;	
 				} 
 				if (player3.yCoord == player6.yCoord) {
 					player6.health -= 1;
+					p6damageBar.x = 578 + (196 * (player6.health * 0.2));
+					p6damageBar.scale.x = 0.2;	
 				}
-			} else if (p1Player == 1) {
+			} else if (p1Player == 5) {
 				if (player5.yCoord == player2.yCoord) {
-					player5.health -= 1;
+					player2.health -= 1;
+					p2damageBar.x = 578 + (196 * (player2.health * 0.2));
+					p2damageBar.scale.x = 0.2;	
 				}
 				if (player5.yCoord == player4.yCoord) {
 					player4.health -= 1;
+					p4damageBar.x = 578 + (196 * (player4.health * 0.2));
+					p4damageBar.scale.x = 0.2;	
 				} 
 				if (player5.yCoord == player6.yCoord) {
 					player6.health -= 1;
+					p6damageBar.x = 578 + (196 * (player6.health * 0.2));
+					p6damageBar.scale.x = 0.2;	
 				}
 			}			
 		} else if (turnCounter == 1) {
 			if (p2Player == 2) {
 				if (player1.yCoord == player2.yCoord) {
 					player1.health -= 1;
+					p1damageBar.x = 25 + (196 * (player1.health * 0.2));
+					p1damageBar.scale.x = 0.2;	
 				} 
 				if (player3.yCoord == player2.yCoord) {
 					player3.health -= 1;
+					p3damageBar.x = 25 + (196 * (player3.health * 0.2));
+					p3damageBar.scale.x = 0.2;	
 				} 
-				if (player3.yCoord == player2.yCoord) {
+				if (player5.yCoord == player2.yCoord) {
 					player5.health -= 1;
+					p5damageBar.x = 25 + (196 * (player5.health * 0.2));
+					p5damageBar.scale.x = 0.2;	
 				}
 			} else if (p2Player == 4) {
 				if (player1.yCoord == player4.yCoord) {
 					player1.health -= 1;
+					p1damageBar.x = 25 + (196 * (player1.health * 0.2));
+					p1damageBar.scale.x = 0.2;	
 				} 
 				if (player3.yCoord == player4.yCoord) {
 					player3.health -= 1;
+					p3damageBar.x = 25 + (196 * (player3.health * 0.2));
+					p3damageBar.scale.x = 0.2;	
 				} 
 				if (player5.yCoord == player4.yCoord) {
-					player3.health -= 1;
+					player5.health -= 1;
+					p5damageBar.x = 25 + (196 * (player5.health * 0.2));
+					p5damageBar.scale.x = 0.2;	
 				}
 			} else if (p2Player == 6) {
 				if (player1.yCoord == player6.yCoord) {
 					player1.health -= 1;
+					p1damageBar.x = 25 + (196 * (player1.health * 0.2));
+					p1damageBar.scale.x = 0.2;	
 				} if (player3.yCoord == player6.yCoord) {
 					player3.health -= 1;
+					p3damageBar.x = 25 + (196 * (player3.health * 0.2));
+					p3damageBar.scale.x = 0.2;	
 				} if (player5.yCoord == player6.yCoord) {
 					player5.health -= 1;
+					p5damageBar.x = 25 + (196 * (player5.health * 0.2));
+					p5damageBar.scale.x = 0.2;	
 				}
 			}	
 		}
@@ -1441,64 +1568,100 @@ function confirmPressed() { //when enter is pressed, check to see which attack b
 			if (p1Player == 1) {
 				if (player2.xCoord == player1.xCoord + 3) {
 					player2.health -= 1;
+					p2damageBar.x = 578 + (196 * (player2.health * 0.2));
+					p2damageBar.scale.x = 0.2;	
 				} 
 				if (player4.xCoord == player1.xCoord + 3) {
 					player4.health -= 1;
+					p4damageBar.x = 578 + (196 * (player4.health * 0.2));
+					p4damageBar.scale.x = 0.2;	
 				} 
 				if (player6.xCoord == player1.xCoord + 3) {
 					player6.health -= 1;
+					p6damageBar.x = 578 + (196 * (player6.health * 0.2));
+					p6damageBar.scale.x = 0.2;	
 				}
 			} else if (p1Player == 3) {
 				if (player2.xCoord == player3.xCoord + 3) {
 					player2.health -= 1;
+					p2damageBar.x = 578 + (196 * (player2.health * 0.2));
+					p2damageBar.scale.x = 0.2;	
 				} 
 				if (player4.xCoord == player3.xCoord + 3) {
 					player4.health -= 1;
+					p4damageBar.x = 578 + (196 * (player4.health * 0.2));
+					p4damageBar.scale.x = 0.2;	
 				} 
 				if (player6.xCoord == player3.xCoord + 3) {
 					player6.health -= 1;
+					p6damageBar.x = 578 + (196 * (player6.health * 0.2));
+					p6damageBar.scale.x = 0.2;	
 				}
 			} else if (p1Player == 5) {
 				if (player2.xCoord == player5.xCoord + 3) {
 					player2.health -= 1;
+					p2damageBar.x = 578 + (196 * (player2.health * 0.2));
+					p2damageBar.scale.x = 0.2;	
 				} 
 				if (player4.xCoord == player5.xCoord + 3) {
 					player4.health -= 1;
+					p4damageBar.x = 578 + (196 * (player4.health * 0.2));
+					p4damageBar.scale.x = 0.2;	
 				} 
 				if (player6.xCoord == player5.xCoord + 3) {
 					player6.health -= 1;
+					p6damageBar.x = 578 + (196 * (player6.health * 0.2));
+					p6damageBar.scale.x = 0.2;	
 				}
 			}			
 		} else if (turnCounter == 1) {
 			if (p2Player == 2){
 				if (player1.xCoord == player2.xCoord - 3) {
 					player1.health -= 1;
+					p1damageBar.x = 25 + (196 * (player1.health * 0.2));
+					p1damageBar.scale.x = 0.2;
 				}
 				if (player3.xCoord == player2.xCoord - 3) {
 					player3.health -= 1;
+					p3damageBar.x = 25 + (196 * (player3.health * 0.2));
+					p3damageBar.scale.x = 0.2;
 				}
 				if (player5.xCoord == player2.xCoord - 3) {
 					player5.health -= 1;
+					p5damageBar.x = 25 + (196 * (player5.health * 0.2));
+					p5damageBar.scale.x = 0.2;
 				}
 			} else if (p2Player == 4){
 				if (player1.xCoord == player4.xCoord - 3) {
 					player1.health -= 1;
+					p1damageBar.x = 25 + (196 * (player1.health * 0.2));
+					p1damageBar.scale.x = 0.2;
 				}
 				if (player3.xCoord == player4.xCoord - 3) {
 					player3.health -= 1;
+					p3damageBar.x = 25 + (196 * (player3.health * 0.2));
+					p3damageBar.scale.x = 0.2;
 				}
 				if (player5.xCoord == player4.xCoord - 3) {
 					player5.health -= 1;
+					p5damageBar.x = 25 + (196 * (player5.health * 0.2));
+					p5damageBar.scale.x = 0.2;
 				}			
 			} else if (p2Player == 6){
 				if (player1.xCoord == player6.xCoord - 3) {
 					player1.health -= 1;
+					p1damageBar.x = 25 + (196 * (player1.health * 0.2));
+					p1damageBar.scale.x = 0.2;
 				}
 				if (player3.xCoord == player6.xCoord - 3) {
 					player3.health -= 1;
+					p3damageBar.x = 25 + (196 * (player3.health * 0.2));
+					p3damageBar.scale.x = 0.2;
 				}
 				if (player5.xCoord == player6.xCoord - 3) {
 					player5.health -= 1;
+					p5damageBar.x = 25 + (196 * (player5.health * 0.2));
+					p5damageBar.scale.x = 0.2;
 				}
 			}
 		}
@@ -1507,64 +1670,190 @@ function confirmPressed() { //when enter is pressed, check to see which attack b
 			if (p1Player == 1) {
 				if (player2.xCoord == player1.xCoord + 3 && player2.yCoord == player1.yCoord) {
 					player2.health -= 2;
+					if (player2.health < 0) {
+						p2damageBar.x = 578;
+						p2damageBar.scale.x = 0.2;	
+					} else {
+						p2damageBar.x = 578 + (196 * (player2.health * 0.2));
+						p2damageBar.scale.x = 0.4;	
+					}
 				}
 				if (player4.xCoord == player1.xCoord + 3 && player4.yCoord == player1.yCoord) {
 					player4.health -= 2;
+					if (player4.health < 0) {
+						p4damageBar.x = 578;
+						p4damageBar.scale.x = 0.2;	
+					} else {
+						p4damageBar.x = 578 + (196 * (player4.health * 0.2));
+						p4damageBar.scale.x = 0.4;	
+					}
 				}				
 				if (player6.xCoord == player1.xCoord + 3 && player6.yCoord == player1.yCoord) {
 					player6.health -= 2;
+					if (player6.health < 0) {
+						p6damageBar.x = 578;
+						p6damageBar.scale.x = 0.2;	
+					} else {
+						p6damageBar.x = 578 + (196 * (player6.health * 0.2));
+						p6damageBar.scale.x = 0.4;
+					}	
 				}
 			} else if (p1Player == 3) {
 				if (player2.xCoord == player3.xCoord + 3 && player2.yCoord == player3.yCoord) {
 					player2.health -= 2;
+					if (player2.health < 0) {
+						p2damageBar.x = 578;
+						p2damageBar.scale.x = 0.2;	
+					} else {
+						p2damageBar.x = 578 + (196 * (player2.health * 0.2));
+						p2damageBar.scale.x = 0.4;	
+					}
 				}
 				if (player4.xCoord == player3.xCoord + 3 && player4.yCoord == player3.yCoord) {
 					player4.health -= 2;
+					if (player4.health < 0) {
+						p4damageBar.x = 578;
+						p4damageBar.scale.x = 0.2;	
+					} else {
+						p4damageBar.x = 578 + (196 * (player4.health * 0.2));
+						p4damageBar.scale.x = 0.4;	
+					}
 				}				
 				if (player6.xCoord == player3.xCoord + 3 && player6.yCoord == player3.yCoord) {
 					player6.health -= 2;
+					if (player6.health < 0) {
+						p6damageBar.x = 578;
+						p6damageBar.scale.x = 0.2;	
+					} else {
+						p6damageBar.x = 578 + (196 * (player6.health * 0.2));
+						p6damageBar.scale.x = 0.4;
+					}	
 				}
 			} else if (p1Player == 5) {
 				if (player2.xCoord == player5.xCoord + 3 && player2.yCoord == player5.yCoord) {
 					player2.health -= 2;
+					if (player2.health < 0) {
+						p2damageBar.x = 578;
+						p2damageBar.scale.x = 0.2;	
+					} else {
+						p2damageBar.x = 578 + (196 * (player2.health * 0.2));
+						p2damageBar.scale.x = 0.4;	
+					}
 				}
 				if (player4.xCoord == player5.xCoord + 3 && player4.yCoord == player5.yCoord) {
 					player4.health -= 2;
+					if (player4.health < 0) {
+						p4damageBar.x = 578;
+						p4damageBar.scale.x = 0.2;	
+					} else {
+						p4damageBar.x = 578 + (196 * (player4.health * 0.2));
+						p4damageBar.scale.x = 0.4;	
+					}
 				}				
 				if (player6.xCoord == player5.xCoord + 3 && player6.yCoord == player5.yCoord) {
 					player6.health -= 2;
+					if (player6.health < 0) {
+						p6damageBar.x = 578;
+						p6damageBar.scale.x = 0.2;	
+					} else {
+						p6damageBar.x = 578 + (196 * (player6.health * 0.2));
+						p6damageBar.scale.x = 0.4;
+					}	
 				}
 			}
 		} else if (turnCounter == 1) {
 			if (p2Player == 2) {
 				if (player1.xCoord == player2.xCoord - 3 && player1.yCoord == player2.yCoord) {
 					player1.health -= 2;
+					if (player1.health < 0) {
+						p1damageBar.x = 25;
+						p1damageBar.scale.x = 0.2;	
+					} else {
+						p1damageBar.x = 25 + (196 * (player1.health * 0.2));
+						p1damageBar.scale.x = 0.4;
+					}
 				}
-				if (player3.xCoord == player2.xCoord - 3 && player5.yCoord == player2.yCoord) {
+				if (player3.xCoord == player2.xCoord - 3 && player3.yCoord == player2.yCoord) {
 					player3.health -= 2;
+					if (player3.health < 0) {
+						p3damageBar.x = 25;
+						p3damageBar.scale.x = 0.2;	
+					} else {
+						p3damageBar.x = 25 + (196 * (player3.health * 0.2));
+						p3damageBar.scale.x = 0.4;
+					}
 				}
 				if (player5.xCoord == player2.xCoord - 3 && player5.yCoord == player2.yCoord) {
 					player5.health -= 2;
+					if (player5.health < 0) {
+						p5damageBar.x = 25;
+						p5damageBar.scale.x = 0.2;	
+					} else {
+						p5damageBar.x = 25 + (196 * (player5.health * 0.2));
+						p5damageBar.scale.x = 0.4;
+					}
 				}
 			} else if (p2Player == 4) {
 				if (player1.xCoord == player4.xCoord - 3 && player1.yCoord == player4.yCoord) {
 					player1.health -= 2;
+					if (player1.health < 0) {
+						p1damageBar.x = 25;
+						p1damageBar.scale.x = 0.2;	
+					} else {
+						p1damageBar.x = 25 + (196 * (player1.health * 0.2));
+						p1damageBar.scale.x = 0.4;
+					}
 				}
-				if (player3.xCoord == player4.xCoord - 3 && player5.yCoord == player4.yCoord) {
+				if (player3.xCoord == player4.xCoord - 3 && player3.yCoord == player4.yCoord) {
 					player3.health -= 2;
+					if (player3.health < 0) {
+						p3damageBar.x = 25;
+						p3damageBar.scale.x = 0.2;	
+					} else {
+						p3damageBar.x = 25 + (196 * (player3.health * 0.2));
+						p3damageBar.scale.x = 0.4;
+					}
 				}
 				if (player5.xCoord == player4.xCoord - 3 && player5.yCoord == player4.yCoord) {
 					player5.health -= 2;
+					if (player5.health < 0) {
+						p5damageBar.x = 25;
+						p5damageBar.scale.x = 0.2;	
+					} else {
+						p5damageBar.x = 25 + (196 * (player5.health * 0.2));
+						p5damageBar.scale.x = 0.4;
+					}
 				}
 			} else if (p2Player == 6) {
 				if (player1.xCoord == player6.xCoord - 3 && player1.yCoord == player6.yCoord) {
 					player1.health -= 2;
+					if (player1.health < 0) {
+						p1damageBar.x = 25;
+						p1damageBar.scale.x = 0.2;	
+					} else {
+						p1damageBar.x = 25 + (196 * (player1.health * 0.2));
+						p1damageBar.scale.x = 0.4;
+					}
 				}
-				if (player3.xCoord == player6.xCoord - 3 && player5.yCoord == player6.yCoord) {
+				if (player3.xCoord == player6.xCoord - 3 && player3.yCoord == player6.yCoord) {
 					player3.health -= 2;
+					if (player3.health < 0) {
+						p3damageBar.x = 25;
+						p3damageBar.scale.x = 0.2;	
+					} else {
+						p3damageBar.x = 25 + (196 * (player3.health * 0.2));
+						p3damageBar.scale.x = 0.4;
+					}
 				}
 				if (player5.xCoord == player6.xCoord - 3 && player5.yCoord == player6.yCoord) {
 					player5.health -= 2;
+					if (player5.health < 0) {
+						p5damageBar.x = 25;
+						p5damageBar.scale.x = 0.2;	
+					} else {
+						p5damageBar.x = 25 + (196 * (player5.health * 0.2));
+						p5damageBar.scale.x = 0.4;
+					}
 				}
 			}
 			
