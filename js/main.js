@@ -216,7 +216,7 @@ GameLoop.prototype = {
       game.world.bringToTop(gainBarGroup);
       game.world.bringToTop(borderBarGroup);
    },
-   update: function(){    
+   update: function(){
    		//which player is moving?
     player1.events.onInputDown.add(p1click, this);   		
    	player2.events.onInputDown.add(p2click, this);   	
@@ -605,17 +605,17 @@ GameLoop.prototype = {
 var GameOver = function(game) {};
 GameOver.prototype = {
    create: function(){      
-   	//show victory/loss screen
-   	if (winner == 2) {
-   		game.add.sprite(0, 0, 'atlas', 'P2Win');
-   	} else if (winner == 1) {
-   		game.add.sprite(0, 0, 'atlas', 'P1Win');
-   	}
+      //show victory/loss screen
+      if (winner == 2) {
+         game.add.sprite(0, 0, 'atlas', 'P2Win');
+      } else if (winner == 1) {
+         game.add.sprite(0, 0, 'atlas', 'P1Win');
+      }
    },
    update: function(){ //return to start
-   	if(game.input.keyboard.justPressed(Phaser.Keyboard.ENTER)){ //press enter to start
-   			game.state.start('GameLoop');
-   		}
+      if(game.input.keyboard.justPressed(Phaser.Keyboard.ENTER)){ //press enter to start
+            game.state.start('GameLoop');
+         }
    }
 } 
 
@@ -792,7 +792,7 @@ function p1click() { //when the player 1 sprite is clicked
 		}	
 	}
 
-	buttonGroup.forEachAlive(function (c) { if((c.xCoord == player3.xCoord && c.yCoord == player3.yCoord) || (c.xCoord == player5.xCoord && c.yCoord == player5.yCoord)){ c.kill(); } });
+   buttonGroup.forEachAlive(function (c) { if((c.xCoord == player3.xCoord && c.yCoord == player3.yCoord) || (c.xCoord == player5.xCoord && c.yCoord == player5.yCoord)){ c.kill(); } });
 }
 
 function p2click() { //do the same with when player 2 is clicked
@@ -1671,158 +1671,158 @@ function p6click() { //do the same with when player 2 is clicked
 	buttonGroup.forEachAlive(function (c) { if((c.xCoord == player2.xCoord && c.yCoord == player2.yCoord) || (c.xCoord == player4.xCoord && c.yCoord == player4.yCoord)){ c.kill(); } });
 }
 function button1Click(x, y) { //when one of the buttons created by the previous function is created
-	//console.log('im here');
-	if(p1Player == 1) {		
-		player1.x = -77 + 130*x; //move the player to a certain spot depending on where the button was
-		player1.y = 194 + 95*y;
-	} else if(p1Player == 3) {		
-		player3.x = -77 + 130*x; //move the player to a certain spot depending on where the button was
-		player3.y = 194 + 95*y;
-	} else if(p1Player == 5) {		
-		player5.x = -77 + 130*x; //move the player to a certain spot depending on where the button was
-		player5.y = 194 + 95*y;
-	}
-	buttonGroup.forEachAlive(function (c) { c.kill(); }); // delete the existing buttons, waiting for next move phase
-	phaseCounter = 2; //increment phase counter to attack phase
+   //console.log('im here');
+   if(p1Player == 1) {     
+      player1.x = -77 + 130*x; //move the player to a certain spot depending on where the button was
+      player1.y = 194 + 95*y;
+   } else if(p1Player == 3) {    
+      player3.x = -77 + 130*x; //move the player to a certain spot depending on where the button was
+      player3.y = 194 + 95*y;
+   } else if(p1Player == 5) {    
+      player5.x = -77 + 130*x; //move the player to a certain spot depending on where the button was
+      player5.y = 194 + 95*y;
+   }
+   buttonGroup.forEachAlive(function (c) { c.kill(); }); // delete the existing buttons, waiting for next move phase
+   phaseCounter = 2; //increment phase counter to attack phase
 }
 function button2Click(x, y) { // same with player 2
-	//console.log('im here 2');
-	if(p2Player == 2) {
-		player2.x = -62 + 130*x;
-		player2.y = 194 + 95*y;
-	} else if(p2Player == 4) {
-		player4.x = -62 + 130*x;
-		player4.y = 194 + 95*y;
-	} if(p2Player == 6) {
-		player6.x = -62 + 130*x;
-		player6.y = 194 + 95*y;
-	}	
-	buttonGroup.forEachAlive(function (c) { c.kill(); });
-	phaseCounter = 2;
+   //console.log('im here 2');
+   if(p2Player == 2) {
+      player2.x = -62 + 130*x;
+      player2.y = 194 + 95*y;
+   } else if(p2Player == 4) {
+      player4.x = -62 + 130*x;
+      player4.y = 194 + 95*y;
+   } if(p2Player == 6) {
+      player6.x = -62 + 130*x;
+      player6.y = 194 + 95*y;
+   }  
+   buttonGroup.forEachAlive(function (c) { c.kill(); });
+   phaseCounter = 2;
 }
 
 function attP1A(x, y) { //if 1 is pressed, increment phase counter to 3, waiting for attack confirmation
-	phaseCounter = 3;
-	damageGroup.forEachAlive(function (c) { c.kill(); })
-	if (y == 1) { //create images of which squares are damaged by the player's chosen attack, 1 attack the column the player is in
-		damage4_1 = game.add.sprite(square4_1.x, square4_1.y, 'atlas', 'DamageTile');
-		damage5_1 = game.add.sprite(square5_1.x, square5_1.y, 'atlas', 'DamageTile');
-		damage6_1 = game.add.sprite(square6_1.x, square6_1.y, 'atlas', 'DamageTile');
-		damageGroup.add(damage4_1); //adds all the damage square images to the damage tile group
-		damageGroup.add(damage5_1);
-		damageGroup.add(damage6_1);
-	} else if (y == 2) {
-		damage4_2 = game.add.sprite(square4_2.x, square4_2.y, 'atlas', 'DamageTile');
-		damage5_2 = game.add.sprite(square5_2.x, square5_2.y, 'atlas', 'DamageTile');
-		damage6_2 = game.add.sprite(square6_2.x, square6_2.y, 'atlas', 'DamageTile');
-		damageGroup.add(damage4_2);
-		damageGroup.add(damage5_2);
-		damageGroup.add(damage6_2);
-	} else if (y == 3) {
-		damage4_3 = game.add.sprite(square4_3.x, square4_3.y, 'atlas', 'DamageTile');
-		damage5_3 = game.add.sprite(square5_3.x, square5_3.y, 'atlas', 'DamageTile');
-		damage6_3 = game.add.sprite(square6_3.x, square6_3.y, 'atlas', 'DamageTile');
-		damageGroup.add(damage4_3);
-		damageGroup.add(damage5_3);
-		damageGroup.add(damage6_3);
-	}
+   phaseCounter = 3;
+   damageGroup.forEachAlive(function (c) { c.kill(); })
+   if (y == 1) { //create images of which squares are damaged by the player's chosen attack, 1 attack the column the player is in
+      damage4_1 = game.add.sprite(square4_1.x, square4_1.y, 'atlas', 'DamageTile');
+      damage5_1 = game.add.sprite(square5_1.x, square5_1.y, 'atlas', 'DamageTile');
+      damage6_1 = game.add.sprite(square6_1.x, square6_1.y, 'atlas', 'DamageTile');
+      damageGroup.add(damage4_1); //adds all the damage square images to the damage tile group
+      damageGroup.add(damage5_1);
+      damageGroup.add(damage6_1);
+   } else if (y == 2) {
+      damage4_2 = game.add.sprite(square4_2.x, square4_2.y, 'atlas', 'DamageTile');
+      damage5_2 = game.add.sprite(square5_2.x, square5_2.y, 'atlas', 'DamageTile');
+      damage6_2 = game.add.sprite(square6_2.x, square6_2.y, 'atlas', 'DamageTile');
+      damageGroup.add(damage4_2);
+      damageGroup.add(damage5_2);
+      damageGroup.add(damage6_2);
+   } else if (y == 3) {
+      damage4_3 = game.add.sprite(square4_3.x, square4_3.y, 'atlas', 'DamageTile');
+      damage5_3 = game.add.sprite(square5_3.x, square5_3.y, 'atlas', 'DamageTile');
+      damage6_3 = game.add.sprite(square6_3.x, square6_3.y, 'atlas', 'DamageTile');
+      damageGroup.add(damage4_3);
+      damageGroup.add(damage5_3);
+      damageGroup.add(damage6_3);
+   }
 }
 function attP2A(x, y) { 
-	phaseCounter = 3;
-	damageGroup.forEachAlive(function (c) { c.kill(); })
-	if (y == 1) {
-		damage1_1 = game.add.sprite(square1_1.x, square1_1.y, 'atlas', 'DamageTile');
-		damage2_1 = game.add.sprite(square2_1.x, square2_1.y, 'atlas', 'DamageTile');
-		damage3_1 = game.add.sprite(square3_1.x, square2_1.y, 'atlas', 'DamageTile');
-		damageGroup.add(damage1_1);
-		damageGroup.add(damage2_1);
-		damageGroup.add(damage3_1);
-	} else if (y == 2) {
-		damage1_2 = game.add.sprite(square1_2.x, square1_2.y, 'atlas', 'DamageTile');
-		damage2_2 = game.add.sprite(square2_2.x, square2_2.y, 'atlas', 'DamageTile');
-		damage3_2 = game.add.sprite(square3_2.x, square3_2.y, 'atlas', 'DamageTile');
-		damageGroup.add(damage1_2);
-		damageGroup.add(damage2_2);
-		damageGroup.add(damage3_2);
-	} else if (y == 3) {
-		damage1_3 = game.add.sprite(square1_3.x, square1_3.y, 'atlas', 'DamageTile');
-		damage2_3 = game.add.sprite(square2_3.x, square2_3.y, 'atlas', 'DamageTile');
-		damage3_3 = game.add.sprite(square3_3.x, square3_3.y, 'atlas', 'DamageTile');
-		damageGroup.add(damage1_3);
-		damageGroup.add(damage2_3);
-		damageGroup.add(damage3_3);
-	}
+   phaseCounter = 3;
+   damageGroup.forEachAlive(function (c) { c.kill(); })
+   if (y == 1) {
+      damage1_1 = game.add.sprite(square1_1.x, square1_1.y, 'atlas', 'DamageTile');
+      damage2_1 = game.add.sprite(square2_1.x, square2_1.y, 'atlas', 'DamageTile');
+      damage3_1 = game.add.sprite(square3_1.x, square2_1.y, 'atlas', 'DamageTile');
+      damageGroup.add(damage1_1);
+      damageGroup.add(damage2_1);
+      damageGroup.add(damage3_1);
+   } else if (y == 2) {
+      damage1_2 = game.add.sprite(square1_2.x, square1_2.y, 'atlas', 'DamageTile');
+      damage2_2 = game.add.sprite(square2_2.x, square2_2.y, 'atlas', 'DamageTile');
+      damage3_2 = game.add.sprite(square3_2.x, square3_2.y, 'atlas', 'DamageTile');
+      damageGroup.add(damage1_2);
+      damageGroup.add(damage2_2);
+      damageGroup.add(damage3_2);
+   } else if (y == 3) {
+      damage1_3 = game.add.sprite(square1_3.x, square1_3.y, 'atlas', 'DamageTile');
+      damage2_3 = game.add.sprite(square2_3.x, square2_3.y, 'atlas', 'DamageTile');
+      damage3_3 = game.add.sprite(square3_3.x, square3_3.y, 'atlas', 'DamageTile');
+      damageGroup.add(damage1_3);
+      damageGroup.add(damage2_3);
+      damageGroup.add(damage3_3);
+   }
 }
 
 function attP1B(x, y) { // 2 attacks the row 3 spaces away, and highlights the tiles to be hit
-	phaseCounter = 3;
-	damageGroup.forEachAlive(function (c) { c.kill(); })
-	if (x == 1) {
-		damage4_1 = game.add.sprite(square4_1.x, square4_1.y, 'atlas', 'DamageTile');
-		damage4_2 = game.add.sprite(square4_2.x, square4_2.y, 'atlas', 'DamageTile');
-		damage4_3 = game.add.sprite(square4_3.x, square4_3.y, 'atlas', 'DamageTile');
-		damageGroup.add(damage4_1);
-		damageGroup.add(damage4_2);
-		damageGroup.add(damage4_3);
-	} else if (x == 2) {
-		damage5_1 = game.add.sprite(square5_1.x, square5_1.y, 'atlas', 'DamageTile');
-		damage5_2 = game.add.sprite(square5_2.x, square5_2.y, 'atlas', 'DamageTile');
-		damage5_3 = game.add.sprite(square5_3.x, square5_3.y, 'atlas', 'DamageTile');
-		damageGroup.add(damage5_1);
-		damageGroup.add(damage5_2);
-		damageGroup.add(damage5_3);
-	} else if (x == 3) {
-		damage6_1 = game.add.sprite(square6_1.x, square6_1.y, 'atlas', 'DamageTile');
-		damage6_2 = game.add.sprite(square6_2.x, square6_2.y, 'atlas', 'DamageTile');
-		damage6_3 = game.add.sprite(square6_3.x, square6_3.y, 'atlas', 'DamageTile');
-		damageGroup.add(damage6_1);
-		damageGroup.add(damage6_2);
-		damageGroup.add(damage6_3);
-	} 
+   phaseCounter = 3;
+   damageGroup.forEachAlive(function (c) { c.kill(); })
+   if (x == 1) {
+      damage4_1 = game.add.sprite(square4_1.x, square4_1.y, 'atlas', 'DamageTile');
+      damage4_2 = game.add.sprite(square4_2.x, square4_2.y, 'atlas', 'DamageTile');
+      damage4_3 = game.add.sprite(square4_3.x, square4_3.y, 'atlas', 'DamageTile');
+      damageGroup.add(damage4_1);
+      damageGroup.add(damage4_2);
+      damageGroup.add(damage4_3);
+   } else if (x == 2) {
+      damage5_1 = game.add.sprite(square5_1.x, square5_1.y, 'atlas', 'DamageTile');
+      damage5_2 = game.add.sprite(square5_2.x, square5_2.y, 'atlas', 'DamageTile');
+      damage5_3 = game.add.sprite(square5_3.x, square5_3.y, 'atlas', 'DamageTile');
+      damageGroup.add(damage5_1);
+      damageGroup.add(damage5_2);
+      damageGroup.add(damage5_3);
+   } else if (x == 3) {
+      damage6_1 = game.add.sprite(square6_1.x, square6_1.y, 'atlas', 'DamageTile');
+      damage6_2 = game.add.sprite(square6_2.x, square6_2.y, 'atlas', 'DamageTile');
+      damage6_3 = game.add.sprite(square6_3.x, square6_3.y, 'atlas', 'DamageTile');
+      damageGroup.add(damage6_1);
+      damageGroup.add(damage6_2);
+      damageGroup.add(damage6_3);
+   } 
 }
 
 function attP2B(x, y) {
-	phaseCounter = 3;
-	damageGroup.forEachAlive(function (c) { c.kill(); })
-	if (x == 4) {
-		damage1_1 = game.add.sprite(square1_1.x, square1_1.y, 'atlas', 'DamageTile');
-		damage1_2 = game.add.sprite(square1_2.x, square1_2.y, 'atlas', 'DamageTile');
-		damage1_3 = game.add.sprite(square1_3.x, square1_3.y, 'atlas', 'DamageTile');
-		damageGroup.add(damage1_1);
-		damageGroup.add(damage1_2);
-		damageGroup.add(damage1_3);
-	} else if (x == 5) {
-		damage2_1 = game.add.sprite(square2_1.x, square2_1.y, 'atlas', 'DamageTile');
-		damage2_2 = game.add.sprite(square2_2.x, square2_2.y, 'atlas', 'DamageTile');
-		damage2_3 = game.add.sprite(square2_3.x, square2_3.y, 'atlas', 'DamageTile');
-		damageGroup.add(damage2_1);
-		damageGroup.add(damage2_2);
-		damageGroup.add(damage2_3);
-	} else if (x == 6) {
-		damage3_1 = game.add.sprite(square3_1.x, square3_1.y, 'atlas', 'DamageTile');
-		damage3_2 = game.add.sprite(square3_2.x, square3_2.y, 'atlas', 'DamageTile');
-		damage3_3 = game.add.sprite(square3_3.x, square3_3.y, 'atlas', 'DamageTile');
-		damageGroup.add(damage3_1);
-		damageGroup.add(damage3_2);
-		damageGroup.add(damage3_3);
-	} 
+   phaseCounter = 3;
+   damageGroup.forEachAlive(function (c) { c.kill(); })
+   if (x == 4) {
+      damage1_1 = game.add.sprite(square1_1.x, square1_1.y, 'atlas', 'DamageTile');
+      damage1_2 = game.add.sprite(square1_2.x, square1_2.y, 'atlas', 'DamageTile');
+      damage1_3 = game.add.sprite(square1_3.x, square1_3.y, 'atlas', 'DamageTile');
+      damageGroup.add(damage1_1);
+      damageGroup.add(damage1_2);
+      damageGroup.add(damage1_3);
+   } else if (x == 5) {
+      damage2_1 = game.add.sprite(square2_1.x, square2_1.y, 'atlas', 'DamageTile');
+      damage2_2 = game.add.sprite(square2_2.x, square2_2.y, 'atlas', 'DamageTile');
+      damage2_3 = game.add.sprite(square2_3.x, square2_3.y, 'atlas', 'DamageTile');
+      damageGroup.add(damage2_1);
+      damageGroup.add(damage2_2);
+      damageGroup.add(damage2_3);
+   } else if (x == 6) {
+      damage3_1 = game.add.sprite(square3_1.x, square3_1.y, 'atlas', 'DamageTile');
+      damage3_2 = game.add.sprite(square3_2.x, square3_2.y, 'atlas', 'DamageTile');
+      damage3_3 = game.add.sprite(square3_3.x, square3_3.y, 'atlas', 'DamageTile');
+      damageGroup.add(damage3_1);
+      damageGroup.add(damage3_2);
+      damageGroup.add(damage3_3);
+   } 
 }
 
 function attP1C(x, y) { // attack 3 attacks the square directly across from you, 3 tiles away
-	phaseCounter = 3;
-	damageGroup.forEachAlive(function (c) { c.kill(); })
-	damage = game.add.sprite(130*x + 280, 95*y + 210, 'atlas', 'DamageTile');		
-	damageGroup.add(damage);	
+   phaseCounter = 3;
+   damageGroup.forEachAlive(function (c) { c.kill(); })
+   damage = game.add.sprite(130*x + 280, 95*y + 210, 'atlas', 'DamageTile');     
+   damageGroup.add(damage);   
 }
 
 function attP2C(x, y) {
-	phaseCounter = 3;
-	damageGroup.forEachAlive(function (c) { c.kill(); })
-	damage = game.add.sprite(130*x - 515, 95*y + 210, 'atlas', 'DamageTile');		
-	damageGroup.add(damage);	
+   phaseCounter = 3;
+   damageGroup.forEachAlive(function (c) { c.kill(); })
+   damage = game.add.sprite(130*x - 515, 95*y + 210, 'atlas', 'DamageTile');     
+   damageGroup.add(damage);   
 }
 function confirmPressed() { //when enter is pressed, check to see which attack button was pressed last, and check to see if the attack hits
-	if (attackCounter == 1) { //an attempt was made to make this use sprite overlap checking, but it didn't work well with the irregular player sprite
+if (attackCounter == 1) { //an attempt was made to make this use sprite overlap checking, but it didn't work well with the irregular player sprite
 		if (turnCounter == 0) { //so it simply checks the squares as expected
 			if (p1Player == 1) {
 				if (player1.yCoord == player2.yCoord) {	
