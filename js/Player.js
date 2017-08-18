@@ -13,7 +13,7 @@ function Player(game, key, frame, number){
             Phaser.Sprite.call(this, game, 718, 479, key, frame);
       }
 	this.number = number;
-      this.health = 20;
+      this.health = 50;
       this.memoryX = 0;
       this.memoryY = 0;
 }
