@@ -13,8 +13,9 @@ function Player(game, key, frame, number){
             Phaser.Sprite.call(this, game, 718, 479, key, frame);
       }
 	this.number = number;
-	game.physics.enable(this);
-      this.health = 5;
+      this.health = 20;
+      this.memoryX = 0;
+      this.memoryY = 0;
 }
 
 Player.prototype = Object.create(Phaser.Sprite.prototype);
