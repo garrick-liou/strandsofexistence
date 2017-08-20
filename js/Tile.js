@@ -4,9 +4,12 @@ function Grid(game, x, y, width, height, tileWidth, tileHeight, playerNumber){
     this.number = playerNumber;
     this.tileWidth = tileWidth;
     this.tileHeight = tileHeight;
-    //includes padding on the final tile
+
+    //includes padding on the final tile -- the width of the whole grid
     this.width = width*tileWidth*1.1;
     this.height = height*tileHeight*1.1;
+
+    //offset of the grid (which is a phaser group as well, so it changes the x/y of its children, the tiles, automatically)
     this.x = x;
     this.y = y;
 
@@ -51,7 +54,11 @@ function Square(grid, game, xIndex, x, yIndex, y){
 Square.prototype = Object.create(Object.prototype);
 Square.prototype.constructor = Square;
 Square.prototype.relocate = function(x, y){
-    this.button.x = x + this.x;//since button isn't a child of the group
+    //since button isn't a child of the group... sucks, but can't do anything about it, cuz you can't add something to two groups
+    //and we need the buttons in a group in order to kill them.
+    //... unless... unless we can add a group to a group. Do'oh. Well, can't do it super easily because somewhere in the damage tile
+    //thing I made them align themselves to buttons... so we'll have to also add the damage tile group to the grid group and stuff...........
+    this.button.x = x + this.x;
     this.button.y = y + this.y;
 }
 
