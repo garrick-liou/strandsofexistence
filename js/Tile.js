@@ -1,4 +1,4 @@
-function Grid(game, x, y, width, height, tileWidth, tileHeight, buttonGroup, buttonCallback, playerNumber){
+function Grid(game, x, y, width, height, tileWidth, tileHeight, playerNumber){
     Phaser.Group.call(this, game);
 
     this.number = playerNumber;
@@ -10,13 +10,15 @@ function Grid(game, x, y, width, height, tileWidth, tileHeight, buttonGroup, but
     this.x = x;
     this.y = y;
 
+    this.players = [];
+
     this.squares = [];
     for(var i = 0; i < height; i++){
         this.squares.push([]);
         for(var j = 0; j < width; j++){
             this.squares[i].push(new Square(this, game,
                  j, j*tileWidth*1.1, // padding between tiles equal to 10% of their width/height
-                 i, i*tileHeight*1.1, buttonGroup, buttonCallback));
+                 i, i*tileHeight*1.1));
         }
     }
 }
@@ -32,8 +34,7 @@ Grid.prototype.relocate = function(x, y){
     }
 }
 
-
-function Square(grid, game, xIndex, x, yIndex, y, btnGroup, fn){
+function Square(grid, game, xIndex, x, yIndex, y){
     this.parent = grid;
     this.xIndex = xIndex;
     this.yIndex = yIndex;
@@ -45,7 +46,7 @@ function Square(grid, game, xIndex, x, yIndex, y, btnGroup, fn){
     var num = (xIndex+1);
     if(grid.number == 2) num += 3;
     this.tile = new Tile(this, game, grid, 'TileColumn'+num);
-    this.button = new Button(this, game, btnGroup, function(){fn(this)});
+    this.button = new Button(this, game);
 }
 Square.prototype = Object.create(Object.prototype);
 Square.prototype.constructor = Square;
@@ -64,28 +65,11 @@ Tile.prototype = Object.create(Phaser.Sprite.prototype);
 Tile.prototype.constructor = Tile;
 
 
-function Button(parent, game, group, func){
-    Phaser.Button.call(this, game, parent.x + parent.parent.x, parent.y + parent.parent.y, 'atlas', func, parent, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+function Button(parent, game){
+    Phaser.Button.call(this, game, parent.x + parent.parent.x, parent.y + parent.parent.y, 'atlas', function(){buttonClick(parent)}, parent, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
     game.add.existing(this);
-    group.add(this);
+    buttonGroup.add(this);
     this.kill();
 }
 Button.prototype = Object.create(Phaser.Button.prototype);
 Button.prototype.constructor = Button;
-
-/*function Tile(game, x, y, name, group){
-    Phaser.Sprite.call(this, game, x, y, 'atlas', name);
-    game.add.existing(this);
-    group.add(this);
-}
-Tile.prototype = Object.create(Phaser.Sprite.prototype);
-Tile.prototype.constructor = Tile;
-
-function Button(game, x, y, xCoord, yCoord, group, func){
-    Phaser.Button.call(this, game, x, y, 'atlas', function(){func(xCoord, yCoord)}, this, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
-    game.add.existing(this);
-    group.add(this);
-    this.kill();
-}
-Button.prototype = Object.create(Phaser.Button.prototype);
-Button.prototype.constructor = Button;*/

@@ -1,12 +1,13 @@
 var game;
 var turnCounter;
 var phaseCounter;
-var lastAttack;
+var lastAttack, selectedPlayer;
 var squares, buttons;
-var p1attacks, p2attacks;
-var player1, player2, background;
+var p1attacks, p2attacks, attacks;
+var player1, player2, background, p1Grid, p2Grid;
+var damageGroup, playerGroup, buttonGroup;
 
-var JSsources = ['attacks', 'Tile', 'Player', 'input'];
+var JSsources = ['phases', 'input', 'attacks', 'Tile', 'Player'];
 
 function loadScript(url, callback) {
 	//this function copied from:
@@ -92,29 +93,44 @@ statesObject.GameLoop = {
 		phaseCounter = 0;
 		lastAttack = null;
 
+		//add background; it can be clicked to "undo" temporary decisions in a sense
 		background = game.add.sprite(0, 0, 'atlas', 'background');
 		background.scale.setTo(0.78125);
 
 		//add grids and buttons-- buttons get killed immediately after creation, and are reset later as needed
 		buttonGroup = game.add.group();
-		p1Grid = new Grid(game, 5, 305, 3, 3, 130/1.1, 95/1.1, buttonGroup, button1Click, 1);
-		p2Grid = new Grid(game, 410, 305, 3, 3, 130/1.1, 95/1.1, buttonGroup, button2Click, 2);
 
-		//add players, assigning each a grid to play on
-		player1 = new Player(game, p1Grid);
-      	player1.inputEnabled = true;//I did jank stuff, this line should probably get left alone for a while
-		player2 = new Player(game, p2Grid);
+		//130/1.1 etc. because I wanted to use the same tiles for the time being, we know 130 is the distance they were apart
+		//when it worked, and because tiles are set apart by 10% padding
+		p1Grid = new Grid(game,
+			5, 305,//grid offset
+			3, 3,//w/h in number of tiles
+			130/1.1, 95/1.1,//w/h of the tile sprites
+			1);//who owns this side?
+		
+		p2Grid = new Grid(game,
+			410, 305,//grid offset
+			3, 3,//w/h in number of tiles
+			130/1.1, 95/1.1,//w/h of the tile sprites
+			2);//who owns this side?
+
+		//add players, assigning each a grid to play on and indicating their sprite atlas names
+		playerGroup = game.add.group();
+		player1 = new Player(game, p1Grid, 'Player1_');
+		player2 = new Player(game, p2Grid, 'Player2_');
 
 		damageGroup = game.add.group();
 		damageGroup.enableBody = true;
 
 		player1Text = game.add.text(25, 25, 'Player 1 Health: ', { fontSize: '32px', fill: '#ffffff'});
 		player2Text = game.add.text(500, 25, 'Player 2 Health: ',  { fontSize: '32px', fill: '#ffffff'});
-		text = game.add.text(320, 50, '', { fontSize: '12px', fill: '#ffffff'} )
+		text = game.add.text(320, 50, '', { fontSize: '12px', fill: '#ffffff'} );
+
+		setPhase(0);
 	},
 	update: function(){
-		player1.events.onInputDown.add(p1click, this);
-		player2.events.onInputDown.add(p2click, this);
+		player1.events.onInputDown.add(playerClick, this);
+		player2.events.onInputDown.add(playerClick, this);
 		background.events.onInputDown.add(bgclick, this);
 
 		player1Text.text = 'Player 1 Health: ' + player1.health;

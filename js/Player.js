@@ -1,26 +1,23 @@
-function Player(game, grid){
-      //the information about the y position is consistent between players
-      //this.maxy = 479;
-      //this.miny = 289;
-      this.yCoord = 1;
+function Player(game, grid, spriteKey){
+      //should use xcoord and ycoord as arguments instead...
+      var yCoord = Math.floor(grid.squares.length / 2);
 	if (grid.number == 1){
-            this.keys = {u:Phaser.Keyboard.W, l:Phaser.Keyboard.A, d:Phaser.Keyboard.S, r:Phaser.Keyboard.D};
-            //this.maxx = 313;
-            //this.minx = 53;
-            this.xCoord = 0;
-		Phaser.Sprite.call(this, game, 53, 384, 'atlas', 'Player1_01');
+            var xCoord = 0;
+            Phaser.Sprite.call(this, game, 53, 384, 'atlas', spriteKey + '01');
+
+            this.inputEnabled = true;
 	} else {
-            number = 2;
-            this.keys = {u:Phaser.Keyboard.UP, l:Phaser.Keyboard.LEFT, d:Phaser.Keyboard.DOWN, r:Phaser.Keyboard.RIGHT};
-            //this.maxx = 718;
-            //this.minx = 458;
-            this.xCoord = 2;
-		Phaser.Sprite.call(this, game, 718, 384, 'atlas', 'Player2_01');
+            var xCoord = grid.squares[yCoord].length - 1;
+            Phaser.Sprite.call(this, game, 718, 384, 'atlas', spriteKey + '01');
+            
+            this.inputEnabled = false;
       }
       
       this.grid = grid;
-      this.square = grid.squares[this.yCoord][this.xCoord];
+      this.square = grid.squares[yCoord][xCoord];
       this.square.occupant = this;
+
+      this.grid.players.push(this);
       
       game.physics.enable(this);
       game.add.existing(this);
@@ -28,29 +25,12 @@ function Player(game, grid){
       
       //add characters and add character animations
       //the floating characters are at the center of their squares
-      this.animations.add('float', Phaser.Animation.generateFrameNames('Player'+grid.number+'_', 1, 12, '', 2), 20, true);
+      this.animations.add('float', Phaser.Animation.generateFrameNames(spriteKey, 1, 12, '', 2), 20, true);
       this.animations.play('float');
+
+      playerGroup.add(this);
 
 }
 
 Player.prototype = Object.create(Phaser.Sprite.prototype);
 Player.prototype.constructor = Player;
-
-/*Player.prototype.update = function() { //set the movement to the right, then when R is pressed flip sprite and move left
-      if(game.input.keyboard.justPressed(this.keys.u) && this.y > this.miny){
-            this.y -= 95;
-            this.yCoord -= 1;
-      }
-      if(game.input.keyboard.justPressed(this.keys.d) && this.y < this.maxy){
-            this.y += 95;
-            this.yCoord += 1;
-      }
-      if(game.input.keyboard.justPressed(this.keys.l) && this.x > this.minx){
-            this.x -= 130;
-            this.xCoord -= 1;
-      }
-      if(game.input.keyboard.justPressed(this.keys.r) && this.x < this.maxx){
-            this.x += 130;
-            this.xCoord += 1;
-      }
-}*/
