@@ -1,4 +1,32 @@
-function attP1A(x, y) { // 1 attacks the row that the player is on, on the enemy player's side
+//
+// in attack functions, "grid" is the defending grid, of sorts (i.e. not the one that the attack is coming from)
+//
+
+function atkA(grid, x, y){
+	for(var i = 0; i < grid.squares[y].length; i++){
+		makeDamage(grid, i, y);
+	}
+}
+
+function atkB(grid, x, y){
+	for(var i = Math.max(y-1, 0); i < Math.min(y+2, grid.squares.length); i++){
+		makeDamage(grid, x, i);
+	}
+}
+
+function atkC(grid, x, y){
+	makeDamage(grid, x, y);
+}
+
+function makeDamage(grid, x, y){
+	var sqr = grid.squares[y][x];
+	var d = damageGroup.create(sqr.x, sqr.y, 'atlas', 'DamageTile');
+	d.xCoord = x;
+	d.yCoord = y;
+}
+
+
+/*function attP1A(x, y) { // 1 attacks the row that the player is on, on the enemy player's side
 	for(var i = 0; i < 3; i++){
 		if(y == i + 1){
 			for(j = 3; j < 6; j++){
@@ -55,18 +83,35 @@ function attP2C(x, y) {
 	var d = damageGroup.create(squares[y-1][x-4].x, squares[y-1][x-4].y, 'atlas', 'DamageTile');
 	d.xCoord = x - 3;
 	d.yCoord = y;
-}
+}*/
 
-p1attacks = [
+attackInfo = [
+	{fn:atkA, dmg:1},
+	{fn:atkB, dmg:2},
+	{fn:atkC, dmg:3}];
+
+/*p1attacks = [
 	{fn:attP1A, dmg:1},
 	{fn:attP1B, dmg:1},
 	{fn:attP1C, dmg:2}];
 p2attacks = [
 	{fn:attP2A, dmg:1},
 	{fn:attP2B, dmg:1},
-	{fn:attP2C, dmg:2}];
+	{fn:attP2C, dmg:2}];*/
 
 function doAttack(number){
+	phaseCounter = 3;
+
+	for(var i = damageGroup.getFirstAlive(); i != null; i = damageGroup.getFirstAlive()) i.destroy(); //delete all damage tile sprites
+	lastAttack = attackInfo[number - 1];
+	if (turnCounter == 0) {
+		lastAttack.fn(player2.grid, player1.xCoord, player1.yCoord);
+	} else if (turnCounter == 1) {
+		lastAttack.fn(player1.grid, player2.xCoord, player2.yCoord);
+	}
+}
+
+/*function doAttack(number){
 	phaseCounter = 3;
 
 	for(var i = damageGroup.getFirstAlive(); i != null; i = damageGroup.getFirstAlive()) i.destroy(); //delete all damage tile sprites
@@ -78,4 +123,4 @@ function doAttack(number){
 		lastAttack = p2attacks[number - 1];
 		lastAttack.fn(player2.xCoord, player2.yCoord);
 	}
-}
+}*/
