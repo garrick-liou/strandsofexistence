@@ -49,23 +49,22 @@ function bgclick(){
 //when enter is pressed, check to see which attack button was pressed last, check to see if the attack hits,
 //apply appropriate damage, and go to the next turn
 function confirmPressed() {
+	let g;
 	if(turnCounter == 0) {
-		let g = p2Grid;
+		g = p2Grid;
 		turnCounter = 1; //if it was player 1's turn, make it player 2's turn
 	}else if(turnCounter == 1){
-		let g = p1Grid;
+		g = p1Grid;
 		turnCounter = 0; //vice versa
 	}
 
-	damageGroup.forEachAlive(function(square){
-		for(var p of g.players){
-			if(p.square == square) p.health -= lastAttack.dmg;
-		}
+	g.damageG.forEachAlive(function(dTile){
+		g.players.forEachAlive(function(p){
+			if(p.square == dTile.sqr) p.health -= lastAttack.dmg;
+		});
 	});
 
-	for(var dt = damageGroup.getFirstAlive(); dt != null; dt = damageGroup.getFirstAlive()) dt.destroy(); //delete all damage tile sprites
-
-	setPhase(0); //and reset the phase to move phase
+	setPhase(0); //reset the phase to move phase
 }
 
 function buttonClick(square){
@@ -82,9 +81,9 @@ function buttonClick(square){
 }
 
 function movementButton(square, player){
-    square.occupant = player;
     player.square.occupant = null;
+    square.occupant = player;
     player.square = square;
-	player.x = player.grid.x + player.grid.tileWidth*1.1*square.xIndex + 48;
-	player.y = player.grid.y + player.grid.tileHeight*1.1*square.yIndex - 16;
+	player.x = square.x + 48;
+	player.y = square.y - 16;
 }

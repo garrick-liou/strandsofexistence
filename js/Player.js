@@ -1,26 +1,23 @@
 function Player(game, grid, spriteKey){
       //should use xcoord and ycoord as arguments instead...
-      var yCoord = Math.floor(grid.squares.length / 2);
-	if (grid.number == 1){
-            var xCoord = 0;
-            Phaser.Sprite.call(this, game, 53, 384, 'atlas', spriteKey + '01');
-
-            this.inputEnabled = true;
-	} else {
-            var xCoord = grid.squares[yCoord].length - 1;
-            Phaser.Sprite.call(this, game, 718, 384, 'atlas', spriteKey + '01');
-            
-            this.inputEnabled = false;
-      }
-      
+      Phaser.Sprite.call(this, game, 0, 0, 'atlas', spriteKey + '01');
       this.grid = grid;
-      this.square = grid.squares[yCoord][xCoord];
-      this.square.occupant = this;
 
-      this.grid.players.push(this);
+      let yCoord = Math.floor(grid.squares.length / 2);
+	if (grid.number == 1){
+            this.square = grid.squares[yCoord][0];
+	} else {
+            let xCoord = grid.squares[yCoord].length - 1;
+            this.square = grid.squares[yCoord][xCoord];
+      }
+
+      this.square.occupant = this;
+      this.x = this.square.x + 48;
+      this.y = this.square.y - 16;
       
       game.physics.enable(this);
       game.add.existing(this);
+      this.grid.players.add(this)
       this.health = 5;
       
       //add characters and add character animations
@@ -28,8 +25,7 @@ function Player(game, grid, spriteKey){
       this.animations.add('float', Phaser.Animation.generateFrameNames(spriteKey, 1, 12, '', 2), 20, true);
       this.animations.play('float');
 
-      playerGroup.add(this);
-
+      this.events.onInputDown.add(playerClick, this);
 }
 
 Player.prototype = Object.create(Phaser.Sprite.prototype);
