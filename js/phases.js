@@ -1,7 +1,3 @@
-function resetDamageAndButtons(activeGrid){
-    
-}
-
 function setPhase(p){
     let nextAnim = 'float';
     let fn = function(p){

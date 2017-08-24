@@ -36,6 +36,27 @@ function playerClick(player){
 	}
 }
 
+//movement order given by a button (even though that ended up not always being the case)
+function movementButton(square, player){
+    player.square.occupant = null;
+    square.occupant = player;
+    player.square = square;
+	player.x = square.x + square.tile.width*3/8;
+	player.y = square.y - square.tile.height/6;
+}
+
+function buttonClick(square){
+	switch(phaseCounter){
+		case 0:
+			playerClick(square.occupant);
+			break;
+		case 1:
+			movementButton(square, selectedPlayer);
+			setPhase(2);
+			break;
+	}
+}
+
 //when enter is pressed, check to see which attack button was pressed last, check to see if the attack hits,
 //apply appropriate damage, and go to the next turn
 function confirmPressed() {
@@ -48,16 +69,14 @@ function confirmPressed() {
 		turnCounter = 0; //vice versa
 	}
 
-	g.damageG.forEachAlive(function(dTile){
-		let dPlayer = dTile.sqr.occupant;
-		if(dPlayer == null) return;
-		//kinda want to make mult a negative number but it feels wrong, so I negate the whole result later as you'd expect
-		let mult = 1;
-		if((dPlayer.element + 1)%3 == selectedPlayer.element) mult = 0.5;
-		if((dPlayer.element + 2)%3 == selectedPlayer.element) mult = 1.5;
-		dPlayer.alterHealth(-lastAttack.dmg * mult);
-	});
+	//hm... I wonder what this line does...
+	doDamage(g.damageG);
 
+	//make sure your character goes back to the right square when you cancel your actions
+	selectedPlayer.turnStartSquare = selectedPlayer.square;
+
+	setPhase(0); //reset the phase to move phase
+	
 	//deal with damage causing deaths
 	p1Grid.findDeaths();
 	p2Grid.findDeaths();
@@ -71,35 +90,10 @@ function confirmPressed() {
 		winner = 1;
 		game.state.start("GameOver");
 	}
-
-	//make sure your character goes back to the right square when you cancel your actions
-	selectedPlayer.turnStartSquare = selectedPlayer.square;
-
-	setPhase(0); //reset the phase to move phase
 }
 
+//for when you press backspace or click the background
 function cancelPressed() {
 	if(phaseCounter > 1) movementButton(selectedPlayer.turnStartSquare, selectedPlayer)
 	setPhase(0);
-}
-
-function buttonClick(square){
-	switch(phaseCounter){
-		case 0:
-			playerClick(square.occupant);
-			break;
-		case 1:
-			movementButton(square, selectedPlayer);
-			setPhase(2);
-			break;
-
-	}
-}
-
-function movementButton(square, player){
-    player.square.occupant = null;
-    square.occupant = player;
-    player.square = square;
-	player.x = square.x + square.tile.width*3/8;
-	player.y = square.y - square.tile.height/6;
 }

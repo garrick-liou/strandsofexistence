@@ -53,7 +53,7 @@ Grid.prototype.relocate = function(x, y){
     this.y = y;
 }
 Grid.prototype.findDeaths = function(){
-    let numDeaths = 0;
+    var numDeaths = 0;
     this.players.forEachAlive(function(p){
         //find how many players are dead but haven't been killed yet, and deal with that
         if(p.health <= 0) {

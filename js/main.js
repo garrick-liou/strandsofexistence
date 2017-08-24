@@ -13,7 +13,7 @@ var damageBarGroup, gainBarGroup, borderBarGroup;
 
 var winner;
 
-var JSsources = ['phases', 'input', 'attacks', 'Tile', 'Player'];
+var JSsources = ['phases', 'input', 'elements', 'attacks', 'Tile', 'Player', 'LifeBar'];
 
 //functions for linking js libraries (before running them)
 function loadScript(url, callback) {
