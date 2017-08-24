@@ -21,6 +21,8 @@ function makeDamage(grid, x, y){
 	d.xCoord = x;
 	d.yCoord = y;
 	d.sqr = sqr;
+	d.scale.x = sqr.tile.scale.x;
+	d.scale.y = sqr.tile.scale.y;
 }
 
 //set up a array/structure to easily access the functions based on what number attack they are

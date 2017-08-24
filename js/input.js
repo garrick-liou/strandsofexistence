@@ -90,6 +90,6 @@ function movementButton(square, player){
     player.square.occupant = null;
     square.occupant = player;
     player.square = square;
-	player.x = square.x + 48;
-	player.y = square.y - 16;
+	player.x = square.x + square.tile.width*3/8;
+	player.y = square.y - square.tile.height/6;
 }

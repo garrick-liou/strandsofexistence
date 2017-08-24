@@ -27,6 +27,20 @@ function Grid(x, y, width, height, tileWidth, tileHeight, playerNumber){
                  i, i*tileHeight*1.1));
         }
     }
+
+    //temporary solution to not having properly-sized tile sprites
+    let xFactor = tileWidth*1.1/130;
+    let yFactor = tileHeight*1.1/95;
+    let fn = function(o){
+        o.scale.x = xFactor;
+        o.scale.y = yFactor;
+    }
+    for(let i of this.squares){
+        for(let j of i){
+            fn(j.tile);
+            fn(j.button);
+        }
+    }
     
     this.add(this.buttonG);
     this.add(this.damageG);
@@ -65,7 +79,8 @@ function Square(grid, xIndex, x, yIndex, y){
 
     this.occupant = null;
 
-    var num = (xIndex+1);
+    //var num = (xIndex+1);
+    var num = 1 + 2 * ((xIndex + yIndex) % 2)
     if(grid.number == 2) num += 3;
     this.tile = new Tile(this, 'TileColumn'+num);
     this.button = new Button(this);

@@ -8,6 +8,9 @@ var attackCounter = 0;
 var p1Player = 0;
 var p2Player = 0;
 
+var TILE_SCALE_X = 0.7;
+var TILE_SCALE_Y = 0.55;
+
 //temporary solution, I'm not entirely sure we'll need these groups
 var damageBarGroup, gainBarGroup, borderBarGroup;
 
@@ -112,13 +115,13 @@ statesObject.GameLoop = {
 		//add grids -- 130/1.1 etc. because I wanted to use the same tiles for the time being, and we know 130 is the distance they were apart
 		//when it worked, and because tiles are set apart by 10% padding
 		p1Grid = new Grid(5, 305,//grid offset (position of upper left)
-			3, 3,//w/h in number of tiles
-			130/1.1, 95/1.1,//w/h of the tile sprites
+			4, 5,//w/h in number of tiles
+			TILE_SCALE_X * 130/1.1, TILE_SCALE_Y * 95/1.1,//w/h of the tile sprites
 			1);//who owns this side?
 		
 		p2Grid = new Grid(410, 305,//grid offset
-			3, 3,//w/h in number of tiles
-			130/1.1, 95/1.1,//w/h of the tile sprites
+			4, 5,//w/h in number of tiles
+			TILE_SCALE_X * 130/1.1, TILE_SCALE_Y * 95/1.1,//w/h of the tile sprites
 			2);//who owns this side?
 
 		damageBarGroup = game.add.group();               

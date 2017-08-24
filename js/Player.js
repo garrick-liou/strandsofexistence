@@ -57,12 +57,14 @@ function Player(grid, pNum){
             this.square = grid.squares[yCoord][xCoord];
       }*/
       let myC = coords[pNum-1];
-      this.square = grid.squares[myC[1]/2][myC[0]];
+      this.square = grid.squares[myC[1]][myC[0]];
 
       this.square.occupant = this;
       this.turnStartSquare = this.square;
-      this.x = this.square.x + 48;
-      this.y = this.square.y - 16;
+      this.scale.x = this.square.tile.scale.x;
+      this.scale.y = this.square.tile.scale.y;
+      this.x = this.square.x + this.square.tile.width*3/8;
+      this.y = this.square.y - this.square.tile.height/6;
       
       game.physics.enable(this);
       game.add.existing(this);
