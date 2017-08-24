@@ -55,7 +55,7 @@ statesObject.LoadScreen = {
    preload: function() {
       console.log('LoadScreen preload');      
       game.load.path = 'assets/';
-      game.load.atlas('atlas', 'img/atlas.png', 'img/atlas.json');
+      game.load.atlas('atlas', 'img/atlas2.png', 'img/atlas2.json');
       // creates the cursors object that allows the program to read keyboard input
       cursors = game.input.keyboard.createCursorKeys();
       // this starts the physics used in the game

@@ -81,6 +81,19 @@ function Player(grid, pNum){
       this.animations.play('float');
       this.animations.currentAnim.setFrame(Math.floor(Math.random() * 12) + 1, true);//I dunno why this is really necessary but OK
 
+      /*this.emitter = game.add.emitter(this.x, this.y + 64, 100)
+      this.emitter.makeParticles('atlas', 'particle');
+      let area = new Phaser.Rectangle(this.x, this.y, 32, 1);
+      this.emitter.area = area;
+      let gravity = new Phaser.Point(0, 10);
+      this.emitter.gravity = gravity;
+      this.emitter.setAlpha(0.2, 0.4);
+      this.emitter.setRotation(0, 40);
+      this.emitter.minParticleScale = 0.6;
+      this.emitter.maxParticleScale = 0.8;
+      this.emitter.setXSpeed(0,0);
+      this.emitter.setYSpeed(-60,-90);
+      this.emitter.flow(500, 100, 1, -1);*/
       this.events.onInputDown.add(playerClick, this);
 }
 
