@@ -17,7 +17,7 @@ function selectForMove(player){
 	if(player.square.xIndex != 0){ //as long as it's not on the left edge of a map
 		btnReset(player, -1, 0);
 	}
-	if(player.square.xIndex != player.grid.squares[0].length-1){ //'' right edge of a map
+	if(player.square.xIndex != player.grid.squares[0].length - 1){ //'' right edge of a map
 		btnReset(player, 1, 0);
 	}
 	if(player.square.yIndex != 0){ //'' top edge of a map
@@ -25,6 +25,33 @@ function selectForMove(player){
 	}
 	if(player.square.yIndex != player.grid.squares.length - 1){ //'' bottom edge of a map
 		btnReset(player, 0, 1);
+	}
+
+	//temporary thingy thing to make it so you can move 2 squares
+	if(player.square.xIndex > 1){
+		btnReset(player, -2, 0);
+	}
+	if(player.square.xIndex < player.grid.squares[0].length - 2){
+		btnReset(player, 2, 0);
+	}
+	if(player.square.yIndex > 1){
+		btnReset(player, 0, -2);
+	}
+	if(player.square.yIndex < player.grid.squares.length - 2){
+		btnReset(player, 0, 2);
+	}
+
+	if(player.square.xIndex != 0 && player.square.yIndex != 0){
+		btnReset(player, -1, -1);
+	}
+	if(player.square.xIndex != player.grid.squares[0].length - 1 && player.square.yIndex != player.grid.squares.length - 1){
+		btnReset(player, 1, 1);
+	}
+	if(player.square.xIndex != player.grid.squares[0].length - 1 && player.square.yIndex != 0){
+		btnReset(player, 1, -1);
+	}
+	if(player.square.xIndex != 0 && player.square.yIndex != player.grid.squares.length - 1){
+		btnReset(player, -1, 1);
 	}
 }
 
