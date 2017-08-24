@@ -1,10 +1,10 @@
 var coords = [
       [0, 0],
-      [2, 0],
+      [3, 0],
       [0, 2],
-      [2, 2],
+      [3, 2],
       [0, 4],
-      [2, 4]
+      [3, 4]
 ]
 
 function LifeBarContainer(parent, x, y){
