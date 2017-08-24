@@ -59,10 +59,16 @@ function confirmPressed() {
 	}
 
 	g.damageG.forEachAlive(function(dTile){
-		g.players.forEachAlive(function(p){
-			if(p.square == dTile.sqr) p.health -= lastAttack.dmg;
-		});
+		let dPlayer = dTile.sqr.occupant;
+		if(dPlayer == null) return;
+		//kinda want to make mult a negative number but it feels wrong, so I negate the whole result later as you'd expect
+		let mult = 1;
+		if((dPlayer.element + 2)%6 == selectedPlayer.element - 1) mult = 1.5;
+		if((dPlayer.element - 2)%6 == selectedPlayer.element - 1) mult = 0.5;
+		dPlayer.alterHealth(-lastAttack.dmg * mult);
 	});
+
+	selectedPlayer.turnStartSquare = selectedPlayer.square;
 
 	setPhase(0); //reset the phase to move phase
 }

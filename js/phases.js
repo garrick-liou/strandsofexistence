@@ -1,7 +1,21 @@
 function setPhase(p){
+    let nextAnim = 'float';
     let g;
-    if(turnCounter == 0) g=p1Grid;
-    else if(turnCounter == 1) g=p2Grid;
+    let fn = function(p){
+        let prevFrame = p.animations.currentAnim.frame;
+        p.animations.stop();
+        p.animations.play(nextAnim);
+        p.animations.currentAnim.setFrame(prevFrame, true);
+    }
+    if(turnCounter == 0) {
+        g=p1Grid;
+        p2Grid.players.forEachAlive(fn);
+    }else if(turnCounter == 1) {
+        g=p2Grid;
+        p1Grid.players.forEachAlive(fn);
+    }
+    nextAnim = 'turn';
+    g.players.forEachAlive(fn);
 
     switch(p){
         case 0:
@@ -30,7 +44,7 @@ function setPhase(p){
         case 2:
             //no more selecting a different player, or going back to phase 0 by "clicking off"
             g.players.forEachAlive(function(p){
-                i.inputEnabled = false;
+                p.inputEnabled = false;
             });
             background.inputEnabled = false;
 

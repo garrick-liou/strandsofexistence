@@ -25,9 +25,9 @@ function makeDamage(grid, x, y){
 
 //set up a array/structure to easily access the functions based on what number attack they are
 attackInfo = [
-	{fn:atkA, dmg:1},
-	{fn:atkB, dmg:2},
-	{fn:atkC, dmg:3}];
+	{fn:atkA, dmg:8},
+	{fn:atkB, dmg:10},
+	{fn:atkC, dmg:12}];
 
 //use the structure above
 function doAttack(number){

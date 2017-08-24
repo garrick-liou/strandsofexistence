@@ -1,4 +1,4 @@
-function Grid(game, x, y, width, height, tileWidth, tileHeight, playerNumber){
+function Grid(x, y, width, height, tileWidth, tileHeight, playerNumber){
     Phaser.Group.call(this, game);
 
     this.number = playerNumber;
@@ -22,7 +22,7 @@ function Grid(game, x, y, width, height, tileWidth, tileHeight, playerNumber){
     for(var i = 0; i < height; i++){
         this.squares.push([]);
         for(var j = 0; j < width; j++){
-            this.squares[i].push(new Square(this, game,
+            this.squares[i].push(new Square(this,
                  j, j*tileWidth*1.1, // padding between tiles equal to 10% of their width/height
                  i, i*tileHeight*1.1));
         }
@@ -38,9 +38,25 @@ Grid.prototype.relocate = function(x, y){
     this.x = x;
     this.y = y;
 }
+Grid.prototype.findDeaths = function(){
+    let numDeaths = 0;
+    this.players.forEachAlive(function(p){
+        //find how many players are dead but haven't been killed yet, and deal with that
+        if(p.health <= 0) {
+            numDeaths++;
+            p.kill();
+        }
+    });
+    if(numDeaths > 0) {
+        this.players.forEachAlive(function(p){
+            //add up to 10 hp for each allied player that died
+            p.alterHealth(10*numDeaths);
+        });
+    }
+}
 
 
-function Square(grid, game, xIndex, x, yIndex, y){
+function Square(grid, xIndex, x, yIndex, y){
     this.parent = grid;
     this.xIndex = xIndex;
     this.yIndex = yIndex;
@@ -51,14 +67,14 @@ function Square(grid, game, xIndex, x, yIndex, y){
 
     var num = (xIndex+1);
     if(grid.number == 2) num += 3;
-    this.tile = new Tile(this, game, 'TileColumn'+num);
-    this.button = new Button(this, game);
+    this.tile = new Tile(this, 'TileColumn'+num);
+    this.button = new Button(this);
 }
 Square.prototype = Object.create(Object.prototype);
 Square.prototype.constructor = Square;
 
 
-function Tile(parent, game, name){
+function Tile(parent, name){
     Phaser.Sprite.call(this, game, parent.x, parent.y, 'atlas', name);
     game.add.existing(this);
     parent.parent.add(this);
@@ -67,7 +83,7 @@ Tile.prototype = Object.create(Phaser.Sprite.prototype);
 Tile.prototype.constructor = Tile;
 
 
-function Button(parent, game){
+function Button(parent){
     Phaser.Button.call(this, game, parent.x, parent.y, 'atlas', function(){buttonClick(parent)}, parent, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
     game.add.existing(this);
     parent.parent.buttonG.add(this);
