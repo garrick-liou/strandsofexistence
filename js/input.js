@@ -14,20 +14,16 @@ function selectForMove(player){
 	//"turn on" buttons on each side of the player, and under them, and remember what player is selected for later
 	selectedPlayer = player;
 	btnReset(player, 0, 0);
-	if(player.square.xIndex != 0){
-		//as long as it's not on the left edge of a map
+	if(player.square.xIndex != 0){ //as long as it's not on the left edge of a map
 		btnReset(player, -1, 0);
 	}
-	if(player.square.xIndex != player.grid.squares[0].length-1){
-		//as long as it's not on the right edge of a map
+	if(player.square.xIndex != player.grid.squares[0].length-1){ //'' right edge of a map
 		btnReset(player, 1, 0);
 	}
-	if(player.square.yIndex != 0){
-		//as long as it's not on the top edge of a map
+	if(player.square.yIndex != 0){ //'' top edge of a map
 		btnReset(player, 0, -1);
 	}
-	if(player.square.yIndex != player.grid.squares.length - 1){
-		//as long as it's not on the bottom edge of a map
+	if(player.square.yIndex != player.grid.squares.length - 1){ //'' bottom edge of a map
 		btnReset(player, 0, 1);
 	}
 }
@@ -37,12 +33,6 @@ function playerClick(player){
 	if(phaseCounter == 0 || phaseCounter == 1){
 		setPhase(1);
 		selectForMove(player);
-	}
-}
-
-function bgclick(){
-	if(phaseCounter == 1){
-		setPhase(0);
 	}
 }
 
@@ -63,14 +53,34 @@ function confirmPressed() {
 		if(dPlayer == null) return;
 		//kinda want to make mult a negative number but it feels wrong, so I negate the whole result later as you'd expect
 		let mult = 1;
-		if((dPlayer.element + 2)%6 == selectedPlayer.element - 1) mult = 1.5;
-		if((dPlayer.element - 2)%6 == selectedPlayer.element - 1) mult = 0.5;
+		if((dPlayer.element + 1)%3 == selectedPlayer.element) mult = 0.5;
+		if((dPlayer.element + 2)%3 == selectedPlayer.element) mult = 1.5;
 		dPlayer.alterHealth(-lastAttack.dmg * mult);
 	});
 
+	//deal with damage causing deaths
+	p1Grid.findDeaths();
+	p2Grid.findDeaths();
+
+	//check if anyone's won
+	if(p1Grid.players.getFirstAlive() == null){
+		winner = 2;
+		game.state.start("GameOver");
+	}
+	if(p2Grid.players.getFirstAlive() == null){
+		winner = 1;
+		game.state.start("GameOver");
+	}
+
+	//make sure your character goes back to the right square when you cancel your actions
 	selectedPlayer.turnStartSquare = selectedPlayer.square;
 
 	setPhase(0); //reset the phase to move phase
+}
+
+function cancelPressed() {
+	if(phaseCounter > 1) movementButton(selectedPlayer.turnStartSquare, selectedPlayer)
+	setPhase(0);
 }
 
 function buttonClick(square){

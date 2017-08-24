@@ -71,8 +71,8 @@ function Player(grid, pNum){
       this.grid.players.add(this)
       this.health = 50;
       //jank math in there, not 100% sure how to organize that but I can probably find a way. Low priority tho.
-      this.bar = new LifeBarContainer(this, pNum%2==0?25:578, Math.floor((pNum-1)/2)*50 + 25);
-      this.element = pNum; //temporarily...
+      this.bar = new LifeBarContainer(this, pNum%2==1?25:578, Math.floor((pNum-1)/2)*50 + 25);
+      this.element = Math.ceil(pNum/2); //temporarily...
       
       //add characters and add character animations
       //the floating characters are at the center of their squares

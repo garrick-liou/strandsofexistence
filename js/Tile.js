@@ -58,6 +58,7 @@ Grid.prototype.findDeaths = function(){
         //find how many players are dead but haven't been killed yet, and deal with that
         if(p.health <= 0) {
             numDeaths++;
+            p.square.occupant = null;
             p.kill();
         }
     });

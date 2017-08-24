@@ -4,9 +4,6 @@ var background, p1Grid, p2Grid;
 var turnCounter, phaseCounter;
 var attacks;
 var lastAttack, selectedPlayer;
-var attackCounter = 0;
-var p1Player = 0;
-var p2Player = 0;
 
 var TILE_SCALE_X = 0.7;
 var TILE_SCALE_Y = 0.55;
@@ -45,7 +42,7 @@ function loadSources(callback){
 		loadScript('js/' + JSsources[i] + '.js', function(){
 			finished++;
 			if(finished == JSsources.length){
-				finished++;//make it increasingly unlikely that two scripts will load at the same time and both run the callback
+				finished++;//as unlikely as it already is that two scripts will load at the same time and both run the callback... might as well.
 				callback();
 			}
 		});
@@ -66,7 +63,7 @@ statesObject.LoadScreen = {
    },
    create: function() {
       console.log('LoadScreen create');
-	  //game.state.start('MainMenu'); //after assets are loaded, move to main menu
+	  //after js assets are loaded, move to main menu
 	  loadSources(function(){game.state.start('MainMenu');});
    }
 }
@@ -77,12 +74,7 @@ statesObject.MainMenu =  {
       game.add.sprite(230, 200, 'atlas', 'logo'); //placeholder logo and maybe button text, who knows
       game.add.button(150, 350, 'atlas', function() {game.state.start('InstructionScreen')}, this, 'ButtonInst', 'ButtonInst', 'ButtonInst');
       game.add.button(150, 475, 'atlas', function() {game.state.start('GameLoop')}, this, 'ButtonPlay', 'ButtonPlay', 'ButtonPlay');
-   }/*,
-   update: function() {
-   		if(game.input.keyboard.justPressed(Phaser.Keyboard.ENTER)){ //press enter to start
-   			game.state.start('InstructionScreen');
-   		}
-   }*/
+   }
 }
 
 statesObject.InstructionScreen = {
@@ -142,10 +134,12 @@ statesObject.GameLoop = {
 		//game.world.bringToTop(borderBarGroup);
 
 		setPhase(0);
-		background.events.onInputDown.add(bgclick, this);
+		//allow player to "click off" to go back to the start of the turn
+		background.events.onInputDown.add(cancelPressed, this);
+		background.inputEnabled = true;
 	},
 	update: function(){
-		text.text = 'phase: ' + phaseCounter + ' turn: ' + turnCounter + ' attack: ' + attackCounter;
+		text.text = 'phase: ' + phaseCounter + ' turn: ' + turnCounter
 
 		p1Grid.players.forEach(function(p){
 			p.bar.update();
@@ -154,10 +148,12 @@ statesObject.GameLoop = {
 			p.bar.update();
 		});
 
+		if(game.input.keyboard.justPressed(Phaser.Keyboard.BACKSPACE)){
+			cancelPressed();
+		}
+
 		if (phaseCounter > 1 && phaseCounter < 4) { // if the player has already moved
-			if (game.input.keyboard.justPressed(Phaser.Keyboard.BACKSPACE)){
-				cancelPressed();
-			}
+			
 			if(game.input.keyboard.justPressed(Phaser.Keyboard.ONE)) { //wait for attack button input, 1, 2, or 3 and go to appropriate attack function
 				doAttack(1);
 			} else if (game.input.keyboard.justPressed(Phaser.Keyboard.TWO)) {
@@ -171,262 +167,6 @@ statesObject.GameLoop = {
 				confirmPressed();
 			}
 		}
-
-		//we should probably move these and the win check to the function that deals damage, because it's doing a bunch of unnecessary checks each loop
-		p1Grid.findDeaths();
-		p2Grid.findDeaths();
-
-		//check if anyone's won (important because the next part will be real silly if the game is over)
-		if(p1Grid.players.getFirstAlive() == null){
-			winner = 2;
-			game.state.start("GameOver");
-		}
-		if(p2Grid.players.getFirstAlive() == null){
-			winner = 1;
-			game.state.start("GameOver");
-		}
-
-		/*if (p1death == 0) {
-			if (player1.health <= 0) {
-				player1.kill();
-				if(player3.alive) {
-					if(player3.health <= 40) {
-						p3gainBar.x = 25 + (196 * ((player3.health + 10) * 0.02));	   				
-						p3gainBar.scale.x = 0.2;
-						player3.health += 10;	
-					} else {
-						p3gainBar.x = 25 + 196;	   				
-						p3gainBar.scale.x = (50 - player3.health) * 0.02;
-						player3.health = 50;
-					}
-				}
-				if(player5.alive) {
-					if(player5.health <= 40) {
-						p5gainBar.x = 25 + (196 * ((player5.health + 10) * 0.02));	   				
-						p5gainBar.scale.x = 0.2;
-						player5.health += 10;
-					} else {
-						p5gainBar.x = 25 + 196 ;	   				
-						p5gainBar.scale.x = (50 - player5.health) * 0.02;
-						player5.health = 50;
-					}
-				}
-				p1death = 1;
-			}
-		}
-		if (p2death == 0) {
-			if (player2.health <= 0) {
-				player2.x = 0;
-				player2.y = 0;
-				player2.xCoord = 0;
-				player2.yCoord = 0;
-				player2.kill();
-				if(player4.alive) {
-					if(player4.health <= 40) {
-						p4gainBar.x = 578 + (196 * ((player4.health + 10) * 0.02));
-						p4gainBar.scale.x = 0.2;
-						player4.health += 10;
-					} else {
-						p4gainBar.x = 578 + 196;
-						p4gainBar.scale.x =(50 - player4.health) * 0.02;
-						player4.health = 50;	   				
-					}
-				}
-				if(player6.alive) {
-					if(player6.health <= 40) {
-						p6gainBar.x = 578 + (196 * ((player6.health + 10) * 0.02));
-						p6gainBar.scale.x = 0.2;
-						player6.health += 10;
-					} else {
-						p6gainBar.x = 578 + 196;
-						p6gainBar.scale.x =(50 - player6.health) * 0.02;
-						player6.health = 50;
-					}
-				}
-				p2death = 1;
-			}
-		}
-		if (p3death == 0) {
-			if (player3.health <= 0) {
-				player3.x = 0;
-				player3.y = 0;
-				player3.xCoord = 0;
-				player3.yCoord = 0;
-				player3.kill();
-				if(player1.alive) {
-					if(player1.health <= 40) {
-						p1gainBar.x = 25 + (196 * ((player1.health + 10) * 0.02));	   				
-						p1gainBar.scale.x = 0.2;
-						player1.health += 10;
-					} else {
-						p1gainBar.x = 25 + 196;	   				
-						p1gainBar.scale.x = (50 - player1.health) * 0.02;
-						player1.health = 50;
-					}
-				}
-				if(player5.alive) {
-					if(player5.health <= 40) {
-						p5gainBar.x = 25 + (196 * ((player5.health + 10) * 0.02));	   				
-						p5gainBar.scale.x = 0.2;
-						player5.health += 10;
-					} else {
-						p5gainBar.x = 25 + 196;	   				
-						p5gainBar.scale.x = (50 - player5.health) * 0.02;
-						player5.health = 50;
-					}
-				}
-				p3death = 1;
-			}
-		}
-		if (p4death == 0) {
-			if (player4.health <= 0) {
-				player4.x = 0;
-				player4.y = 0;
-				player4.xCoord = 0;
-				player4.yCoord = 0;
-				player4.kill();
-				if(player2.alive) {
-					if(player2.health <= 40) {
-						p2gainBar.x = 578 + (196 * ((player2.health + 15) * 0.02));
-						p2gainBar.scale.x = 0.2;
-						player2.health += 10;
-					} else {
-						p2gainBar.x = 578 + 196;
-						p2gainBar.scale.x =(50 - player2.health) * 0.02;
-						player2.health = 50;
-					}
-				}
-				if(player6.alive) {
-					if(player6.health <= 40) {
-						p6gainBar.x = 578 + (196 * ((player6.health + 15) * 0.02));
-						p6gainBar.scale.x = 0.2;
-						player6.health += 10;
-					} else {
-						p6gainBar.x = 578 + 196;
-						p6gainBar.scale.x =(50 - player6.health) * 0.02;
-						player6.health = 50;
-					}
-				} 			
-				p4death = 1;
-			}
-		}
-		if (p5death == 0) {
-			if (player5.health <= 0) {
-				player5.x = 0;
-				player5.y = 0;
-				player5.xCoord = 0;
-				player5.yCoord = 0;
-				player5.kill();
-				if(player1.alive) {
-					if(player1.health <= 40) {
-						p1gainBar.x = 25 + (196 * ((player1.health + 15) * 0.02));	   				
-						p1gainBar.scale.x = 0.2;
-						player1.health += 10;
-					} else {
-						p1gainBar.x = 25 + 196;	   				
-						p1gainBar.scale.x = (50 - player1.health) * 0.02;
-						player1.health = 50;
-					}
-				}
-				if(player3.alive) {
-					if(player3.health <= 40) {
-						p3gainBar.x = 25 + (196 * ((player3.health + 15) * 0.02));	   				
-						p3gainBar.scale.x = 0.2;
-						player3.health += 10;
-					} else {
-						p3gainBar.x = 25 + 196;	   				
-						p3gainBar.scale.x = (50 - player3.health) * 0.02;
-						player3.health = 50;
-					}
-				}
-				p5death = 1;
-			}
-		}
-		if(p6death == 0) {
-			gainBarGroup.forEachAlive(function(c){ c.bringToTop(); });
-			if (player6.health <= 0) {
-				player6.x = 0;
-				player6.y = 0;
-				player6.xCoord = 0;
-				player6.yCoord = 0;
-				player6.kill();
-				if(player2.alive) {
-					if(player2.health <= 40) {
-						p2gainBar.x = 578 + (196 * ((player2.health + 10) * 0.02));
-						p2gainBar.scale.x = 0.2;
-						player2.health += 10;
-					} else {
-						p2gainBar.x = 578 + 196;
-						p2gainBar.scale.x =(50 - player2.health) * 0.02;
-						player2.health = 50;
-					}
-				}
-				if(player4.alive) {
-					if(player4.health <= 40) {
-						p4gainBar.x = 578 + (196 * ((player4.health + 10) * 0.02));
-						p4gainBar.scale.x = 0.2;
-						player4.health += 10;
-					} else {
-						p4gainBar.x = 578 + 196;
-						p4gainBar.scale.x =(50 - player4.health) * 0.02;
-						player4.health = 50;
-					}
-				}
-				p6death = 1;
-			}
-		}	
-			
-		if (player1.health == 0 && player3.health == 0 && player5.health == 0) {
-			winner = 2;
-			game.state.start('GameOver');
-		} else if (player2.health == 0 && player4.health == 0 && player6.health == 0) {
-			winner = 1;
-			game.state.start('GameOver');
-		}
-		if(player1.health >= 0) {
-			p1lifeBar.scale.x = player1.health/50;
-		} else {
-			player1.health = 0;
-		}   	  
-		if(player2.health >= 0) {
-			p2lifeBar.scale.x = player2.health/50;
-		} else {
-			player2.health = 0;
-		}   	 
-		if(player3.health >= 0) {
-			p3lifeBar.scale.x = player3.health/50;
-		} else {
-			player3.health = 0;
-		}   
-		if(player4.health >= 0) {
-			p4lifeBar.scale.x = player4.health/50;
-		} else {
-			player4.health = 0;
-		}    
-		if(player5.health >= 0) {
-			p5lifeBar.scale.x = player5.health/50;
-		} else {
-			player5.health = 0;
-		}    
-		if(player6.health >= 0) {
-			p6lifeBar.scale.x = player6.health/50;
-		} else {
-			player6.health = 0;
-		}   
-		damageBarGroup.forEachAlive(function(c) {   		
-			if (c.scale.x > 0) {
-				c.scale.x -= .003;
-			} else {
-				c.scale.x = 0;
-			}
-		}); 
-		gainBarGroup.forEachAlive(function(c) {   		
-			if (c.scale.x > 0) {
-				c.scale.x -= .003;
-			} else {
-				c.scale.x = 0;
-			}
-		}); */	
 	}
 }
 statesObject.GameOver = {
@@ -450,14 +190,6 @@ statesObject.GameOver = {
 			game.state.start('GameLoop');
 		}
 	}
-} 
-
-
-
-
-function cancelPressed() {
-	movementButton(selectedPlayer.turnStartSquare, selectedPlayer)
-	setPhase(0);
 }
 
 //add states to the game by looping through the statesObject as a dictionary
