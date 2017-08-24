@@ -106,12 +106,12 @@ statesObject.GameLoop = {
 
 		//add grids -- 130/1.1 etc. because I wanted to use the same tiles for the time being, and we know 130 is the distance they were apart
 		//when it worked, and because tiles are set apart by 10% padding
-		p1Grid = new Grid(5, 305,//grid offset (position of upper left)
+		p1Grid = new Grid(25, 250,//grid offset (position of upper left)
 			4, 5,//w/h in number of tiles
 			TILE_SCALE_X * 130/1.1, TILE_SCALE_Y * 95/1.1,//w/h of the tile sprites
 			1);//who owns this side?
 		
-		p2Grid = new Grid(410, 305,//grid offset
+		p2Grid = new Grid(415, 250,//grid offset
 			4, 5,//w/h in number of tiles
 			TILE_SCALE_X * 130/1.1, TILE_SCALE_Y * 95/1.1,//w/h of the tile sprites
 			2);//who owns this side?

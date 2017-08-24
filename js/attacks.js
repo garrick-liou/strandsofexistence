@@ -34,6 +34,7 @@ attackInfo = [
 //use the structure above
 function doAttack(number){
 	setPhase(3);
+	selectedPlayer.emitter.setAlpha(1);
 	lastAttack = attackInfo[number - 1];
 	if (turnCounter == 0) {
 		lastAttack.fn(p2Grid, selectedPlayer.square.xIndex, selectedPlayer.square.yIndex);

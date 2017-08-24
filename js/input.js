@@ -49,6 +49,10 @@ function confirmPressed() {
 	}
 
 	g.damageG.forEachAlive(function(dTile){
+		dTile.emitter = game.add.emitter(g.x + dTile.x + dTile.width/2, g.y + dTile.y + dTile.height/2);
+        dTile.emitter.makeParticles('atlas', 'particle');
+        dTile.emitter.start(true, 400, null, 20);
+        game.time.events.add(400, dTile.emitter.destroy, dTile.emitter);        
 		let dPlayer = dTile.sqr.occupant;
 		if(dPlayer == null) return;
 		//kinda want to make mult a negative number but it feels wrong, so I negate the whole result later as you'd expect
@@ -101,5 +105,7 @@ function movementButton(square, player){
     square.occupant = player;
     player.square = square;
 	player.x = square.x + square.tile.width*3/8;
-	player.y = square.y - square.tile.height/6;
+	player.y = square.y - square.tile.height/6;	
+    player.emitter.x = player.x + 12;
+    player.emitter.y = player.y + 40;
 }
