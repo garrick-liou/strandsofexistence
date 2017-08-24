@@ -1,88 +1,57 @@
-function Player(game, key, frame, number){
+function Player(game, number){
 	if (number == 1){		
-		Phaser.Sprite.call(this, game, 53, 384, key, frame);
+		Phaser.Sprite.call(this, game, 53, 384, 'atlas', 'Player1_01');
+            this.xCoord = 1;
+            this.yCoord = 1;
+            this.type = 'fire'
 	} else if (number == 2){
-		Phaser.Sprite.call(this, game, 718, 384, key, frame);
+		Phaser.Sprite.call(this, game, 718, 384, 'atlas', 'Player2_01');
+            this.xCoord = 8;
+            this.yCoord = 1;
+            this.type = 'fire';
 	} else if (number == 3) {
-            Phaser.Sprite.call(this, game, 53, 289, key, frame);
+            Phaser.Sprite.call(this, game, 53, 289, 'atlas', 'Player3_01');
+            this.xCoord = 1;
+            this.yCoord = 3;
+            this.type = 'grass';
       } else if (number == 4){
-            Phaser.Sprite.call(this, game, 718, 289, key, frame);
+            Phaser.Sprite.call(this, game, 718, 289, 'atlas', 'Player4_01');
+            this.xCoord = 8;
+            this.yCoord = 3;
+            this.type = 'grass';
       } else if (number == 5) {
-            Phaser.Sprite.call(this, game, 53, 479, key, frame);       
+            Phaser.Sprite.call(this, game, 53, 479, 'atlas', 'Player5_01');
+            this.xCoord = 1;
+            this.yCoord = 5;
+            this.type = 'water';       
       } else if (number == 6){
-            Phaser.Sprite.call(this, game, 718, 479, key, frame);
+            Phaser.Sprite.call(this, game, 718, 479, 'atlas', 'Player6_01');
+            this.xCoord = 8;
+            this.yCoord = 5;
+            this.type = 'water';
       }
 	this.number = number;
       this.health = 50;
-      this.memoryX = 0;
-      this.memoryY = 0;
+      this.memory = [0, 0];
 }
 
 Player.prototype = Object.create(Phaser.Sprite.prototype);
 Player.prototype.constructor = Player;
 
-Player.prototype.update = function() { //set the movement to the right, then when R is pressed flip sprite and move left
-      if (this.x == 53) {
-            this.xCoord = 1;
-      } else if (this.x == 183) {
-            this.xCoord = 2;
-      } else if (this.x == 313) {
-            this.xCoord = 3;
-      } else if (this.x == 458) {
-            this.xCoord = 4;
-      } else if (this.x == 588) {
-            this.xCoord = 5;
-       } else if (this.x == 718) {
-       this.xCoord = 6;
-         }
-      if (this.y == 289) {
-            this.yCoord = 1;
-      } else if (this.y == 384) {
-            this.yCoord = 2;
-      } else if (this.y == 479) {
-            this.yCoord = 3;
+Player.prototype.update = function() {
+      if (this.health == 0) {
+            this.kill();
+            this.xCoord = 0;
+            this.yCoord = 0;
+      }    
+      if (this.xCoord != 0) {
+            this.x = this.xCoord * 90 - 25;  
+      } else if (this.xCoord == 0) {
+            this.x = 0;
       }
-	if(this.number == 1) {
-	     if(game.input.keyboard.justPressed(Phaser.Keyboard.W)){
-      	     if (this.y > 289) {
-      		    this.y -= 95;
-      	     }
-            }
-      if(game.input.keyboard.justPressed(Phaser.Keyboard.S)){
-      	if (this.y < 479) {
-      		this.y += 95;
-      	}
-      }
-      if(game.input.keyboard.justPressed(Phaser.Keyboard.A)){
-      	if (this.x > 53) {
-      		this.x -= 130;
-      	}
-      }
-      if(game.input.keyboard.justPressed(Phaser.Keyboard.D)){
-      	if (this.x < 313) {
-      		this.x += 130;
-      	     }
-            }
-      } else if (this.number == 2) {
-    	       if(game.input.keyboard.justPressed(Phaser.Keyboard.UP)){
-      	     if (this.y > 289) {
-      		this.y -= 95;
-      	}
-      }
-            if(game.input.keyboard.justPressed(Phaser.Keyboard.DOWN)){
-      	     if (this.y < 479) {
-      		this.y += 95;
-      	}
-      }
-            if(game.input.keyboard.justPressed(Phaser.Keyboard.LEFT)){
-      	     if (this.x > 458) {
-      		this.x -= 130;
-      	}
-      }
-            if(game.input.keyboard.justPressed(Phaser.Keyboard.RIGHT)){
-      	     if (this.x < 718) {
-      		this.x += 130;
-      	}
-      }
-    }
+      if (this.yCoord != 0) {            
+            this.y = this.yCoord * 75 + 110;
+      } else if(this.yCoord == 0) {
+            this.y = 0;
+      }      
 }
