@@ -1,6 +1,8 @@
 function setPhase(p){
+    
     let nextAnim = 'float';
     let fn = function(p){
+        if(p.animations.currentAnim.name == nextAnim) return;
         let prevFrame = p.animations.currentAnim.frame;
         p.animations.stop();
         p.animations.play(nextAnim);

@@ -47,8 +47,8 @@ function movementButton(square, player){
     player.square = square;
 	player.x = square.x + square.tile.width*3/8;
 	player.y = square.y - square.tile.height/6
-	player.emitter.x = player.x + 12;
-	player.emitter.y = player.y + 40;
+	player.emitter.x = player.x + player.width/2;
+	player.emitter.y = player.y + player.height*0.9;
 }
 
 function buttonClick(square){
@@ -66,17 +66,15 @@ function buttonClick(square){
 //when enter is pressed, check to see which attack button was pressed last, check to see if the attack hits,
 //apply appropriate damage, and go to the next turn
 function confirmPressed() {
-	let g;
 	if(turnCounter == 0) {
-		g = p2Grid;
-		turnCounter = 1; //if it was player 1's turn, make it player 2's turn
+		//if it was player 1's turn, make it player 2's turn, and calculate the damage that was done to player 2
+		turnCounter = 1;
+		doDamage(p2Grid);
 	}else if(turnCounter == 1){
-		g = p1Grid;
-		turnCounter = 0; //vice versa
+		//vice versa
+		turnCounter = 0;
+		doDamage(p1Grid);
 	}
-
-	//hm... I wonder what this line does...
-	doDamage(g.damageG);
 
 	//make sure your character goes back to the right square when you cancel your actions
 	selectedPlayer.turnStartSquare = selectedPlayer.square;

@@ -55,7 +55,7 @@ statesObject.LoadScreen = {
    preload: function() {
       console.log('LoadScreen preload');      
       game.load.path = 'assets/';
-      game.load.atlas('atlas', 'img/atlas.png', 'img/atlas.json');
+      game.load.atlas('atlas', 'img/atlas2.png', 'img/atlas2.json');
       // creates the cursors object that allows the program to read keyboard input
       cursors = game.input.keyboard.createCursorKeys();
       // this starts the physics used in the game
@@ -79,10 +79,11 @@ statesObject.MainMenu =  {
 
 statesObject.InstructionScreen = {
 	create: function() {
-		game.add.text(140, 120, 'Click on your players to see the squares you can move to.', { font: 'Garamond', fontSize: '22px', fill: '#d6dbdf' });
-		game.add.text(30, 170, 'After moving, press 1 to see your attack range. Press ENTER to confirm your attack.' , { font: 'Garamond', fontSize: '22px', fill: '#d6dbdf' });
-		game.add.text(90, 220, 'Or press BACKSPACE to move another character. Player 1 moves first.', { font: 'Garamond', fontSize: '22px', fill: '#d6dbdf' });
-		game.add.text(100, 270, 'Fire beats Plant, beats Water, beats Fire. Use this to your advantage.', { font: 'Garamond', fontSize: '22px', fill: '#d6dbdf' } )
+		game.add.text(game.width/2, 120, 'Click on your players to see the squares you can move to.', { font: 'Garamond', fontSize: '22px', fill: '#d6dbdf' }).anchor.setTo(0.5, 0);
+		game.add.text(game.width/2, 170, 'After moving, you\'ll see the area your attack will hit.' , { font: 'Garamond', fontSize: '22px', fill: '#d6dbdf' }).anchor.setTo(0.5, 0);
+		game.add.text(game.width/2, 220, 'Pressing ENTER confirms that attack, BACKSPACE resets the turn.', { font: 'Garamond', fontSize: '22px', fill: '#d6dbdf' }).anchor.setTo(0.5, 0);
+		game.add.text(game.width/2, 290, 'Helpful info: Flame trumps Plant; Plant trumps Water; Water trumps Flame.', { font: 'Garamond', fontSize: '22px', fill: '#d6dbdf' } ).anchor.setTo(0.5, 0)
+		game.add.text(game.width/2, 340, 'Also, characters with small attacks deal more damage.', { font: 'Garamond', fontSize: '22px', fill: '#d6dbdf' } ).anchor.setTo(0.5, 0);
 		game.add.button(150, 425, 'atlas', function() {game.state.start('MainMenu')}, this, 'ButtonReturn', 'ButtonReturn', 'ButtonReturn');
 	},
 	update: function() {
@@ -126,9 +127,9 @@ statesObject.GameLoop = {
 		new Player(p1Grid, 5);
 		new Player(p2Grid, 6);
 
-		text = game.add.text(320, 50, '', { fontSize: '12px', fill: '#ffffff'} );
+		/*text = game.add.text(320, 50, '', { fontSize: '12px', fill: '#ffffff'} );
 		text2 = game.add.text(320, 90, '', { fontSize: '12px', fill: '#ffffff'} );
-		text3 = game.add.text(320, 130, '', { fontSize: '12px', fill: '#ffffff'} );
+		text3 = game.add.text(320, 130, '', { fontSize: '12px', fill: '#ffffff'} );*/
 
 		setPhase(0);
 		//allow player to "click off" to go back to the start of the turn
@@ -136,7 +137,7 @@ statesObject.GameLoop = {
 		background.inputEnabled = true;
 	},
 	update: function(){
-		text.text = 'phase: ' + phaseCounter + ' turn: ' + turnCounter
+		//text.text = 'phase: ' + phaseCounter + ' turn: ' + turnCounter
 
 		p1Grid.players.forEach(function(p){
 			p.bar.update();

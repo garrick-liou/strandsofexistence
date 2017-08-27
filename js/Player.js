@@ -39,11 +39,11 @@ function Player(grid, pNum){
       this.animations.play('float');
       this.animations.currentAnim.setFrame(Math.floor(Math.random() * 12) + 1, true);
 
-      this.emitter = game.add.emitter(this.x + 12, this.y + 40, 100)
+      this.emitter = game.add.emitter(this.x + this.width/2, this.y + this.height*0.9, 100)
       this.grid.add(this.emitter);
-      this.emitter.makeParticles('atlas', 'logo');
+      this.emitter.makeParticles('atlas', 'particle');
 
-      this.emitter.area = new Phaser.Rectangle(this.x, this.y, 32, 1);
+      this.emitter.area = new Phaser.Rectangle(this.x, this.y, this.square.tile.width/3, 1);
       this.emitter.gravity = new Phaser.Point(0, 20);
       
       this.emitter.minParticleScale = 0.4;
@@ -65,12 +65,12 @@ Player.prototype.emitterState = function(state){
             case 0:
                   this.emitter.setAlpha(0.4, 0.5);
                   this.emitter.setYSpeed(-60,-40);
-                  this.emitter.flow(800, 100, 1, -1);
+                  this.emitter.flow(800, 100, 1);
                   break;
             case 1:
                   this.emitter.setAlpha(1);
                   this.emitter.setYSpeed(-100,-80);
-                  this.emitter.flow(500, 100, 2, -1);
+                  this.emitter.flow(500, 100, 2);
                   break;
             default:
                   break;

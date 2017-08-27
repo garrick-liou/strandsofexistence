@@ -1,32 +1,69 @@
-var effectiveness ={
+//for the damage effect emitter
+function doFlow(x, y, area, xMin, xMax, yMin, yMax, gravity, particleDuration, frequency, count, emitDuration, color){
+    var emitter = game.add.emitter(x, y, Math.floor(emitDuration*count/frequency));
+    emitter.area = area;
+    emitter.setXSpeed(xMin, xMax);
+    emitter.setYSpeed(yMin, yMax);
+    emitter.gravity = gravity;
+    emitter.makeParticles('atlas', 'particle');
+
+    emitter.forEach(function(particle){
+        particle.tint = color;
+    });
+
+    emitter.flow(particleDuration, frequency, count);
+    game.time.events.add(emitDuration, function(){this.on = false;}, emitter);
+    game.time.events.add(emitDuration + particleDuration, emitter.destroy, emitter);
+    return emitter;
+}
+
+
+
+
+var elementStruct ={
     flame:{
         plant:1.5,
         flame:1,
-        water:0.5
+        water:0.5,
+        burst:function(x, y, w, h){
+            this.area = this.area || new Phaser.Rectangle(0, 0, w, h/5);
+            this.gravity = this.gravity || new Phaser.Point(0, -300);
+            doFlow(x, y, this.area, -8, 8, -75, -15, this.gravity, 350, 10, 1, 500, 0xC02000);
+        }
     },
     water:{
         flame:1.5,
         water:1,
-        plant:0.5
+        plant:0.5,
+        burst:function(x, y, w, h){
+            this.area = this.area || new Phaser.Rectangle(0, 0, w*0.75, h*0.75);
+            this.gravity = this.gravity || new Phaser.Point(0, 0);
+            let e = doFlow(x, y, this.area, -12, 12, -12, 12, this.gravity, 500, 30, 2, 500, 0x4040E0);
+            //specifically for water, it should appear a bit above the middle of the square.
+            //I have no idea why the "area" rectangle doesn't care about its position, but the x and y in there do absolutely nothing.
+            e.y -= h/4;
+        }
     },
     plant:{
         water:1.5,
         plant:1,
-        flame:0.5
+        flame:0.5,
+        burst:function(x, y, w, h){
+            this.area = this.area || new Phaser.Rectangle(0, 0, w, 1);
+            this.gravity = this.gravity || new Phaser.Point(0, 1800);
+            doFlow(x, y, this.area, 5, 15, -475, -350, this.gravity, 400, 25, 10, 100, 0x109030);
+        }
     }
 }
 
-function doDamage(damageG){
-    damageG.forEachAlive(function(dTile){
-        //check up here
-		dTile.emitter = game.add.emitter(g.x + dTile.x + dTile.width/2, g.y + dTile.y + dTile.height/2);
-        dTile.emitter.makeParticles('atlas', 'particle');
-        dTile.emitter.start(true, 400, null, 20);        
-		dTile.emitter.forEach(function(particle){particle.tint = 0xff0000;});
-        game.time.events.add(400, dTile.emitter.destroy, dTile.emitter);        
+function doDamage(grid){
+    grid.damageG.forEachAlive(function(dTile){
+        let elem = elementStruct[selectedPlayer.element];
+        
+        elem.burst.call(elem, grid.x + dTile.x + dTile.width/2, grid.y + dTile.y + dTile.height*0.75, dTile.width, dTile.height);
 
 		let dPlayer = dTile.sqr.occupant;
-		if(dPlayer == null) return;
-		defPlayer.alterHealth(-lastAttack.dmg * effectiveness[selectedPlayer.element][defPlayer.element]);
+        if(dPlayer == null) return;
+		dPlayer.alterHealth(-lastAttack.dmg * elem[dPlayer.element]);
 	});
 }
