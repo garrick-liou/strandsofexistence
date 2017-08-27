@@ -18,8 +18,15 @@ var effectiveness ={
 
 function doDamage(damageG){
     damageG.forEachAlive(function(dTile){
-		let defPlayer = dTile.sqr.occupant;
-		if(defPlayer == null) return;
+        //check up here
+		dTile.emitter = game.add.emitter(g.x + dTile.x + dTile.width/2, g.y + dTile.y + dTile.height/2);
+        dTile.emitter.makeParticles('atlas', 'particle');
+        dTile.emitter.start(true, 400, null, 20);        
+		dTile.emitter.forEach(function(particle){particle.tint = 0xff0000;});
+        game.time.events.add(400, dTile.emitter.destroy, dTile.emitter);        
+
+		let dPlayer = dTile.sqr.occupant;
+		if(dPlayer == null) return;
 		defPlayer.alterHealth(-lastAttack.dmg * effectiveness[selectedPlayer.element][defPlayer.element]);
 	});
 }

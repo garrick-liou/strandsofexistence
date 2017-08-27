@@ -26,6 +26,11 @@ function setPhase(p){
     switch(p){
         case 0:
             //so there's no mistakes in this regard
+            if(selectedPlayer) {
+                selectedPlayer.emitter.setAlpha(0.4, 0.5);
+                selectedPlayer.emitter.setYSpeed(-40,-60);                
+                selectedPlayer.emitter.flow(800, 100, 1, -1);
+            }
             selectedPlayer = null;
 
             g.players.forEachAlive(function(p){
@@ -42,8 +47,11 @@ function setPhase(p){
             });
             doAttack(0);
             break;
-        //case 3:
-            //break;
+        case 3://move back to phase 2
+            selectedPlayer.emitter.setAlpha(1);
+            selectedPlayer.emitter.setYSpeed(-100,-80);
+            selectedPlayer.emitter.flow(500, 100, 2, -1);
+            break;
         default:
             console.log("Something's probably going seriously wrong.")
             break;
