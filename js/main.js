@@ -152,7 +152,7 @@ statesObject.GameLoop = {
 			cancelPressed();
 		}
 
-		if (phaseCounter > 1 && phaseCounter < 4) { // if the player has already moved
+		/*if (phaseCounter > 1 && phaseCounter < 4) { // if the player has already moved
 			
 			if(game.input.keyboard.justPressed(Phaser.Keyboard.ONE)) { //wait for attack button input, 1, 2, or 3 and go to appropriate attack function
 				doAttack(1);
@@ -166,7 +166,8 @@ statesObject.GameLoop = {
 			if(game.input.keyboard.justPressed(Phaser.Keyboard.ENTER)) {
 				confirmPressed();
 			}
-		}
+		}*/
+		if(phaseCounter == 2 && game.input.keyboard.justPressed(Phaser.Keyboard.ENTER)) confirmPressed();
 	}
 }
 statesObject.GameOver = {

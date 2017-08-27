@@ -40,8 +40,10 @@ characterAttacks = {
 
 //use the structure above
 function doAttack(number){
-	setPhase(3);
-	lastAttack = attackInfo[number - 1];
+	/*setPhase(3);
+	lastAttack = attackInfo[number - 1];*/
+	//setPhase(2);
+	lastAttack = characterAttacks[selectedPlayer.element];
 	if (turnCounter == 0) {
 		lastAttack.fn(p2Grid, selectedPlayer.square.xIndex, selectedPlayer.square.yIndex);
 	} else if (turnCounter == 1) {

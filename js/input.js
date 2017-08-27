@@ -101,14 +101,14 @@ function confirmPressed() {
 
 	//make sure your character goes back to the right square when you cancel your actions
 	selectedPlayer.turnStartSquare = selectedPlayer.square;
-
-	setPhase(0); //reset the phase to move phase
 	
 	//deal with damage causing deaths
 	p1Grid.findDeaths();
 	p2Grid.findDeaths();
+	
+	setPhase(0); //reset the phase to move phase
 
-	//check if anyone's won
+	//check if anyone's won (done last because that makes sense for a state change-- otherwise setPhase should be last)
 	if(p1Grid.players.getFirstAlive() == null){
 		winner = 2;
 		game.state.start("GameOver");

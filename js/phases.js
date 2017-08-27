@@ -40,9 +40,10 @@ function setPhase(p){
             g.players.forEachAlive(function(p){
                 p.inputEnabled = false;
             });
+            doAttack(0);
             break;
-        case 3:
-            break;
+        //case 3:
+            //break;
         default:
             console.log("Something's probably going seriously wrong.")
             break;
