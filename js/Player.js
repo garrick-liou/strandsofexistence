@@ -30,6 +30,8 @@ function Player(grid, pNum){
       this.bar = new LifeBar(this, pNum%2==1?25:578, Math.floor((pNum-1)/2)*50 + 25);
       this.element = myInfo.element;
       
+      this.events.onInputDown.add(playerClick, this);
+      
       //add characters and add character animations
       //the floating characters are at the center of their squares
       this.animations.add('float', Phaser.Animation.generateFrameNames('Player' + pNum + '_', 1, 12, '', 2), 20, true);
@@ -39,23 +41,38 @@ function Player(grid, pNum){
 
       this.emitter = game.add.emitter(this.x + 12, this.y + 40, 100)
       this.grid.add(this.emitter);
-      this.emitter.makeParticles('atlas', 'particle');
-      let area = new Phaser.Rectangle(this.x, this.y, 32, 1);
-      this.emitter.area = area;
-      let gravity = new Phaser.Point(0, 20);
-      this.emitter.gravity = gravity;
-      this.emitter.setAlpha(0.4, 0.5);
-      this.emitter.setRotation(0, 40);
+      this.emitter.makeParticles('atlas', 'logo');
+
+      this.emitter.area = new Phaser.Rectangle(this.x, this.y, 32, 1);
+      this.emitter.gravity = new Phaser.Point(0, 20);
+      
       this.emitter.minParticleScale = 0.4;
       this.emitter.maxParticleScale = 0.6;
+
+      this.emitter.setRotation(-20, 20);
       this.emitter.setXSpeed(0,0);
-      this.emitter.setYSpeed(-60,-40);
-      this.emitter.flow(800, 100, 1, -1);
-      this.events.onInputDown.add(playerClick, this);
+
+      this.emitterState(0);
 }
 
 Player.prototype = Object.create(Phaser.Sprite.prototype);
 Player.prototype.constructor = Player;
 Player.prototype.alterHealth = function(amount){
       this.health = Math.max(0, Math.min(50, this.health + amount));
+}
+Player.prototype.emitterState = function(state){
+      switch(state){
+            case 0:
+                  this.emitter.setAlpha(0.4, 0.5);
+                  this.emitter.setYSpeed(-60,-40);
+                  this.emitter.flow(800, 100, 1, -1);
+                  break;
+            case 1:
+                  this.emitter.setAlpha(1);
+                  this.emitter.setYSpeed(-100,-80);
+                  this.emitter.flow(500, 100, 2, -1);
+                  break;
+            default:
+                  break;
+      }
 }

@@ -1,7 +1,13 @@
 //show buttons when a player has been selected
 
 function btnReset(player, dx, dy){
-	let sqr = player.grid.squares[player.square.yIndex + dy][player.square.xIndex + dx];
+	let rx = player.square.xIndex + dx;
+	let ry = player.square.yIndex + dy;
+	//don't bother if we're looking for something outside of the map
+	if(ry < 0 || ry >= player.grid.squares.length) return;
+	if(rx < 0 || rx >= player.grid.squares[ry].length) return;
+
+	let sqr = player.grid.squares[ry][rx];
 
 	//ignore if occupied by a different unit
 	if(sqr.occupant && sqr.occupant != player) return;
@@ -11,48 +17,19 @@ function btnReset(player, dx, dy){
 	sqr.button.reset(sqr.button.x, sqr.button.y);
 }
 function selectForMove(player){
-	//"turn on" buttons on each side of the player, and under them, and remember what player is selected for later
+	//"turn on" buttons within 2 squares of the player, and remember what player is selected for later
 	selectedPlayer = player;
+
 	btnReset(player, 0, 0);
-	if(player.square.xIndex != 0){ //as long as it's not on the left edge of a map
-		btnReset(player, -1, 0);
-	}
-	if(player.square.xIndex != player.grid.squares[0].length - 1){ //'' right edge of a map
-		btnReset(player, 1, 0);
-	}
-	if(player.square.yIndex != 0){ //'' top edge of a map
-		btnReset(player, 0, -1);
-	}
-	if(player.square.yIndex != player.grid.squares.length - 1){ //'' bottom edge of a map
-		btnReset(player, 0, 1);
+	for(let i = -2; i <= 2; i++){ 
+		btnReset(player, 0, i);//above/below
+		btnReset(player, i, 0);//left/right
 	}
 
-	//temporary thingy thing to make it so you can move 2 squares
-	if(player.square.xIndex > 1){
-		btnReset(player, -2, 0);
-	}
-	if(player.square.xIndex < player.grid.squares[0].length - 2){
-		btnReset(player, 2, 0);
-	}
-	if(player.square.yIndex > 1){
-		btnReset(player, 0, -2);
-	}
-	if(player.square.yIndex < player.grid.squares.length - 2){
-		btnReset(player, 0, 2);
-	}
-
-	if(player.square.xIndex != 0 && player.square.yIndex != 0){
-		btnReset(player, -1, -1);
-	}
-	if(player.square.xIndex != player.grid.squares[0].length - 1 && player.square.yIndex != player.grid.squares.length - 1){
-		btnReset(player, 1, 1);
-	}
-	if(player.square.xIndex != player.grid.squares[0].length - 1 && player.square.yIndex != 0){
-		btnReset(player, 1, -1);
-	}
-	if(player.square.xIndex != 0 && player.square.yIndex != player.grid.squares.length - 1){
-		btnReset(player, -1, 1);
-	}
+	btnReset(player, -1, -1);//diagonals
+	btnReset(player, 1, 1);
+	btnReset(player, 1, -1);
+	btnReset(player, -1, 1);
 }
 
 //deal with phases and such, moving forward upon clicking a player at the right time, backward when clicking the stage after selecting a player
@@ -69,7 +46,9 @@ function movementButton(square, player){
     square.occupant = player;
     player.square = square;
 	player.x = square.x + square.tile.width*3/8;
-	player.y = square.y - square.tile.height/6;
+	player.y = square.y - square.tile.height/6
+	player.emitter.x = player.x + 12;
+	player.emitter.y = player.y + 40;
 }
 
 function buttonClick(square){

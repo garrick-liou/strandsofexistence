@@ -22,15 +22,11 @@ function setPhase(p){
     for(let i = p1Grid.damageG.getFirstAlive(); i != null; i = p1Grid.damageG.getFirstAlive()) i.destroy();
     for(let i = p2Grid.damageG.getFirstAlive(); i != null; i = p2Grid.damageG.getFirstAlive()) i.destroy();
 
-    //there was a lot more going on in here a while ago...
     switch(p){
         case 0:
+            if(selectedPlayer) selectedPlayer.emitterState(0);
+
             //so there's no mistakes in this regard
-            if(selectedPlayer) {
-                selectedPlayer.emitter.setAlpha(0.4, 0.5);
-                selectedPlayer.emitter.setYSpeed(-40,-60);                
-                selectedPlayer.emitter.flow(800, 100, 1, -1);
-            }
             selectedPlayer = null;
 
             g.players.forEachAlive(function(p){
@@ -45,12 +41,8 @@ function setPhase(p){
             g.players.forEachAlive(function(p){
                 p.inputEnabled = false;
             });
+            selectedPlayer.emitterState(1);
             doAttack(0);
-            break;
-        case 3://move back to phase 2
-            selectedPlayer.emitter.setAlpha(1);
-            selectedPlayer.emitter.setYSpeed(-100,-80);
-            selectedPlayer.emitter.flow(500, 100, 2, -1);
             break;
         default:
             console.log("Something's probably going seriously wrong.")

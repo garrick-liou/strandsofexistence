@@ -55,7 +55,7 @@ statesObject.LoadScreen = {
    preload: function() {
       console.log('LoadScreen preload');      
       game.load.path = 'assets/';
-      game.load.atlas('atlas', 'img/atlas2.png', 'img/atlas2.json');
+      game.load.atlas('atlas', 'img/atlas.png', 'img/atlas.json');
       // creates the cursors object that allows the program to read keyboard input
       cursors = game.input.keyboard.createCursorKeys();
       // this starts the physics used in the game
@@ -129,9 +129,6 @@ statesObject.GameLoop = {
 		text = game.add.text(320, 50, '', { fontSize: '12px', fill: '#ffffff'} );
 		text2 = game.add.text(320, 90, '', { fontSize: '12px', fill: '#ffffff'} );
 		text3 = game.add.text(320, 130, '', { fontSize: '12px', fill: '#ffffff'} );
-		//I don't think this is necessary, but I'll keep it written here for now
-		//game.world.bringToTop(gainBarGroup);
-		//game.world.bringToTop(borderBarGroup);
 
 		setPhase(0);
 		//allow player to "click off" to go back to the start of the turn
@@ -151,22 +148,6 @@ statesObject.GameLoop = {
 		if(game.input.keyboard.justPressed(Phaser.Keyboard.BACKSPACE)){
 			cancelPressed();
 		}
-
-		/*if (phaseCounter > 1 && phaseCounter < 4) { // if the player has already moved
-			
-			if(game.input.keyboard.justPressed(Phaser.Keyboard.ONE)) { //wait for attack button input, 1, 2, or 3 and go to appropriate attack function
-				doAttack(1);
-			} else if (game.input.keyboard.justPressed(Phaser.Keyboard.TWO)) {
-				doAttack(2);
-			} else if (game.input.keyboard.justPressed(Phaser.Keyboard.THREE)) {
-				doAttack(3);
-			}
-		}
-		if (phaseCounter == 3) { // after an attack has been chosen, wait for confirmation with ENTER
-			if(game.input.keyboard.justPressed(Phaser.Keyboard.ENTER)) {
-				confirmPressed();
-			}
-		}*/
 		if(phaseCounter == 2 && game.input.keyboard.justPressed(Phaser.Keyboard.ENTER)) confirmPressed();
 	}
 }

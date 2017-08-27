@@ -25,13 +25,7 @@ function makeDamage(grid, x, y){
 	d.scale.y = sqr.tile.scale.y;
 }
 
-//set up a array/structure to easily access the functions based on what number attack they are
-attackInfo = [
-	{fn:atkA, dmg:8, ele:'water'},
-	{fn:atkB, dmg:10, ele:'plant'},
-	{fn:atkC, dmg:12, ele:'flame'}];
-
-//alternate structure that I'll probably swap to soon
+//set up a object structure to easily access the functions based on what element attack they are
 characterAttacks = {
 	water:{fn:atkA, dmg:8},
 	plant:{fn:atkB, dmg:10},
@@ -40,8 +34,6 @@ characterAttacks = {
 
 //use the structure above
 function doAttack(number){
-	/*setPhase(3);
-	lastAttack = attackInfo[number - 1];*/
 	lastAttack = characterAttacks[selectedPlayer.element];
 	if (turnCounter == 0) {
 		lastAttack.fn(p2Grid, selectedPlayer.square.xIndex, selectedPlayer.square.yIndex);
