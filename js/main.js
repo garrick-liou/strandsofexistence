@@ -55,7 +55,7 @@ statesObject.LoadScreen = {
    preload: function() {
       console.log('LoadScreen preload');      
       game.load.path = 'assets/';
-      game.load.atlas('atlas', 'img/atlas2.png', 'img/atlas2.json');
+      game.load.atlas('atlas', 'img/atlas.png', 'img/atlas.json');
       // creates the cursors object that allows the program to read keyboard input
       cursors = game.input.keyboard.createCursorKeys();
       // this starts the physics used in the game
@@ -71,7 +71,9 @@ statesObject.LoadScreen = {
 statesObject.MainMenu =  {
    create: function() {
       console.log('MainMenu create');
-      game.add.sprite(230, 200, 'atlas', 'logo'); //placeholder logo and maybe button text, who knows
+      game.add.sprite(game.width/2, 40, 'atlas', 'Strands').anchor.setTo(0.5, 0); //placeholder logo and maybe button text, who knows
+      game.add.sprite(game.width/2, 125, 'atlas', 'Of').anchor.setTo(0.5, 0);
+      game.add.sprite(game.width/2, 230, 'atlas', 'Existence').anchor.setTo(0.5, 0);
       game.add.button(150, 350, 'atlas', function() {game.state.start('InstructionScreen')}, this, 'ButtonInst', 'ButtonInst', 'ButtonInst');
       game.add.button(150, 475, 'atlas', function() {game.state.start('GameLoop')}, this, 'ButtonPlay', 'ButtonPlay', 'ButtonPlay');
    }
@@ -117,6 +119,14 @@ statesObject.GameLoop = {
 			TILE_SCALE_X * 130/1.1, TILE_SCALE_Y * 95/1.1,//w/h of the tile sprites
 			2);//who owns this side?
 
+		p1Enter = game.add.sprite(50, 525, 'atlas', 'enter');
+		p2Enter = game.add.sprite(680, 525, 'atlas', 'enter');
+		p1Back = game.add.sprite(150, 525, 'atlas', 'backspace');
+		p2Back = game.add.sprite(580, 525, 'atlas', 'backspace');
+		for(let i = 1; i < 7; i++) {
+			game.add.sprite(i%2==1?230:540, Math.floor((i-1)/2)*50 + 25, 'atlas', 'P' + i + 'Icon');
+		}
+		phaseText = game.add.text(game.width/2, 180, 'Player 1, your turn to move.', { font: 'Garamond', fontSize: '32px', fill: '#eeeeee' }).anchor.setTo(0.5, 0);
 		damageBarGroup = game.add.group();               
 		gainBarGroup = game.add.group(); 
 		borderBarGroup = game.add.group();

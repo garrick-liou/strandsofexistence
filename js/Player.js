@@ -36,6 +36,8 @@ function Player(grid, pNum){
       //the floating characters are at the center of their squares
       this.animations.add('float', Phaser.Animation.generateFrameNames('Player' + pNum + '_', 1, 12, '', 2), 20, true);
       this.animations.add('turn', Phaser.Animation.generateFrameNames('Player' + pNum + 'Turn_', 1, 12, '', 2), 20, true);
+      this.animations.add('damage', Phaser.Animation.generateFrameNames('Player' + pNum + 'Damage', 1, 5, '', 2), 5, false);
+      this.animations.add('strongDamage', Phaser.Animation.generateFrameNames('Player' + pNum + 'Strong', 1, 5, '', 2), 5, false);
       this.animations.play('float');
       this.animations.currentAnim.setFrame(Math.floor(Math.random() * 12) + 1, true);
 
@@ -57,6 +59,8 @@ function Player(grid, pNum){
 
 Player.prototype = Object.create(Phaser.Sprite.prototype);
 Player.prototype.constructor = Player;
+
+
 Player.prototype.alterHealth = function(amount){
       this.health = Math.max(0, Math.min(50, this.health + amount));
 }
