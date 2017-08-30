@@ -51,6 +51,11 @@ function setPhase(p){
             break;
         case 1:
             phaseText.text = 'Click on a highlighted square to move to it.';
+            if(turnCounter == 0) {
+                p1Back.alpha = 1;
+            }else if(turnCounter == 1) {
+                p2Back.alpha = 1;
+            }
             break;
         case 2:
             //no more selecting a different player by clicking them, have to go back phase with background click or backspace press

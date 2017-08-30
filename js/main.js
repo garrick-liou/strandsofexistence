@@ -138,18 +138,12 @@ statesObject.GameLoop = {
 		new Player(p1Grid, 5);
 		new Player(p2Grid, 6);
 
-		/*text = game.add.text(320, 50, '', { fontSize: '12px', fill: '#ffffff'} );
-		text2 = game.add.text(320, 90, '', { fontSize: '12px', fill: '#ffffff'} );
-		text3 = game.add.text(320, 130, '', { fontSize: '12px', fill: '#ffffff'} );*/
-
 		setPhase(0);
 		//allow player to "click off" to go back to the start of the turn
 		background.events.onInputDown.add(cancelPressed, this);
 		background.inputEnabled = true;
 	},
 	update: function(){
-		//text.text = 'phase: ' + phaseCounter + ' turn: ' + turnCounter
-
 		p1Grid.players.forEach(function(p){
 			p.bar.update();
 		});

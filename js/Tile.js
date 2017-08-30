@@ -59,13 +59,14 @@ Grid.prototype.findDeaths = function(){
         if(p.health <= 0) {
             numDeaths++;
             p.square.occupant = null;
+            p.emitter.destroy();
             p.kill();
         }
     });
     if(numDeaths > 0) {
         this.players.forEachAlive(function(p){
             //add up to 10 hp for each allied player that died
-            p.alterHealth(10*numDeaths);
+            p.alterHealth(10*numDeaths, 0);
         });
     }
 }
