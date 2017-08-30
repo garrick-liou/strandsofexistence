@@ -1,24 +1,27 @@
+function changeAnim(player, newAnimation){
+    if(player.animations.currentAnim.name == newAnimation) return;
+    let prevFrame = player.animations.currentAnim.frame;
+    player.animations.stop();
+    player.animations.play(newAnimation);
+    player.animations.currentAnim.setFrame(prevFrame, true);
+}
 function setPhase(p){
-    
-    let nextAnim = 'float';
-    let fn = function(p){
-        if(p.animations.currentAnim.name == nextAnim) return;
-        let prevFrame = p.animations.currentAnim.frame;
-        p.animations.stop();
-        p.animations.play(nextAnim);
-        p.animations.currentAnim.setFrame(prevFrame, true);        
-    }
-    
+    console.log(phaseText);
     var g;
     if(turnCounter == 0) {
         g=p1Grid;
-        p2Grid.players.forEachAlive(fn);
+        p2Grid.players.forEachAlive(function(p){
+            changeAnim(p, 'float');
+        });
     }else if(turnCounter == 1) {
         g=p2Grid;
-        p1Grid.players.forEachAlive(fn);
+        p1Grid.players.forEachAlive(function(p){
+            changeAnim(p, 'float');
+        });
     }
-    nextAnim = 'turn';
-    g.players.forEachAlive(fn);
+    g.players.forEachAlive(function(p){
+        changeAnim(p, 'turn');
+    });
 
     g.buttonG.forEachAlive(function (c) { c.kill(); });
     for(let i = p1Grid.damageG.getFirstAlive(); i != null; i = p1Grid.damageG.getFirstAlive()) i.destroy();
@@ -47,6 +50,7 @@ function setPhase(p){
             });
             break;
         case 1:
+            phaseText.text = 'Click on a highlighted square to move to it.';
             break;
         case 2:
             //no more selecting a different player by clicking them, have to go back phase with background click or backspace press
