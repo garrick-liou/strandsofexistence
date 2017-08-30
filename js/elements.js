@@ -20,9 +20,9 @@ function doFlow(x, y, area, xMin, xMax, yMin, yMax, gravity, particleDuration, f
 var elementStruct ={
     flame:{
         soundName:"",
-        plant:1.5,
-        flame:1,
-        water:0.5,
+        plant:3,
+        flame:2,
+        water:1,
         burst:function(x, y, w, h){
             this.area = this.area || new Phaser.Rectangle(0, 0, w, h/5);
             this.gravity = this.gravity || new Phaser.Point(0, -300);
@@ -31,9 +31,9 @@ var elementStruct ={
     },
     water:{
         soundName:"",
-        flame:1.5,
-        water:1,
-        plant:0.5,
+        flame:3,
+        water:2,
+        plant:1,
         burst:function(x, y, w, h){
             this.area = this.area || new Phaser.Rectangle(0, 0, w*0.75, h*0.75);
             this.gravity = this.gravity || new Phaser.Point(0, 0);
@@ -45,9 +45,9 @@ var elementStruct ={
     },
     plant:{
         soundName:"",
-        water:1.5,
-        plant:1,
-        flame:0.5,
+        water:3,
+        plant:2,
+        flame:1,
         burst:function(x, y, w, h){
             this.area = this.area || new Phaser.Rectangle(0, 0, w, 1);
             this.gravity = this.gravity || new Phaser.Point(0, 1800);
@@ -64,6 +64,6 @@ function doDamage(grid){
 
 		let dPlayer = dTile.sqr.occupant;
         if(dPlayer == null) return;
-		dPlayer.alterHealth(-lastAttack.dmg * elem[dPlayer.element]);
+		dPlayer.alterHealth(-lastAttack.dmg, elem[dPlayer.element]);
 	});
 }

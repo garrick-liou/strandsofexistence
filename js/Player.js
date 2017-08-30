@@ -4,7 +4,7 @@ var pInfo = [
       {x:0, y:2, element:"plant"},
       {x:3, y:2, element:"plant"},
       {x:0, y:4, element:"water"},
-      {x:3, y:4, element:"water"},
+      {x:3, y:4, element:"water"}
 ];
 
 function Player(grid, pNum){
@@ -61,8 +61,25 @@ Player.prototype = Object.create(Phaser.Sprite.prototype);
 Player.prototype.constructor = Player;
 
 
-Player.prototype.alterHealth = function(amount){
-      this.health = Math.max(0, Math.min(50, this.health + amount));
+Player.prototype.alterHealth = function(amount, multiplier){
+      switch(multiplier){
+            case 1:
+                  //took weak damage
+                  break;
+            case 2:
+                  //took normal damage
+                  break;
+            case 3:
+                  //took strong damage
+                  break;
+            default:
+                  multiplier = 2;
+                  //didn't take damage, got healed
+                  break;
+      }
+      multiplier /= 2;
+      this.health = Math.max(0, Math.min(50, this.health + amount * multiplier));
+
 }
 Player.prototype.emitterState = function(state){
       switch(state){
