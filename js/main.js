@@ -137,7 +137,9 @@ statesObject.GameLoop = {
 			2);//who owns this side?
 
 		p1Enter = game.add.sprite(50, 525, 'atlas', 'enter');
+		p1Enter.events.onInputDown.add(confirmPressed);
 		p2Enter = game.add.sprite(680, 525, 'atlas', 'enter');
+		p2Enter.events.onInputDown.add(confirmPressed);
 		p1Back = game.add.sprite(150, 525, 'atlas', 'backspace');
 		p2Back = game.add.sprite(580, 525, 'atlas', 'backspace');
 		for(let i = 1; i < 7; i++) {

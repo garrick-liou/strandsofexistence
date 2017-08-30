@@ -21,11 +21,11 @@ function setPhase(p){
             p2Enter.alpha = 0.25;
             p2Back.alpha = 0.25;  
             p1Enter.inputEnabled = false;
-            p2Enter.inputEnabled = false;          
+            p2Enter.inputEnabled = false;
             if(turnCounter == 0) {
-                phaseText.text = 'Player 1, your turn to move.';
+                phaseText.text = 'Player 1\'s turn to move.';
             } else if (turnCounter == 1) {
-                phaseText.text = 'Player 2, your turn to move.';
+                phaseText.text = 'Player 2\'s turn to move.';
             }
 
             g.players.forEachAlive(function(p){
@@ -46,18 +46,16 @@ function setPhase(p){
             g.players.forEachAlive(function(p){
                 p.inputEnabled = false;
             });
-            phaseText.text = 'Press ENTER to confirm your attack, or BACKSPACE to cancel it.';
+            phaseText.text = 'Press ENTER to confirm your attack, or BACKSPACE to cancel.';
             selectedPlayer.emitterState(1);
             if(turnCounter == 0) {
                 p1Enter.alpha = 1;
                 p1Back.alpha = 1;
-                p1Enter.inputEnabled = true;
-                p1Enter.events.onInputDown.add(confirmPressed);                
+                p1Enter.inputEnabled = true;              
             }else if(turnCounter == 1) {
                 p2Enter.alpha = 1;
                 p2Back.alpha = 1;
                 p2Enter.inputEnabled = true;
-                p2Enter.events.onInputDown.add(confirmPressed);  
             }
             doAttack(0);
             break;
