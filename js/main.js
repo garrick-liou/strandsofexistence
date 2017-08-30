@@ -59,21 +59,42 @@ statesObject.LoadScreen = {
       // creates the cursors object that allows the program to read keyboard input
       cursors = game.input.keyboard.createCursorKeys();
       // this starts the physics used in the game
-      game.physics.startSystem(Phaser.Physics.ARCADE);      
+      game.physics.startSystem(Phaser.Physics.ARCADE);     
+      //load audio
+      game.load.audio('fire', 'audio/fire-spell-01.wav');
+      game.load.audio('Silverbgm', 'audio/Silver Flame.mp3');
+      game.load.audio('Truthbgm', 'audio/Truth in the Stones.mp3'); 
    },
    create: function() {
       console.log('LoadScreen create');
+
+   //play menu music
+      truthbgm = game.add.audio('Truthbgm');
+      truthbgm.onDecoded.add(start, this);
+
+      //play music
+      function start(){    	      
+          truthbgm.play('', 0, 0.5, true);
+      }
+
 	  //after js assets are loaded, move to main menu
 	  loadSources(function(){game.state.start('MainMenu');});
    }
 }
 
+//make sure song plays only once
+var flag = 0;
+
 statesObject.MainMenu =  {
    create: function() {
       console.log('MainMenu create');
-      game.add.sprite(230, 200, 'atlas', 'logo'); //placeholder logo and maybe button text, who knows
+      game.add.sprite(game.width/2, 40, 'atlas', 'Strands').anchor.setTo(0.5, 0); //placeholder logo and maybe button text, who knows
+      game.add.sprite(game.width/2, 125, 'atlas', 'Of').anchor.setTo(0.5, 0);
+      game.add.sprite(game.width/2, 230, 'atlas', 'Existence').anchor.setTo(0.5, 0);
       game.add.button(150, 350, 'atlas', function() {game.state.start('InstructionScreen')}, this, 'ButtonInst', 'ButtonInst', 'ButtonInst');
       game.add.button(150, 475, 'atlas', function() {game.state.start('GameLoop')}, this, 'ButtonPlay', 'ButtonPlay', 'ButtonPlay');
+
+
    }
 }
 
@@ -137,6 +158,18 @@ statesObject.GameLoop = {
 		background.inputEnabled = true;
 	},
 	update: function(){
+
+        //fadout menu music
+        truthbgm.fadeOut(700);
+ 
+        //play game music
+        if (flag == 0){
+            console.log('GameLoop flag in'); 
+            silverbgm = game.add.audio('Silverbgm');
+            silverbgm.play('', 0, 0.75, true);
+            flag = flag + 1;
+        }
+
 		//text.text = 'phase: ' + phaseCounter + ' turn: ' + turnCounter
 
 		p1Grid.players.forEach(function(p){
