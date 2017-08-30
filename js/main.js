@@ -1,7 +1,7 @@
 //game is created lower down just before the function that puts all the states together
 var game;
 var background, p1Grid, p2Grid;
-var turnCounter, phaseCounter;
+var turnCounter, phaseCounter, phaseText;
 var attacks;
 var lastAttack, selectedPlayer;
 
@@ -126,7 +126,8 @@ statesObject.GameLoop = {
 		for(let i = 1; i < 7; i++) {
 			game.add.sprite(i%2==1?230:540, Math.floor((i-1)/2)*50 + 25, 'atlas', 'P' + i + 'Icon');
 		}
-		phaseText = game.add.text(game.width/2, 180, 'Player 1, your turn to move.', { font: 'Garamond', fontSize: '32px', fill: '#eeeeee' }).anchor.setTo(0.5, 0);
+		phaseText = game.add.text(game.width/2, 180, 'Player 1, your turn to move.', { font: 'Garamond', fontSize: '26px', fill: '#eeeeee' });
+		phaseText.anchor.setTo(0.5, 0);
 		damageBarGroup = game.add.group();               
 		gainBarGroup = game.add.group(); 
 		borderBarGroup = game.add.group();
