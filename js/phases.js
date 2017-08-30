@@ -6,7 +6,6 @@ function changeAnim(player, newAnimation){
     player.animations.currentAnim.setFrame(prevFrame, true);
 }
 function setPhase(p){
-    console.log(phaseText);
     var g;
     if(turnCounter == 0) {
         g=p1Grid;
