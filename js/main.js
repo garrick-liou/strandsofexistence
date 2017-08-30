@@ -81,6 +81,8 @@ statesObject.MainMenu =  {
 
 statesObject.InstructionScreen = {
 	create: function() {
+		box = game.add.sprite(0, 0, 'atlas', 'textBox');
+		box.alpha = 0.6;
 		game.add.text(game.width/2, 120, 'Click on your players to see the squares you can move to.', { font: 'Garamond', fontSize: '22px', fill: '#d6dbdf' }).anchor.setTo(0.5, 0);
 		game.add.text(game.width/2, 170, 'After moving, you\'ll see the area your attack will hit.' , { font: 'Garamond', fontSize: '22px', fill: '#d6dbdf' }).anchor.setTo(0.5, 0);
 		game.add.text(game.width/2, 220, 'Pressing ENTER confirms that attack, BACKSPACE resets the turn.', { font: 'Garamond', fontSize: '22px', fill: '#d6dbdf' }).anchor.setTo(0.5, 0);
@@ -127,7 +129,7 @@ statesObject.GameLoop = {
 			game.add.sprite(i%2==1?230:540, Math.floor((i-1)/2)*50 + 25, 'atlas', 'P' + i + 'Icon');
 		}
 
-		phaseText = game.add.text(game.width/2, 180, 'Player 1, your turn to move.', { font: 'Garamond', fontSize: '26px', fill: '#eeeeee' });
+		phaseText = game.add.text(game.width/2, 180, 'Player 1, your turn to move.', { font: 'Garamond', fontSize: '26px', fill: '#eeeeee', stroke: '#000000', strokeThickness: 4 });
 		phaseText.anchor.setTo(0.5, 0);
 		damageBarGroup = game.add.group();               
 		gainBarGroup = game.add.group(); 
