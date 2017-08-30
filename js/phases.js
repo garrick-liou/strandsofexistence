@@ -1,26 +1,7 @@
-function changeAnim(player, newAnimation){
-    if(player.animations.currentAnim.name == newAnimation) return;
-    let prevFrame = player.animations.currentAnim.frame;
-    player.animations.stop();
-    player.animations.play(newAnimation);
-    player.animations.currentAnim.setFrame(prevFrame, true);
-}
 function setPhase(p){
     var g;
-    if(turnCounter == 0) {
-        g=p1Grid;
-        p2Grid.players.forEachAlive(function(p){
-            changeAnim(p, 'float');
-        });
-    }else if(turnCounter == 1) {
-        g=p2Grid;
-        p1Grid.players.forEachAlive(function(p){
-            changeAnim(p, 'float');
-        });
-    }
-    g.players.forEachAlive(function(p){
-        changeAnim(p, 'turn');
-    });
+    if(turnCounter == 0) g=p1Grid;
+    else if(turnCounter == 1) g=p2Grid;
 
     g.buttonG.forEachAlive(function (c) { c.kill(); });
     for(let i = p1Grid.damageG.getFirstAlive(); i != null; i = p1Grid.damageG.getFirstAlive()) i.destroy();
@@ -28,6 +9,8 @@ function setPhase(p){
 
     switch(p){
         case 0:
+            p1Grid.players.forEachAlive(function(player){player.idleAnim();});
+            p2Grid.players.forEachAlive(function(player){player.idleAnim();});
             if(selectedPlayer) selectedPlayer.emitterState(0);
 
             //so there's no mistakes in this regard

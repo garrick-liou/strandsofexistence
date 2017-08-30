@@ -1,10 +1,10 @@
 var pInfo = [
-      {x:0, y:0, element:"flame"},
-      {x:3, y:0, element:"flame"},
-      {x:0, y:2, element:"plant"},
-      {x:3, y:2, element:"plant"},
-      {x:0, y:4, element:"water"},
-      {x:3, y:4, element:"water"}
+      {x:0, y:0, element:"flame", activeTurn:0},
+      {x:3, y:0, element:"flame", activeTurn:1},
+      {x:0, y:2, element:"plant", activeTurn:0},
+      {x:3, y:2, element:"plant", activeTurn:1},
+      {x:0, y:4, element:"water", activeTurn:0},
+      {x:3, y:4, element:"water", activeTurn:1}
 ];
 
 function Player(grid, pNum){
@@ -13,6 +13,7 @@ function Player(grid, pNum){
       this.grid = grid;
 
       let myInfo = pInfo[pNum-1];
+      this.activeTurn = myInfo.activeTurn;
       this.square = grid.squares[myInfo.y][myInfo.x];
 
       this.square.occupant = this;
@@ -24,10 +25,10 @@ function Player(grid, pNum){
       
       game.physics.enable(this);
       game.add.existing(this);
-      this.grid.players.add(this)
+      this.grid.players.add(this);
       this.health = 50;
       //jank math in there, not 100% sure how to organize that but I can probably find a way. Low priority tho.
-      this.bar = new LifeBar(this, pNum%2==1?25:578, Math.floor((pNum-1)/2)*50 + 25);
+      this.bar = new LifeBar(this, this.activeTurn==0 ? 25 : 578, myInfo.y*25 + 25);
       this.element = myInfo.element;
       
       this.events.onInputDown.add(playerClick, this);
@@ -36,9 +37,24 @@ function Player(grid, pNum){
       //the floating characters are at the center of their squares
       this.animations.add('float', Phaser.Animation.generateFrameNames('Player' + pNum + '_', 1, 12, '', 2), 20, true);
       this.animations.add('turn', Phaser.Animation.generateFrameNames('Player' + pNum + 'Turn_', 1, 12, '', 2), 20, true);
-      this.animations.add('damage', Phaser.Animation.generateFrameNames('Player' + pNum + 'Damage', 1, 5, '', 2), 5, false);
-      this.animations.add('strongDamage', Phaser.Animation.generateFrameNames('Player' + pNum + 'Strong', 1, 5, '', 2), 5, false);
-      this.animations.play('float');
+      this.animations.add('damage', Phaser.Animation.generateFrameNames('Player' + pNum + 'Damage_', 1, 5, '', 2), 5, false);
+      this.animations.add('strongDamage', Phaser.Animation.generateFrameNames('Player' + pNum + 'Strong_', 1, 5, '', 2), 5, false);
+
+      let idleAfterDamage = function(){
+            var target = "";
+            if(turnCounter == this.activeTurn) target = 'turn';
+            if(turnCounter != this.activeTurn) target = 'float';
+            if(target == "" || this.animations.currentAnim.name == target) return;
+            this.animations.stop();
+            this.animations.play(target);
+            this.animations.currentAnim.setFrame(this.oldFrame, true);
+      }
+      this.animations.getAnimation("damage").onComplete.add(idleAfterDamage, this);
+      this.animations.getAnimation("strongDamage").onComplete.add(idleAfterDamage, this);
+
+      if(turnCounter == this.activeTurn) this.animations.play('turn');
+      else this.animations.play('float');
+
       this.animations.currentAnim.setFrame(Math.floor(Math.random() * 12) + 1, true);
 
       this.emitter = game.add.emitter(this.x + this.width/2, this.y + this.height*0.9, 100)
@@ -59,22 +75,26 @@ function Player(grid, pNum){
 
 Player.prototype = Object.create(Phaser.Sprite.prototype);
 Player.prototype.constructor = Player;
-
-
+Player.prototype.idleAnim = function(){
+      var target = "";
+      if(turnCounter == this.activeTurn && this.animations.name == 'float') target = 'turn';
+      if(turnCounter != this.activeTurn && this.animations.name == 'turn') target = 'float';
+      if(target == "" || this.animations.currentAnim.name == target) return;
+      this.animations.stop();
+      this.animations.play(target);
+      this.animations.currentAnim.setFrame(this.oldFrame, true);
+}
 Player.prototype.alterHealth = function(amount, multiplier){
+      this.oldFrame = this.animations.currentAnim.frame;
       switch(multiplier){
-            case 1:
-                  //took weak damage
-                  break;
-            case 2:
-                  //took normal damage
+            case 1: case 2:
+                  this.animations.play('damage');
                   break;
             case 3:
-                  //took strong damage
+                  this.animations.play('strongDamage');
                   break;
             default:
                   multiplier = 2;
-                  //didn't take damage, got healed
                   break;
       }
       multiplier /= 2;

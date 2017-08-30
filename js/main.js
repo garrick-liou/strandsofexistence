@@ -52,21 +52,36 @@ function loadSources(callback){
 var statesObject = {};
 
 statesObject.LoadScreen = {
-   preload: function() {
-      console.log('LoadScreen preload');      
-      game.load.path = 'assets/';
-      game.load.atlas('atlas', 'img/atlas.png', 'img/atlas.json');
-      // creates the cursors object that allows the program to read keyboard input
-      cursors = game.input.keyboard.createCursorKeys();
-      // this starts the physics used in the game
-      game.physics.startSystem(Phaser.Physics.ARCADE);      
-   },
-   create: function() {
-      console.log('LoadScreen create');
-	  //after js assets are loaded, move to main menu
-	  loadSources(function(){game.state.start('MainMenu');});
-   }
+	preload: function() {
+		console.log('LoadScreen preload');
+		game.load.path = 'assets/';
+		game.load.atlas('atlas', 'img/atlas.png', 'img/atlas.json');
+		// creates the cursors object that allows the program to read keyboard input
+		cursors = game.input.keyboard.createCursorKeys();
+		// this starts the physics used in the game
+		game.physics.startSystem(Phaser.Physics.ARCADE);
+		//load audio
+		game.load.audio('fire', 'audio/fire-spell-01.wav');
+		game.load.audio('Silverbgm', 'audio/Silver Flame.mp3');
+		game.load.audio('Truthbgm', 'audio/Truth in the Stones.mp3');
+	},
+	create: function() {
+		console.log('LoadScreen create');//play menu music
+		truthbgm = game.add.audio('Truthbgm');
+		truthbgm.onDecoded.add(start, this);
+
+		//play music
+		function start(){
+			truthbgm.play('', 0, 0.5, true);
+		}
+		//after js assets are loaded, move to main menu
+		loadSources(function(){
+			game.state.start('MainMenu');
+		});
+	}
 }
+//make sure song plays only once
+var flag = 0;
 
 statesObject.MainMenu =  {
    create: function() {
@@ -86,7 +101,7 @@ statesObject.InstructionScreen = {
 		game.add.text(game.width/2, 120, 'Click on your players to see the squares you can move to.', { font: 'Garamond', fontSize: '22px', fill: '#d6dbdf' }).anchor.setTo(0.5, 0);
 		game.add.text(game.width/2, 170, 'After moving, you\'ll see the area your attack will hit.' , { font: 'Garamond', fontSize: '22px', fill: '#d6dbdf' }).anchor.setTo(0.5, 0);
 		game.add.text(game.width/2, 220, 'Pressing ENTER confirms that attack, BACKSPACE resets the turn.', { font: 'Garamond', fontSize: '22px', fill: '#d6dbdf' }).anchor.setTo(0.5, 0);
-		game.add.text(game.width/2, 290, 'Helpful info: Flame trumps Plant; Plant trumps Water; Water trumps Flame.', { font: 'Garamond', fontSize: '22px', fill: '#d6dbdf' } ).anchor.setTo(0.5, 0)
+		game.add.text(game.width/2, 290, 'Helpful info: Flame trumps Plant; Plant trumps Water; Water trumps Flame.', { font: 'Garamond', fontSize: '22px', fill: '#d6dbdf' } ).anchor.setTo(0.5, 0);
 		game.add.text(game.width/2, 340, 'Also, characters with small attacks deal more damage.', { font: 'Garamond', fontSize: '22px', fill: '#d6dbdf' } ).anchor.setTo(0.5, 0);
 		game.add.button(150, 425, 'atlas', function() {game.state.start('MainMenu')}, this, 'ButtonReturn', 'ButtonReturn', 'ButtonReturn');
 	},
@@ -98,7 +113,7 @@ statesObject.InstructionScreen = {
 }
 statesObject.GameLoop = {
 	create: function (){
-		console.log('GameLoop create'); 
+		console.log('GameLoop create');
 
 		turnCounter = 0;
 		phaseCounter = 0;
@@ -147,6 +162,16 @@ statesObject.GameLoop = {
 		background.inputEnabled = true;
 	},
 	update: function(){
+		//fadout menu music
+        truthbgm.fadeOut(700);
+		
+		//play game music
+		if (flag == 0){
+			console.log('GameLoop flag in'); 
+			silverbgm = game.add.audio('Silverbgm');
+			silverbgm.play('', 0, 0.75, true);
+			flag = flag + 1;
+		}
 		p1Grid.players.forEach(function(p){
 			p.bar.update();
 		});
