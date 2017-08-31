@@ -62,7 +62,9 @@ statesObject.LoadScreen = {
 		// this starts the physics used in the game
 		game.physics.startSystem(Phaser.Physics.ARCADE);
 		//load audio
-		game.load.audio('fire', 'audio/fire-spell-01.wav');
+		game.load.audio('fire1', 'audio/matches.wav');
+		game.load.audio('water1', 'audio/water.wav');
+		game.load.audio('earth1', 'audio/earth1.wav');
 		game.load.audio('Silverbgm', 'audio/Silver Flame.mp3');
 		game.load.audio('Truthbgm', 'audio/Truth in the Stones.mp3');
 	},
@@ -75,11 +77,12 @@ statesObject.LoadScreen = {
 		truthbgm = game.add.audio('Truthbgm');
 		truthbgm.onDecoded.add(start, this);
 
-		//play music
-		function start(){
-			truthbgm.play('', 0, 0.5, true);
-			game.state.start('MainMenu');
+		//play music	
+		function start(){	
+		   game.state.start('MainMenu');
+
 		}
+		
 		//after js assets are loaded, move to main menu
 		loadSources(function(){
 		});
@@ -90,6 +93,8 @@ var flag = 0;
 
 statesObject.MainMenu =  {
 	create: function() {
+
+      truthbgm.play('', 0, 0.75, true);
 		console.log('MainMenu create');
 		menubg = game.add.sprite(0, 0, 'atlas', 'menubg');
 		menumoon = game.add.tileSprite(0, 0, 800, 600, 'atlas', 'menumoon');
@@ -112,7 +117,6 @@ statesObject.MainMenu =  {
 		menutreesback.tilePosition.x += 0.8;
 		menutreesfore.tilePosition.x += 1.5;
 	}
-}
 
 statesObject.InstructionScreen = {
 	create: function() {
@@ -158,6 +162,11 @@ statesObject.CreditsScreen = {
 statesObject.GameLoop = {
 	create: function (){
 		console.log('GameLoop create');
+
+		fire1 = game.add.audio('fire1');
+        water1 = game.add.audio('water1');
+        earth1 = game.add.audio('earth1');
+
 
 		turnCounter = 0;
 		phaseCounter = 0;
@@ -233,6 +242,9 @@ statesObject.GameLoop = {
 statesObject.GameOver = {
    	create: function(){
 		console.log("Game over screen");
+		//silence song
+        silverbgm.fadeOut(2000);
+
 		//show victory/loss screen
 		switch(winner){
 			case 1:
