@@ -51,7 +51,7 @@ var elementStruct ={
         burst:function(x, y, w, h){
             this.area = this.area || new Phaser.Rectangle(0, 0, w, 1);
             this.gravity = this.gravity || new Phaser.Point(0, 1800);
-            doFlow(x, y, this.area, 5, 15, -475, -350, this.gravity, 400, 25, 10, 100, 0x109030);
+            doFlow(x, y, this.area, 5, 20, -475, -350, this.gravity, 400, 25, 10, 100, 0x108028);
         }
     }
 }
