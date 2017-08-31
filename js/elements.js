@@ -68,7 +68,7 @@ function doDamage(grid){
         water1.play('', 0, 0.75, false);
     }
     else{
-        earth1.play('', 0, 0.75, false);
+        earth1.play('', 0.5, 0.75, false);
     }
 
 

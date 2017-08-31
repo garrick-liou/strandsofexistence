@@ -92,7 +92,6 @@ statesObject.LoadScreen = {
 var flag = 0;
 
 statesObject.MainMenu =  {
-<<<<<<< HEAD
    create: function() {
       truthbgm.play('', 0, 0.75, true);
       console.log('MainMenu create');
