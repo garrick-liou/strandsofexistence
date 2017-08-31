@@ -1,9 +1,10 @@
 //game is created lower down just before the function that puts all the states together
 var game;
 var background, p1Grid, p2Grid;
-var turnCounter, phaseCounter, phaseText;
+var turnCounter, phaseCounter, phaseText, phaseText2;
 var attacks;
 var lastAttack, selectedPlayer;
+var turnsPlayed = 0;
 
 var TILE_SCALE_X = 0.7;
 var TILE_SCALE_Y = 0.55;
@@ -88,16 +89,16 @@ statesObject.LoadScreen = {
 var flag = 0;
 
 statesObject.MainMenu =  {
-   create: function() {
-      console.log('MainMenu create');
-      menubg = game.add.sprite(0, 0, 'atlas', 'menubg');
-      menubg.alpha = 0.5;
-      game.add.sprite(game.width/2, 40, 'atlas', 'Strands').anchor.setTo(0.5, 0); //placeholder logo and maybe button text, who knows
-      game.add.sprite(game.width/2, 125, 'atlas', 'Of').anchor.setTo(0.5, 0);
-      game.add.sprite(game.width/2, 230, 'atlas', 'Existence').anchor.setTo(0.5, 0);
-      game.add.button(150, 350, 'atlas', function() {game.state.start('InstructionScreen')}, this, 'ButtonInst', 'ButtonInst', 'ButtonInst');
-      game.add.button(150, 475, 'atlas', function() {game.state.start('GameLoop')}, this, 'ButtonPlay', 'ButtonPlay', 'ButtonPlay');
-   }
+	create: function() {
+		console.log('MainMenu create');
+		menubg = game.add.sprite(0, 0, 'atlas', 'menubg');
+		menubg.alpha = 0.5;
+		game.add.sprite(game.width/2, 40, 'atlas', 'Strands').anchor.setTo(0.5, 0); //placeholder logo and maybe button text, who knows
+		game.add.sprite(game.width/2, 125, 'atlas', 'Of').anchor.setTo(0.5, 0);
+		game.add.sprite(game.width/2, 230, 'atlas', 'Existence').anchor.setTo(0.5, 0);
+		game.add.button(150, 350, 'atlas', function() {game.state.start('InstructionScreen')}, this, 'ButtonInst', 'ButtonInst', 'ButtonInst');
+		game.add.button(150, 475, 'atlas', function() {game.state.start('GameLoop')}, this, 'ButtonPlay', 'ButtonPlay', 'ButtonPlay');
+	}
 }
 
 statesObject.InstructionScreen = {
@@ -105,12 +106,14 @@ statesObject.InstructionScreen = {
 		menubg = game.add.sprite(0, 0, 'atlas', 'menubg');
       	menubg.alpha = 0.5;
 		box = game.add.sprite(0, 0, 'atlas', 'textBox');
-		box.alpha = 0.6;
-		game.add.text(game.width/2, 120, 'Click on your players to see the squares you can move to.', { font: 'Garamond', fontSize: '22px', fill: '#d6dbdf' }).anchor.setTo(0.5, 0);
-		game.add.text(game.width/2, 170, 'After moving, you\'ll see the area your attack will hit.' , { font: 'Garamond', fontSize: '22px', fill: '#d6dbdf' }).anchor.setTo(0.5, 0);
-		game.add.text(game.width/2, 220, 'Pressing ENTER confirms that attack, BACKSPACE resets the turn.', { font: 'Garamond', fontSize: '22px', fill: '#d6dbdf' }).anchor.setTo(0.5, 0);
-		game.add.text(game.width/2, 290, 'Helpful info: Flame trumps Plant; Plant trumps Water; Water trumps Flame.', { font: 'Garamond', fontSize: '22px', fill: '#d6dbdf' } ).anchor.setTo(0.5, 0);
-		game.add.text(game.width/2, 340, 'Also, characters with small attacks deal more damage.', { font: 'Garamond', fontSize: '22px', fill: '#d6dbdf' } ).anchor.setTo(0.5, 0);
+		box.alpha = 0.75;
+		game.add.text(game.width/2, 90, 'Click on your players to see the squares you can move to.', { font: 'Garamond', fontSize: '22px', fill: '#d6dbdf' }).anchor.setTo(0.5, 0);
+		game.add.text(game.width/2, 135, 'After moving, you\'ll see the area your attack will hit.' , { font: 'Garamond', fontSize: '22px', fill: '#d6dbdf' }).anchor.setTo(0.5, 0);
+		game.add.text(game.width/2, 180, 'Pressing ENTER confirms that attack, BACKSPACE resets the turn.', { font: 'Garamond', fontSize: '22px', fill: '#d6dbdf' }).anchor.setTo(0.5, 0);
+		game.add.text(game.width/2, 245, 'Flame burns Plant - Plant absorbs Water - Water douses Flame.', { font: 'Garamond', fontSize: '22px', fill: '#d6dbdf' } ).anchor.setTo(0.5, 0);
+		game.add.text(game.width/2, 290, 'However, any attack you pull off will hurt its targets.', { font: 'Garamond', fontSize: '22px', fill: '#d6dbdf' } ).anchor.setTo(0.5, 0);
+		game.add.text(game.width/2, 335, 'Also, characters with smaller attacks pack a bigger punch.', { font: 'Garamond', fontSize: '22px', fill: '#d6dbdf' } ).anchor.setTo(0.5, 0);
+		game.add.text(game.width/2, 380, 'Finally, losing an ally regains health to those that remain alive.', { font: 'Garamond', fontSize: '22px', fill: '#d6dbdf' } ).anchor.setTo(0.5, 0);
 		game.add.button(80, 425, 'atlas', function() {game.state.start('MainMenu')}, this, 'ButtonReturn', 'ButtonReturn', 'ButtonReturn');
 		game.add.button(620, 425, 'atlas', function() {game.state.start('CreditsScreen')}, this, 'CreditsButton', 'CreditsButton', 'CreditsButton');
 	},
@@ -171,8 +174,10 @@ statesObject.GameLoop = {
 		p1Back = game.add.sprite(150, 525, 'atlas', 'backspace');
 		p2Back = game.add.sprite(580, 525, 'atlas', 'backspace');
 
-		phaseText = game.add.text(game.width/2, 180, 'Player 1, your turn to move.', { font: 'Garamond', fontSize: '26px', fill: '#eeeeee', stroke: '#000000', strokeThickness: 4 });
+		phaseText = game.add.text(game.width/2, 170, 'Player 1, your turn to move.', { font: 'Garamond', fontSize: '26px', fill: '#eeeeee', stroke: '#000000', strokeThickness: 4 });
 		phaseText.anchor.setTo(0.5, 0);
+		phaseText2 = game.add.text(game.width/2, 200, 'Click on a character or the square they\'re on.', { font: 'Garamond', fontSize: '20px', fill: '#eeeeee', stroke: '#000000', strokeThickness: 4 });
+		phaseText2.anchor.setTo(0.5, 0);
 		damageBarGroup = game.add.group();               
 		gainBarGroup = game.add.group(); 
 		borderBarGroup = game.add.group();

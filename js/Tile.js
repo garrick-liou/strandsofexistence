@@ -76,6 +76,9 @@ Grid.prototype.findDeaths = function(){
                 p.lifeGainEmitter.gravity = new Phaser.Point(0, 50);
                 p.lifeGainEmitter.setXSpeed(0,0);
                 p.lifeGainEmitter.setYSpeed(-200,-150);     
+            } else {
+                p.lifeGainEmitter.x = p.x + p.width/2;
+                p.lifeGainEmitter.y = p.y + p.height * 0.9;
             }
             
             p.lifeGainEmitter.flow(400, 100, 3, 15);
