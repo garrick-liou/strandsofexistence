@@ -66,6 +66,22 @@ Grid.prototype.findDeaths = function(){
     if(numDeaths > 0) {
         this.players.forEachAlive(function(p){
             //add up to 10 hp for each allied player that died
+            if(!p.lifeGainEmitter) {
+                p.lifeGainEmitter = game.add.emitter(p.x + p.width/2, p.y + p.height*0.9, 100)
+                p.grid.add(p.lifeGainEmitter);
+                p.lifeGainEmitter.makeParticles('atlas', 'particle');
+
+                p.lifeGainEmitter.area = new Phaser.Rectangle(p.x, p.y, p.square.tile.width/3, 1);
+                p.lifeGainEmitter.gravity = new Phaser.Point(0, 50);
+                p.lifeGainEmitter.setXSpeed(0,0);
+                p.lifeGainEmitter.setYSpeed(-200,-150);     
+            }
+            
+            p.lifeGainEmitter.flow(400, 100, 3, 15);
+            p.lifeGainEmitter.forEach(function(particle){
+                particle.tint = 0x15AD27;
+            });
+            
             p.alterHealth(10*numDeaths, 0);
         });
     }
