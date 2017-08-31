@@ -38,8 +38,8 @@ function Player(grid, pNum){
       //the floating characters are at the center of their squares
       this.animations.add('float', Phaser.Animation.generateFrameNames('Player' + pNum + '_', 1, 12, '', 2), 20, true);
       this.animations.add('turn', Phaser.Animation.generateFrameNames('Player' + pNum + 'Turn_', 1, 12, '', 2), 20, true);
-      this.animations.add('damage', Phaser.Animation.generateFrameNames('Player' + pNum + 'Damage_', 1, 5, '', 2), 5, false);
-      this.animations.add('strongDamage', Phaser.Animation.generateFrameNames('Player' + pNum + 'Strong_', 1, 5, '', 2), 5, false);
+      this.animations.add('damage', Phaser.Animation.generateFrameNames('Player' + pNum + 'Damage_', 1, 5, '', 2), 8, false);
+      this.animations.add('strongDamage', Phaser.Animation.generateFrameNames('Player' + pNum + 'Strong_', 1, 5, '', 2), 4, false);
 
       let idleAfterDamage = function(){
             var target = "";
