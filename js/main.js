@@ -120,8 +120,8 @@ statesObject.MainMenu =  {
 
 statesObject.InstructionScreen = {
 	create: function() {
-		menubg = game.add.sprite(0, 0, 'atlas', 'menubg');
-      	menubg.alpha = 0.5;
+		menubg = game.add.sprite(0, 0, 'atlas', 'menufullbg');
+      	menubg.alpha = 0.75;
 		box = game.add.sprite(0, 0, 'atlas', 'textBox');
 		box.alpha = 0.75;
 		game.add.text(game.width/2, 90, 'Click on your players to see the squares you can move to.', { font: 'Garamond', fontSize: '22px', fill: '#d6dbdf' }).anchor.setTo(0.5, 0);
