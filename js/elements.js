@@ -19,7 +19,7 @@ function doFlow(x, y, area, xMin, xMax, yMin, yMax, gravity, particleDuration, f
 
 var elementStruct ={
     flame:{
-        soundName:"",
+        soundName:"Fire",
         plant:3,
         flame:2,
         water:1,
@@ -30,7 +30,7 @@ var elementStruct ={
         }
     },
     water:{
-        soundName:"",
+        soundName:"Water",
         flame:3,
         water:2,
         plant:1,
@@ -44,7 +44,7 @@ var elementStruct ={
         }
     },
     plant:{
-        soundName:"",
+        soundName:"Earth",
         water:3,
         plant:2,
         flame:1,
@@ -59,6 +59,19 @@ var elementStruct ={
 function doDamage(grid){
     let elem = elementStruct[selectedPlayer.element];
     //play sound using elem.soundName
+    console.log('sound name', elem.soundName );
+
+    if (elem.soundName === "Fire"){
+        fire1.play('', 0, 0.75, false);
+    }
+    else if (elem.soundName === "Water"){
+        water1.play('', 0, 0.75, false);
+    }
+    else{
+        earth1.play('', 0, 0.75, false);
+    }
+
+
     grid.damageG.forEachAlive(function(dTile){
         elem.burst.call(elem, grid.x + dTile.x + dTile.width/2, grid.y + dTile.y + dTile.height*0.75, dTile.width, dTile.height);
 
