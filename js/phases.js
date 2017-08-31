@@ -66,7 +66,7 @@ function setPhase(p){
             if(turnCounter == 0) {
                 p1Enter.alpha = 1;
                 p1Back.alpha = 1;
-                p1Enter.inputEnabled = true;              
+                p1Enter.inputEnabled = true;
             }else if(turnCounter == 1) {
                 p2Enter.alpha = 1;
                 p2Back.alpha = 1;
