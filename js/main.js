@@ -93,8 +93,8 @@ statesObject.LoadScreen = {
 var flag = 0;
 
 statesObject.MainMenu =  {
-   create: function() {
-      console.log('MainMenu create');
+   	create: function() {
+      	console.log('MainMenu create');
 		menubg = game.add.sprite(0, 0, 'atlas', 'menubg');
 		menumoon = game.add.tileSprite(0, 0, 800, 600, 'atlas', 'menumoon');
 		menuclouds = game.add.tileSprite(0, 0, 800, 600, 'atlas', 'menuclouds');
@@ -102,7 +102,7 @@ statesObject.MainMenu =  {
 		menumountainsfore = game.add.tileSprite(0, 0, 800, 600, 'atlas', 'menumountainsfore');
 		menutreesback = game.add.tileSprite(0, 0, 800, 600, 'atlas', 'menutreesback');
 		menutreesfore = game.add.tileSprite(0, 0, 800, 600, 'atlas', 'menutreesfore');
-		game.add.sprite(game.width/2, 40, 'atlas', 'Strands').anchor.setTo(0.5, 0); //placeholder logo and maybe button text, who knows
+		game.add.sprite(game.width/2, 40, 'atlas', 'Strands').anchor.setTo(0.5, 0);
 		game.add.sprite(game.width/2, 125, 'atlas', 'Of').anchor.setTo(0.5, 0);
 		game.add.sprite(game.width/2, 230, 'atlas', 'Existence').anchor.setTo(0.5, 0);
 		game.add.button(150, 350, 'atlas', function() {game.state.start('InstructionScreen')}, this, 'ButtonInst', 'ButtonInst', 'ButtonInst');
