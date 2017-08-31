@@ -29,6 +29,7 @@ function Player(grid, pNum){
       this.health = 50;
       //jank math in there, not 100% sure how to organize that but I can probably find a way. Low priority tho.
       this.bar = new LifeBar(this, this.activeTurn==0 ? 25 : 578, myInfo.y*25 + 25);
+      this.icon = game.add.sprite(this.activeTurn == 0 ? 230 : 540, myInfo.y*25 + 25, 'atlas', 'P' + pNum + 'Icon');
       this.element = myInfo.element;
       
       this.events.onInputDown.add(playerClick, this);
@@ -48,6 +49,8 @@ function Player(grid, pNum){
             this.animations.stop();
             this.animations.play(target);
             this.animations.currentAnim.setFrame(this.oldFrame, true);
+            this.tint = 0xFFFFFF;
+            this.icon.tint = 0xFFFFFF;
       }
       this.animations.getAnimation("damage").onComplete.add(idleAfterDamage, this);
       this.animations.getAnimation("strongDamage").onComplete.add(idleAfterDamage, this);
@@ -87,10 +90,19 @@ Player.prototype.idleAnim = function(){
 Player.prototype.alterHealth = function(amount, multiplier){
       this.oldFrame = this.animations.currentAnim.frame;
       switch(multiplier){
-            case 1: case 2:
+            case 1:
+                  this.tint = 0xEEDDDD;
+                  this.icon.tint = 0xEEDDDD;
+                  this.animations.play('damage');
+                  break;
+            case 2:
+                  this.tint = 0xCCAAAA;
+                  this.icon.tint = 0xCCAAAA;
                   this.animations.play('damage');
                   break;
             case 3:
+                  this.tint = 0xAA4444;
+                  this.icon.tint = 0xAA4444;
                   this.animations.play('strongDamage');
                   break;
             default:

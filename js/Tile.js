@@ -60,6 +60,7 @@ Grid.prototype.findDeaths = function(){
             numDeaths++;
             p.square.occupant = null;
             p.emitter.destroy();
+            p.icon.tint = 0x666666;
             p.kill();
         }
     });

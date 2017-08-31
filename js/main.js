@@ -142,9 +142,6 @@ statesObject.GameLoop = {
 		p2Enter.events.onInputDown.add(confirmPressed);
 		p1Back = game.add.sprite(150, 525, 'atlas', 'backspace');
 		p2Back = game.add.sprite(580, 525, 'atlas', 'backspace');
-		for(let i = 1; i < 7; i++) {
-			game.add.sprite(i%2==1?230:540, Math.floor((i-1)/2)*50 + 25, 'atlas', 'P' + i + 'Icon');
-		}
 
 		phaseText = game.add.text(game.width/2, 180, 'Player 1, your turn to move.', { font: 'Garamond', fontSize: '26px', fill: '#eeeeee', stroke: '#000000', strokeThickness: 4 });
 		phaseText.anchor.setTo(0.5, 0);
