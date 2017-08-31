@@ -50,8 +50,8 @@ var elementStruct ={
         flame:1,
         burst:function(x, y, w, h){
             this.area = this.area || new Phaser.Rectangle(0, 0, w, 1);
-            this.gravity = this.gravity || new Phaser.Point(0, 120);
-            game.time.events.add(750, doFlow, this, x, y, this.area, 2, 5, -125, -115, this.gravity, 2000, 25, 10, 100, 0x108028);
+            this.gravity = this.gravity || new Phaser.Point(0, 100);
+            game.time.events.add(750, doFlow, this, x, y, this.area, 2, 5, -125, -115, this.gravity, 2300, 25, 10, 100, 0x108028);
         }
     }
 }
@@ -60,7 +60,7 @@ function doDamage(grid){
     let elem = elementStruct[selectedPlayer.element];
 
     //play sound using ~~elem.soundName~~ elem.sound
-    elem.sound.play('', 0, 0.3, false);
+    elem.sound.play('', 0, 0.6, false);
 
     grid.damageG.forEachAlive(function(dTile){
         elem.burst.call(elem, grid.x + dTile.x + dTile.width/2, grid.y + dTile.y + dTile.height*0.75, dTile.width, dTile.height);
