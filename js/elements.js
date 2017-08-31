@@ -20,6 +20,7 @@ function doFlow(x, y, area, xMin, xMax, yMin, yMax, gravity, particleDuration, f
 var elementStruct ={
     flame:{
         sound:null,
+        soundStart:0,
         plant:3,
         flame:2,
         water:1,
@@ -31,6 +32,7 @@ var elementStruct ={
     },
     water:{
         sound:null,
+        soundStart:0,
         flame:3,
         water:2,
         plant:1,
@@ -45,13 +47,14 @@ var elementStruct ={
     },
     plant:{
         sound:null,
+        soundStart:0.74,
         water:3,
         plant:2,
         flame:1,
         burst:function(x, y, w, h){
             this.area = this.area || new Phaser.Rectangle(0, 0, w, 1);
             this.gravity = this.gravity || new Phaser.Point(0, 120);
-            game.time.events.add(750, doFlow, this, x, y, this.area, 2, 5, -125, -115, this.gravity, 2300, 25, 10, 100, 0x108028);
+            game.time.events.add(20, doFlow, this, x, y, this.area, 2, 5, -125, -115, this.gravity, 2300, 25, 10, 100, 0x108028);
         }
     }
 }
@@ -59,8 +62,8 @@ var elementStruct ={
 function doDamage(grid){
     let elem = elementStruct[selectedPlayer.element];
 
-    //play sound using ~~elem.soundName~~ elem.sound
-    elem.sound.play('', 0, 0.3, false);
+    //play sound using sound info in elem
+    elem.sound.play('', elem.soundStart, 0.3, false);
 
     grid.damageG.forEachAlive(function(dTile){
         elem.burst.call(elem, grid.x + dTile.x + dTile.width/2, grid.y + dTile.y + dTile.height*0.75, dTile.width, dTile.height);
