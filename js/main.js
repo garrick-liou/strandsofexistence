@@ -129,7 +129,7 @@ statesObject.InstructionScreen = {
 		box.alpha = 0.75;
 		game.add.text(game.width/2, 90, 'Click on your players to see the squares you can move to.', { font: 'Garamond', fontSize: '22px', fill: '#d6dbdf' }).anchor.setTo(0.5, 0);
 		game.add.text(game.width/2, 135, 'After moving, you\'ll see the area your attack will hit.' , { font: 'Garamond', fontSize: '22px', fill: '#d6dbdf' }).anchor.setTo(0.5, 0);
-		game.add.text(game.width/2, 180, 'Pressing ENTER confirms that attack, BACKSPACE resets the turn.', { font: 'Garamond', fontSize: '22px', fill: '#d6dbdf' }).anchor.setTo(0.5, 0);
+		game.add.text(game.width/2, 180, 'Pressing ENTER confirms that attack, ESC resets the turn.', { font: 'Garamond', fontSize: '22px', fill: '#d6dbdf' }).anchor.setTo(0.5, 0);
 		game.add.text(game.width/2, 245, 'Flame burns Plant - Plant absorbs Water - Water douses Flame.', { font: 'Garamond', fontSize: '22px', fill: '#d6dbdf' } ).anchor.setTo(0.5, 0);
 		game.add.text(game.width/2, 290, 'However, any attack you pull off will hurt its targets.', { font: 'Garamond', fontSize: '22px', fill: '#d6dbdf' } ).anchor.setTo(0.5, 0);
 		game.add.text(game.width/2, 335, 'Also, characters with smaller attacks pack a bigger punch.', { font: 'Garamond', fontSize: '22px', fill: '#d6dbdf' } ).anchor.setTo(0.5, 0);
@@ -238,7 +238,7 @@ statesObject.GameLoop = {
 			p.bar.update();
 		});
 
-		if(game.input.keyboard.justPressed(Phaser.Keyboard.BACKSPACE)){
+		if(game.input.keyboard.justPressed(Phaser.Keyboard.ESC)){
 			cancelPressed();
 		}
 		if(phaseCounter == 2 && game.input.keyboard.justPressed(Phaser.Keyboard.ENTER)) confirmPressed();
