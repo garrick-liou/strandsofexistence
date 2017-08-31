@@ -57,7 +57,6 @@ Grid.prototype.findDeaths = function(){
     this.players.forEachAlive(function(p){
         //find how many players are dead but haven't been killed yet, and deal with that
         if(p.health <= 0) {
-            bell1.play('', 0.65, 0.3, false);
             numDeaths++;
             p.square.occupant = null;
             p.emitter.destroy();
@@ -66,6 +65,7 @@ Grid.prototype.findDeaths = function(){
         }
     });
     if(numDeaths > 0) {
+        bell1.play('', 0.65, 0.3, false);
         this.players.forEachAlive(function(p){
             //add up to 10 hp for each allied player that died
             if(!p.lifeGainEmitter) {

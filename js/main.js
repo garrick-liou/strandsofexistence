@@ -163,9 +163,9 @@ statesObject.GameLoop = {
 	create: function (){
 		console.log('GameLoop create');
 
-		fire1 = game.add.audio('fire1');
-        water1 = game.add.audio('water1');
-        earth1 = game.add.audio('earth1');
+		elementStruct.flame.sound = game.add.audio('fire1');
+		elementStruct.water.sound = game.add.audio('water1');
+		elementStruct.plant.sound = game.add.audio('earth1');
         bell1 = game.add.audio('bell');
 
 
