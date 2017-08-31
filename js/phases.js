@@ -27,6 +27,11 @@ function setPhase(p){
             } else if (turnCounter == 1) {
                 phaseText.text = 'Player 2\'s turn to move.';
             }
+            if(turnsPlayed < 2) {
+                phaseText2.text = 'Click on a character or the square they\'re on.';
+            } else {
+                phaseText2.text = '';
+            }
 
             g.players.forEachAlive(function(p){
                 p.inputEnabled = true;
@@ -35,6 +40,11 @@ function setPhase(p){
             break;
         case 1:
             phaseText.text = 'Click on a highlighted square to move to it.';
+            if(turnsPlayed < 4) {
+                phaseText2.text = 'Click elsewhere to pick a new character to move.';
+            } else {
+                phaseText2.text = '';
+            }
             if(turnCounter == 0) {
                 p1Back.alpha = 1;
             }else if(turnCounter == 1) {
@@ -47,11 +57,16 @@ function setPhase(p){
                 p.inputEnabled = false;
             });
             phaseText.text = 'Press ENTER to confirm your attack, or BACKSPACE to cancel.';
+            if(turnsPlayed < 4) {
+                phaseText2.text = 'Each character\'s attack is different, and based on where they\'re standing.';
+            } else {
+                phaseText2.text = '';
+            }
             selectedPlayer.emitterState(1);
             if(turnCounter == 0) {
                 p1Enter.alpha = 1;
                 p1Back.alpha = 1;
-                p1Enter.inputEnabled = true;              
+                p1Enter.inputEnabled = true;
             }else if(turnCounter == 1) {
                 p2Enter.alpha = 1;
                 p2Back.alpha = 1;

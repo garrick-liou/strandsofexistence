@@ -1,9 +1,10 @@
 //game is created lower down just before the function that puts all the states together
 var game;
 var background, p1Grid, p2Grid;
-var turnCounter, phaseCounter, phaseText;
+var turnCounter, phaseCounter, phaseText, phaseText2;
 var attacks;
 var lastAttack, selectedPlayer;
+var turnsPlayed = 0;
 
 var TILE_SCALE_X = 0.7;
 var TILE_SCALE_Y = 0.55;
@@ -76,10 +77,10 @@ statesObject.LoadScreen = {
 		truthbgm = game.add.audio('Truthbgm');
 		truthbgm.onDecoded.add(start, this);
 
-
 		//play music	
 		function start(){	
 		   game.state.start('MainMenu');
+
 		}
 		
 		//after js assets are loaded, move to main menu
@@ -91,6 +92,7 @@ statesObject.LoadScreen = {
 var flag = 0;
 
 statesObject.MainMenu =  {
+<<<<<<< HEAD
    create: function() {
       truthbgm.play('', 0, 0.75, true);
       console.log('MainMenu create');
@@ -109,12 +111,14 @@ statesObject.InstructionScreen = {
 		menubg = game.add.sprite(0, 0, 'atlas', 'menubg');
       	menubg.alpha = 0.5;
 		box = game.add.sprite(0, 0, 'atlas', 'textBox');
-		box.alpha = 0.6;
-		game.add.text(game.width/2, 120, 'Click on your players to see the squares you can move to.', { font: 'Garamond', fontSize: '22px', fill: '#d6dbdf' }).anchor.setTo(0.5, 0);
-		game.add.text(game.width/2, 170, 'After moving, you\'ll see the area your attack will hit.' , { font: 'Garamond', fontSize: '22px', fill: '#d6dbdf' }).anchor.setTo(0.5, 0);
-		game.add.text(game.width/2, 220, 'Pressing ENTER confirms that attack, BACKSPACE resets the turn.', { font: 'Garamond', fontSize: '22px', fill: '#d6dbdf' }).anchor.setTo(0.5, 0);
-		game.add.text(game.width/2, 290, 'Helpful info: Flame trumps Plant; Plant trumps Water; Water trumps Flame.', { font: 'Garamond', fontSize: '22px', fill: '#d6dbdf' } ).anchor.setTo(0.5, 0);
-		game.add.text(game.width/2, 340, 'Also, characters with small attacks deal more damage.', { font: 'Garamond', fontSize: '22px', fill: '#d6dbdf' } ).anchor.setTo(0.5, 0);
+		box.alpha = 0.75;
+		game.add.text(game.width/2, 90, 'Click on your players to see the squares you can move to.', { font: 'Garamond', fontSize: '22px', fill: '#d6dbdf' }).anchor.setTo(0.5, 0);
+		game.add.text(game.width/2, 135, 'After moving, you\'ll see the area your attack will hit.' , { font: 'Garamond', fontSize: '22px', fill: '#d6dbdf' }).anchor.setTo(0.5, 0);
+		game.add.text(game.width/2, 180, 'Pressing ENTER confirms that attack, BACKSPACE resets the turn.', { font: 'Garamond', fontSize: '22px', fill: '#d6dbdf' }).anchor.setTo(0.5, 0);
+		game.add.text(game.width/2, 245, 'Flame burns Plant - Plant absorbs Water - Water douses Flame.', { font: 'Garamond', fontSize: '22px', fill: '#d6dbdf' } ).anchor.setTo(0.5, 0);
+		game.add.text(game.width/2, 290, 'However, any attack you pull off will hurt its targets.', { font: 'Garamond', fontSize: '22px', fill: '#d6dbdf' } ).anchor.setTo(0.5, 0);
+		game.add.text(game.width/2, 335, 'Also, characters with smaller attacks pack a bigger punch.', { font: 'Garamond', fontSize: '22px', fill: '#d6dbdf' } ).anchor.setTo(0.5, 0);
+		game.add.text(game.width/2, 380, 'Finally, losing an ally regains health to those that remain alive.', { font: 'Garamond', fontSize: '22px', fill: '#d6dbdf' } ).anchor.setTo(0.5, 0);
 		game.add.button(80, 425, 'atlas', function() {game.state.start('MainMenu')}, this, 'ButtonReturn', 'ButtonReturn', 'ButtonReturn');
 		game.add.button(620, 425, 'atlas', function() {game.state.start('CreditsScreen')}, this, 'CreditsButton', 'CreditsButton', 'CreditsButton');
 	},
@@ -128,16 +132,17 @@ statesObject.InstructionScreen = {
 statesObject.CreditsScreen = {
 	create: function() {
 
-		game.add.text(game.width/2, 40, 'Head Developer', { font: 'Garamond', fontSize: '32px', fill: '#ffffff'}).anchor.setTo(0.5, 0);		
+		game.add.text(game.width/2, 40, 'Head Developer', { font: 'Garamond', fontSize: '32px', fill: '#ffffff'}).anchor.setTo(0.5, 0);
 		game.add.text(game.width/2, 80, 'Garrick Liou', { font: 'Garamond', fontSize: '24px', fill: '#ffffff'}).anchor.setTo(0.5, 0);
-		game.add.text(game.width/2, 120, 'Head Programmer', { font: 'Garamond', fontSize: '32px', fill: '#ffffff'}).anchor.setTo(0.5, 0);		
+		game.add.text(game.width/2, 120, 'Head Programmer', { font: 'Garamond', fontSize: '32px', fill: '#ffffff'}).anchor.setTo(0.5, 0);
 		game.add.text(game.width/2, 160, 'Elias Klein', { font: 'Garamond', fontSize: '24px', fill: '#ffffff'}).anchor.setTo(0.5, 0);
-		game.add.text(game.width/2, 200, 'Head Artist/Sound Guy', { font: 'Garamond', fontSize: '32px', fill: '#ffffff'}).anchor.setTo(0.5, 0);		
+		game.add.text(game.width/2, 200, 'Head Artist/Sound Guy', { font: 'Garamond', fontSize: '32px', fill: '#ffffff'}).anchor.setTo(0.5, 0);
 		game.add.text(game.width/2, 240, 'David Sherbinin', { font: 'Garamond', fontSize: '24px', fill: '#ffffff'}).anchor.setTo(0.5, 0);
-		game.add.text(game.width/2, 320, 'Menu BGM: "Truth in the Stones"', { font: 'Garamond', fontSize: '18px', fill: '#ffffff'}).anchor.setTo(0.5, 0);
-		game.add.text(game.width/2, 340, 'Game BGM: "Silver Flame"', { font: 'Garamond', fontSize: '18px', fill: '#ffffff'}).anchor.setTo(0.5, 0);
-		game.add.text(game.width/2, 380, 'BGM by Kevin MacLeod ', { font: 'Garamond', fontSize: '18px', fill: '#ffffff'}).anchor.setTo(0.5, 0);
-		game.add.text(game.width/2, 400, 'under Creative Commons by Attribution License 3.0 ', { font: 'Garamond', fontSize: '18px', fill: '#ffffff'}).anchor.setTo(0.5, 0);		
+		game.add.text(game.width/2, 300, 'Menu BGM: "Truth in the Stones"', { font: 'Garamond', fontSize: '18px', fill: '#ffffff'}).anchor.setTo(0.5, 0);
+		game.add.text(game.width/2, 320, 'Game BGM: "Silver Flame"', { font: 'Garamond', fontSize: '18px', fill: '#ffffff'}).anchor.setTo(0.5, 0);
+		game.add.text(game.width/2, 360, 'BGM by Kevin MacLeod ', { font: 'Garamond', fontSize: '18px', fill: '#ffffff'}).anchor.setTo(0.5, 0);
+		game.add.text(game.width/2, 380, 'under Creative Commons by Attribution License 3.0 ', { font: 'Garamond', fontSize: '18px', fill: '#ffffff'}).anchor.setTo(0.5, 0);
+		game.add.text(game.width/2, 410, 'SFX found on freesound.com', { font: 'Garamond', fontSize: '18px', fill: '#ffffff'}).anchor.setTo(0.5, 0);
 
 		game.add.button(150, 450, 'atlas', function() {game.state.start('InstructionScreen')}, this, 'ButtonReturn', 'ButtonReturn', 'ButtonReturn');
 	}
@@ -179,9 +184,11 @@ statesObject.GameLoop = {
 		p1Back = game.add.sprite(150, 525, 'atlas', 'backspace');
 		p2Back = game.add.sprite(580, 525, 'atlas', 'backspace');
 
-		phaseText = game.add.text(game.width/2, 180, 'Player 1, your turn to move.', { font: 'Garamond', fontSize: '26px', fill: '#eeeeee', stroke: '#000000', strokeThickness: 4 });
+		phaseText = game.add.text(game.width/2, 170, 'Player 1, your turn to move.', { font: 'Garamond', fontSize: '26px', fill: '#eeeeee', stroke: '#000000', strokeThickness: 4 });
 		phaseText.anchor.setTo(0.5, 0);
-		damageBarGroup = game.add.group();               
+		phaseText2 = game.add.text(game.width/2, 200, 'Click on a character or the square they\'re on.', { font: 'Garamond', fontSize: '20px', fill: '#eeeeee', stroke: '#000000', strokeThickness: 4 });
+		phaseText2.anchor.setTo(0.5, 0);
+		damageBarGroup = game.add.group();
 		gainBarGroup = game.add.group(); 
 		borderBarGroup = game.add.group();
 		new Player(p1Grid, 1);
