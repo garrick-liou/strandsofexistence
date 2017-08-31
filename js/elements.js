@@ -62,13 +62,13 @@ function doDamage(grid){
     console.log('sound name', elem.soundName );
 
     if (elem.soundName === "Fire"){
-        fire1.play('', 0, 0.75, false);
+        fire1.play('', 0, 0.3, false);
     }
     else if (elem.soundName === "Water"){
-        water1.play('', 0, 0.75, false);
+        water1.play('', 0, 0.3, false);
     }
     else{
-        earth1.play('', 0.5, 0.75, false);
+        earth1.play('', 0.5, 0.3, false);
     }
 
 
