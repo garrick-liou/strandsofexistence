@@ -130,10 +130,11 @@ statesObject.CreditsScreen = {
 		game.add.text(game.width/2, 160, 'Elias Klein', { font: 'Garamond', fontSize: '24px', fill: '#ffffff'}).anchor.setTo(0.5, 0);
 		game.add.text(game.width/2, 200, 'Head Artist/Sound Guy', { font: 'Garamond', fontSize: '32px', fill: '#ffffff'}).anchor.setTo(0.5, 0);		
 		game.add.text(game.width/2, 240, 'David Sherbinin', { font: 'Garamond', fontSize: '24px', fill: '#ffffff'}).anchor.setTo(0.5, 0);
-		game.add.text(game.width/2, 320, 'Menu BGM: "Truth in the Stones"', { font: 'Garamond', fontSize: '18px', fill: '#ffffff'}).anchor.setTo(0.5, 0);
-		game.add.text(game.width/2, 340, 'Game BGM: "Silver Flame"', { font: 'Garamond', fontSize: '18px', fill: '#ffffff'}).anchor.setTo(0.5, 0);
-		game.add.text(game.width/2, 380, 'BGM by Kevin MacLeod ', { font: 'Garamond', fontSize: '18px', fill: '#ffffff'}).anchor.setTo(0.5, 0);
-		game.add.text(game.width/2, 400, 'under Creative Commons by Attribution License 3.0 ', { font: 'Garamond', fontSize: '18px', fill: '#ffffff'}).anchor.setTo(0.5, 0);		
+		game.add.text(game.width/2, 300, 'Menu BGM: "Truth in the Stones"', { font: 'Garamond', fontSize: '18px', fill: '#ffffff'}).anchor.setTo(0.5, 0);
+		game.add.text(game.width/2, 320, 'Game BGM: "Silver Flame"', { font: 'Garamond', fontSize: '18px', fill: '#ffffff'}).anchor.setTo(0.5, 0);
+		game.add.text(game.width/2, 360, 'BGM by Kevin MacLeod ', { font: 'Garamond', fontSize: '18px', fill: '#ffffff'}).anchor.setTo(0.5, 0);
+		game.add.text(game.width/2, 380, 'under Creative Commons by Attribution License 3.0 ', { font: 'Garamond', fontSize: '18px', fill: '#ffffff'}).anchor.setTo(0.5, 0);
+		game.add.text(game.width/2, 410, 'SFX found on freesound.com', { font: 'Garamond', fontSize: '18px', fill: '#ffffff'}).anchor.setTo(0.5, 0);		
 
 		game.add.button(150, 450, 'atlas', function() {game.state.start('InstructionScreen')}, this, 'ButtonReturn', 'ButtonReturn', 'ButtonReturn');
 	}
