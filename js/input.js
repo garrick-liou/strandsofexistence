@@ -37,6 +37,7 @@ function playerClick(player){
 	if(phaseCounter == 0 || phaseCounter == 1){
 		setPhase(1);
 		selectForMove(player);
+		player.inputEnabled = false;
 	}
 }
 
