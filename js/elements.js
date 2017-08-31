@@ -71,7 +71,6 @@ function doDamage(grid){
         earth1.play('', 0.5, 0.3, false);
     }
 
-
     grid.damageG.forEachAlive(function(dTile){
         elem.burst.call(elem, grid.x + dTile.x + dTile.width/2, grid.y + dTile.y + dTile.height*0.75, dTile.width, dTile.height);
 
