@@ -54,7 +54,7 @@ var elementStruct ={
         burst:function(x, y, w, h){
             this.area = this.area || new Phaser.Rectangle(0, 0, w, 1);
             this.gravity = this.gravity || new Phaser.Point(0, 100);
-            game.time.events.add(750, doFlow, this, x, y, this.area, 2, 5, -125, -115, this.gravity, 2300, 25, 10, 100, 0x108028);
+            game.time.events.add(150, doFlow, this, x, y, this.area, 2, 5, -125, -115, this.gravity, 2400, 25, 10, 100, 0x108028);
 
         }
     }
