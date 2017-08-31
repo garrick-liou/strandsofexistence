@@ -92,19 +92,32 @@ statesObject.MainMenu =  {
 	create: function() {
 		console.log('MainMenu create');
 		menubg = game.add.sprite(0, 0, 'atlas', 'menubg');
-		menubg.alpha = 0.5;
+		menumoon = game.add.tileSprite(0, 0, 800, 600, 'atlas', 'menumoon');
+		menuclouds = game.add.tileSprite(0, 0, 800, 600, 'atlas', 'menuclouds');
+		menumountainsback = game.add.tileSprite(0, 0, 800, 600, 'atlas', 'menumountainsback');
+		menumountainsfore = game.add.tileSprite(0, 0, 800, 600, 'atlas', 'menumountainsfore');
+		menutreesback = game.add.tileSprite(0, 0, 800, 600, 'atlas', 'menutreesback');
+		menutreesfore = game.add.tileSprite(0, 0, 800, 600, 'atlas', 'menutreesfore');
 		game.add.sprite(game.width/2, 40, 'atlas', 'Strands').anchor.setTo(0.5, 0); //placeholder logo and maybe button text, who knows
 		game.add.sprite(game.width/2, 125, 'atlas', 'Of').anchor.setTo(0.5, 0);
 		game.add.sprite(game.width/2, 230, 'atlas', 'Existence').anchor.setTo(0.5, 0);
 		game.add.button(150, 350, 'atlas', function() {game.state.start('InstructionScreen')}, this, 'ButtonInst', 'ButtonInst', 'ButtonInst');
 		game.add.button(150, 475, 'atlas', function() {game.state.start('GameLoop')}, this, 'ButtonPlay', 'ButtonPlay', 'ButtonPlay');
+	}, 
+	update: function() {
+		menumoon.tilePosition.x += 0.05;
+		menuclouds.tilePosition.x += 0.1;
+		menumountainsback.tilePosition.x += 0.2;
+		menumountainsfore.tilePosition.x += 0.4;
+		menutreesback.tilePosition.x += 0.8;
+		menutreesfore.tilePosition.x += 1.5;
 	}
 }
 
 statesObject.InstructionScreen = {
 	create: function() {
-		menubg = game.add.sprite(0, 0, 'atlas', 'menubg');
-      	menubg.alpha = 0.5;
+		menubgfull = game.add.sprite(0, 0, 'atlas', 'menufullbg');
+      	menubgfull.alpha = 0.5;
 		box = game.add.sprite(0, 0, 'atlas', 'textBox');
 		box.alpha = 0.75;
 		game.add.text(game.width/2, 90, 'Click on your players to see the squares you can move to.', { font: 'Garamond', fontSize: '22px', fill: '#d6dbdf' }).anchor.setTo(0.5, 0);
