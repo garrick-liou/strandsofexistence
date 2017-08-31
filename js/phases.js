@@ -39,7 +39,6 @@ function setPhase(p){
             });
             break;
         case 1:
-            //selectedPlayer.inputEnabled = false;
             phaseText.text = 'Click on a highlighted square to move to it.';
             if(turnsPlayed < 4) {
                 phaseText2.text = 'Click elsewhere to pick a new character to move.';
