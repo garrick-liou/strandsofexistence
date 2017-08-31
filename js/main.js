@@ -77,7 +77,7 @@ statesObject.LoadScreen = {
 
 		//play music
 		function start(){
-			truthbgm.play('', 0, 0.5, true);			
+			truthbgm.play('', 0, 0.5, true);
 			game.state.start('MainMenu');
 		}
 		//after js assets are loaded, move to main menu
@@ -127,17 +127,17 @@ statesObject.InstructionScreen = {
 statesObject.CreditsScreen = {
 	create: function() {
 
-		game.add.text(game.width/2, 40, 'Head Developer', { font: 'Garamond', fontSize: '32px', fill: '#ffffff'}).anchor.setTo(0.5, 0);		
+		game.add.text(game.width/2, 40, 'Head Developer', { font: 'Garamond', fontSize: '32px', fill: '#ffffff'}).anchor.setTo(0.5, 0);
 		game.add.text(game.width/2, 80, 'Garrick Liou', { font: 'Garamond', fontSize: '24px', fill: '#ffffff'}).anchor.setTo(0.5, 0);
-		game.add.text(game.width/2, 120, 'Head Programmer', { font: 'Garamond', fontSize: '32px', fill: '#ffffff'}).anchor.setTo(0.5, 0);		
+		game.add.text(game.width/2, 120, 'Head Programmer', { font: 'Garamond', fontSize: '32px', fill: '#ffffff'}).anchor.setTo(0.5, 0);
 		game.add.text(game.width/2, 160, 'Elias Klein', { font: 'Garamond', fontSize: '24px', fill: '#ffffff'}).anchor.setTo(0.5, 0);
-		game.add.text(game.width/2, 200, 'Head Artist/Sound Guy', { font: 'Garamond', fontSize: '32px', fill: '#ffffff'}).anchor.setTo(0.5, 0);		
+		game.add.text(game.width/2, 200, 'Head Artist/Sound Guy', { font: 'Garamond', fontSize: '32px', fill: '#ffffff'}).anchor.setTo(0.5, 0);
 		game.add.text(game.width/2, 240, 'David Sherbinin', { font: 'Garamond', fontSize: '24px', fill: '#ffffff'}).anchor.setTo(0.5, 0);
 		game.add.text(game.width/2, 300, 'Menu BGM: "Truth in the Stones"', { font: 'Garamond', fontSize: '18px', fill: '#ffffff'}).anchor.setTo(0.5, 0);
 		game.add.text(game.width/2, 320, 'Game BGM: "Silver Flame"', { font: 'Garamond', fontSize: '18px', fill: '#ffffff'}).anchor.setTo(0.5, 0);
 		game.add.text(game.width/2, 360, 'BGM by Kevin MacLeod ', { font: 'Garamond', fontSize: '18px', fill: '#ffffff'}).anchor.setTo(0.5, 0);
 		game.add.text(game.width/2, 380, 'under Creative Commons by Attribution License 3.0 ', { font: 'Garamond', fontSize: '18px', fill: '#ffffff'}).anchor.setTo(0.5, 0);
-		game.add.text(game.width/2, 410, 'SFX found on freesound.com', { font: 'Garamond', fontSize: '18px', fill: '#ffffff'}).anchor.setTo(0.5, 0);		
+		game.add.text(game.width/2, 410, 'SFX found on freesound.com', { font: 'Garamond', fontSize: '18px', fill: '#ffffff'}).anchor.setTo(0.5, 0);
 
 		game.add.button(150, 450, 'atlas', function() {game.state.start('InstructionScreen')}, this, 'ButtonReturn', 'ButtonReturn', 'ButtonReturn');
 	}
@@ -178,7 +178,7 @@ statesObject.GameLoop = {
 		phaseText.anchor.setTo(0.5, 0);
 		phaseText2 = game.add.text(game.width/2, 200, 'Click on a character or the square they\'re on.', { font: 'Garamond', fontSize: '20px', fill: '#eeeeee', stroke: '#000000', strokeThickness: 4 });
 		phaseText2.anchor.setTo(0.5, 0);
-		damageBarGroup = game.add.group();               
+		damageBarGroup = game.add.group();
 		gainBarGroup = game.add.group(); 
 		borderBarGroup = game.add.group();
 		new Player(p1Grid, 1);

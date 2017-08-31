@@ -30,7 +30,7 @@ function setPhase(p){
             if(turnsPlayed < 2) {
                 phaseText2.text = 'Click on a character or the square they\'re on.';
             } else {
-                phaseText2 = '';
+                phaseText2.text = '';
             }
 
             g.players.forEachAlive(function(p){
@@ -43,7 +43,7 @@ function setPhase(p){
             if(turnsPlayed < 4) {
                 phaseText2.text = 'Click elsewhere to pick a new character to move.';
             } else {
-                phaseText2 = '';
+                phaseText2.text = '';
             }
             if(turnCounter == 0) {
                 p1Back.alpha = 1;
@@ -60,13 +60,13 @@ function setPhase(p){
             if(turnsPlayed < 4) {
                 phaseText2.text = 'Each character\'s attack is different, and based on where they\'re standing.';
             } else {
-                phaseText2 = '';
+                phaseText2.text = '';
             }
             selectedPlayer.emitterState(1);
             if(turnCounter == 0) {
                 p1Enter.alpha = 1;
                 p1Back.alpha = 1;
-                p1Enter.inputEnabled = true;              
+                p1Enter.inputEnabled = true;
             }else if(turnCounter == 1) {
                 p2Enter.alpha = 1;
                 p2Back.alpha = 1;
