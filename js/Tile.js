@@ -72,20 +72,20 @@ Grid.prototype.findDeaths = function(){
                 p.lifeGainEmitter = game.add.emitter(p.x + p.width/2, p.y + p.height*0.9, 100)
                 p.grid.add(p.lifeGainEmitter);
                 p.lifeGainEmitter.makeParticles('atlas', 'particle');
+                p.lifeGainEmitter.forEach(function(particle){
+                    particle.tint = 0x1ACF30;
+                });
 
                 p.lifeGainEmitter.area = new Phaser.Rectangle(p.x, p.y, p.square.tile.width/3, 1);
                 p.lifeGainEmitter.gravity = new Phaser.Point(0, 50);
                 p.lifeGainEmitter.setXSpeed(0,0);
-                p.lifeGainEmitter.setYSpeed(-200,-150);     
+                p.lifeGainEmitter.setYSpeed(-200,-150);
             } else {
                 p.lifeGainEmitter.x = p.x + p.width/2;
                 p.lifeGainEmitter.y = p.y + p.height * 0.9;
             }
             
-            p.lifeGainEmitter.flow(400, 100, 3, 15);
-            p.lifeGainEmitter.forEach(function(particle){
-                particle.tint = 0x15AD27;
-            });
+            game.time.events.add(250, function(){p.lifeGainEmitter.flow(400, 100, 3, 20);});
             
             p.alterHealth(10*numDeaths, 0);
         });
