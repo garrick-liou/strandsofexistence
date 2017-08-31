@@ -58,6 +58,7 @@ var elementStruct ={
 
 function doDamage(grid){
     let elem = elementStruct[selectedPlayer.element];
+
     //play sound using ~~elem.soundName~~ elem.sound
     elem.sound.play('', 0, 0.3, false);
 
