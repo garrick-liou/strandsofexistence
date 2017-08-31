@@ -69,10 +69,12 @@ function confirmPressed() {
 	if(turnCounter == 0) {
 		//if it was player 1's turn, make it player 2's turn, and calculate the damage that was done to player 2
 		turnCounter = 1;
+		turnsPlayed += 1;
 		doDamage(p2Grid);
 	}else if(turnCounter == 1){
 		//vice versa
 		turnCounter = 0;
+		turnsPlayed += 1;
 		doDamage(p1Grid);
 	}
 
