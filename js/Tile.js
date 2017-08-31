@@ -65,7 +65,7 @@ Grid.prototype.findDeaths = function(){
         }
     });
     if(numDeaths > 0) {
-        bell1.play('', 0.4, 0.3, false);
+        bell1.play('', 0.65, 0.3, false);
         this.players.forEachAlive(function(p){
             //add up to 10 hp for each allied player that died
             if(!p.lifeGainEmitter) {

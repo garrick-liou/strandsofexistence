@@ -65,6 +65,7 @@ statesObject.LoadScreen = {
 		game.load.audio('fire1', 'audio/matches.wav');
 		game.load.audio('water1', 'audio/water.wav');
 		game.load.audio('earth1', 'audio/earth1.wav');
+		game.load.audio('bell', 'audio/bell-05.wav');
 		game.load.audio('Silverbgm', 'audio/Silver Flame.mp3');
 		game.load.audio('Truthbgm', 'audio/Truth in the Stones.mp3');
 	},
@@ -79,8 +80,8 @@ statesObject.LoadScreen = {
 
 		//play music	
 		function start(){	
-      		truthbgm.play('', 0, 0.75, true);
-		    game.state.start('MainMenu');
+		   game.state.start('MainMenu');
+
 		}
 		
 		//after js assets are loaded, move to main menu
@@ -92,35 +93,23 @@ statesObject.LoadScreen = {
 var flag = 0;
 
 statesObject.MainMenu =  {
-	create: function() {
-
-		console.log('MainMenu create');
-		menubg = game.add.sprite(0, 0, 'atlas', 'menubg');
-		menumoon = game.add.tileSprite(0, 0, 800, 600, 'atlas', 'menumoon');
-		menuclouds = game.add.tileSprite(0, 0, 800, 600, 'atlas', 'menuclouds');
-		menumountainsback = game.add.tileSprite(0, 0, 800, 600, 'atlas', 'menumountainsback');
-		menumountainsfore = game.add.tileSprite(0, 0, 800, 600, 'atlas', 'menumountainsfore');
-		menutreesback = game.add.tileSprite(0, 0, 800, 600, 'atlas', 'menutreesback');
-		menutreesfore = game.add.tileSprite(0, 0, 800, 600, 'atlas', 'menutreesfore');
-		game.add.sprite(game.width/2, 40, 'atlas', 'Strands').anchor.setTo(0.5, 0); //placeholder logo and maybe button text, who knows
-		game.add.sprite(game.width/2, 125, 'atlas', 'Of').anchor.setTo(0.5, 0);
-		game.add.sprite(game.width/2, 230, 'atlas', 'Existence').anchor.setTo(0.5, 0);
-		game.add.button(150, 350, 'atlas', function() {game.state.start('InstructionScreen')}, this, 'ButtonInst', 'ButtonInst', 'ButtonInst');
-		game.add.button(150, 475, 'atlas', function() {game.state.start('GameLoop')}, this, 'ButtonPlay', 'ButtonPlay', 'ButtonPlay');
-	}, 
-	update: function() {
-		menumoon.tilePosition.x += 0.02;
-		menuclouds.tilePosition.x += 0.04;
-		menumountainsback.tilePosition.x += 0.1;
-		menumountainsfore.tilePosition.x += 0.2;
-		menutreesback.tilePosition.x += 0.5;
-		menutreesfore.tilePosition.x += 1.0;
-	}
+   create: function() {
+      truthbgm.play('', 0, 0.75, true);
+      console.log('MainMenu create');
+      menubg = game.add.sprite(0, 0, 'atlas', 'menubg');
+      menubg.alpha = 0.5;
+      game.add.sprite(game.width/2, 40, 'atlas', 'Strands').anchor.setTo(0.5, 0); //placeholder logo and maybe button text, who knows
+      game.add.sprite(game.width/2, 125, 'atlas', 'Of').anchor.setTo(0.5, 0);
+      game.add.sprite(game.width/2, 230, 'atlas', 'Existence').anchor.setTo(0.5, 0);
+      game.add.button(150, 350, 'atlas', function() {game.state.start('InstructionScreen')}, this, 'ButtonInst', 'ButtonInst', 'ButtonInst');
+      game.add.button(150, 475, 'atlas', function() {game.state.start('GameLoop')}, this, 'ButtonPlay', 'ButtonPlay', 'ButtonPlay');
+   }
 }
+
 statesObject.InstructionScreen = {
 	create: function() {
-		menubgfull = game.add.sprite(0, 0, 'atlas', 'menufullbg');
-      	menubgfull.alpha = 0.5;
+		menubg = game.add.sprite(0, 0, 'atlas', 'menubg');
+      	menubg.alpha = 0.5;
 		box = game.add.sprite(0, 0, 'atlas', 'textBox');
 		box.alpha = 0.75;
 		game.add.text(game.width/2, 90, 'Click on your players to see the squares you can move to.', { font: 'Garamond', fontSize: '22px', fill: '#d6dbdf' }).anchor.setTo(0.5, 0);
@@ -151,10 +140,9 @@ statesObject.CreditsScreen = {
 		game.add.text(game.width/2, 240, 'David Sherbinin', { font: 'Garamond', fontSize: '24px', fill: '#ffffff'}).anchor.setTo(0.5, 0);
 		game.add.text(game.width/2, 300, 'Menu BGM: "Truth in the Stones"', { font: 'Garamond', fontSize: '18px', fill: '#ffffff'}).anchor.setTo(0.5, 0);
 		game.add.text(game.width/2, 320, 'Game BGM: "Silver Flame"', { font: 'Garamond', fontSize: '18px', fill: '#ffffff'}).anchor.setTo(0.5, 0);
-		game.add.text(game.width/2, 355, 'BGM by Kevin MacLeod ', { font: 'Garamond', fontSize: '18px', fill: '#ffffff'}).anchor.setTo(0.5, 0);
-		game.add.text(game.width/2, 370, 'under Creative Commons by Attribution License 3.0 ', { font: 'Garamond', fontSize: '18px', fill: '#ffffff'}).anchor.setTo(0.5, 0);
-		game.add.text(game.width/2, 400, 'SFX found on freesound.com', { font: 'Garamond', fontSize: '18px', fill: '#ffffff'}).anchor.setTo(0.5, 0);
-		game.add.text(game.width/2, 420, 'Background art found on opengameart.org', { font: 'Garamond', fontSize: '18px', fill: '#ffffff'}).anchor.setTo(0.5, 0);
+		game.add.text(game.width/2, 360, 'BGM by Kevin MacLeod ', { font: 'Garamond', fontSize: '18px', fill: '#ffffff'}).anchor.setTo(0.5, 0);
+		game.add.text(game.width/2, 380, 'under Creative Commons by Attribution License 3.0 ', { font: 'Garamond', fontSize: '18px', fill: '#ffffff'}).anchor.setTo(0.5, 0);
+		game.add.text(game.width/2, 410, 'SFX found on freesound.com', { font: 'Garamond', fontSize: '18px', fill: '#ffffff'}).anchor.setTo(0.5, 0);
 
 		game.add.button(150, 450, 'atlas', function() {game.state.start('InstructionScreen')}, this, 'ButtonReturn', 'ButtonReturn', 'ButtonReturn');
 	}
@@ -163,9 +151,10 @@ statesObject.GameLoop = {
 	create: function (){
 		console.log('GameLoop create');
 
-		fire1 = game.add.audio('fire1');
-        water1 = game.add.audio('water1');
-        earth1 = game.add.audio('earth1');
+		elementStruct.flame.sound = game.add.audio('fire1');
+		elementStruct.water.sound = game.add.audio('water1');
+		elementStruct.plant.sound = game.add.audio('earth1');
+        bell1 = game.add.audio('bell');
 
 
 		turnCounter = 0;
@@ -259,8 +248,7 @@ statesObject.GameOver = {
 		}
 	},
 	update: function(){ //return to start
-		if(game.input.keyboard.justPressed(Phaser.Keyboard.ENTER)){ //press enter to restart			
-      		truthbgm.play('', 0, 0.75, true);
+		if(game.input.keyboard.justPressed(Phaser.Keyboard.ENTER)){ //press enter to restart
 			game.state.start('MainMenu');
 		}
 	}
