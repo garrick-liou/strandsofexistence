@@ -53,7 +53,6 @@ function loadSources(callback){
 var statesObject = {};
 
 statesObject.LoadScreen = {
-<<<<<<< HEAD
 	preload: function() {
 		console.log('LoadScreen preload');
 		game.load.path = 'assets/';
@@ -67,8 +66,8 @@ statesObject.LoadScreen = {
 		game.load.audio('water1', ['audio/water.mp3', 'audio/water.ogg', 'audio/water.wav']);
 		game.load.audio('earth1', ['audio/earth1.mp3', 'audio/earth1.ogg', 'audio/earth1.wav']);
 		game.load.audio('bell', ['audio/bell-05.mp3', 'audio/bell-05.ogg', 'audio/bell-05.wav']);
-		game.load.audio('Silverbgm', 'audio/Silver Flame.mp3');
-		game.load.audio('Truthbgm', 'audio/Truth in the Stones.mp3');
+		game.load.audio('Silverbgm', ['audio/Silver Flame.mp3', 'audio/Silver Flame.ogg']);
+		game.load.audio('Truthbgm', ['audio/Truth in the Stones.mp3', 'audio/Truth in the Stones.ogg']);
 	},
 	create: function() {	
 		logoimage = game.add.sprite(game.width/2, game.height/2, 'atlas', 'logoIMG');	
@@ -89,36 +88,6 @@ statesObject.LoadScreen = {
 		loadSources(function(){
 		});
 	}
-=======
-   preload: function() {
-      console.log('LoadScreen preload');      
-      game.load.path = 'assets/';
-      game.load.atlas('atlas', 'img/atlas2.png', 'img/atlas2.json');
-      // creates the cursors object that allows the program to read keyboard input
-      cursors = game.input.keyboard.createCursorKeys();
-      // this starts the physics used in the game
-      game.physics.startSystem(Phaser.Physics.ARCADE);     
-      //load audio
-      game.load.audio('fire', 'audio/fire-spell-01.wav');
-      game.load.audio('Silverbgm', 'audio/Silver Flame.mp3');
-      game.load.audio('Truthbgm', 'audio/Truth in the Stones.mp3'); 
-   },
-   create: function() {
-      console.log('LoadScreen create');
-
-   //play menu music
-      truthbgm = game.add.audio('Truthbgm');
-      truthbgm.onDecoded.add(start, this);
-
-      //play music
-      function start(){    	      
-          truthbgm.play('', 0, 0.5, true);
-      }
-
-	  //after js assets are loaded, move to main menu
-	  loadSources(function(){game.state.start('MainMenu');});
-   }
->>>>>>> 6ffdead58a413e0579e4a18dcf4b581d583686c6
 }
 //make sure song plays only once
 var flag = 0;
@@ -127,7 +96,6 @@ var flag = 0;
 var flag = 0;
 
 statesObject.MainMenu =  {
-<<<<<<< HEAD
    	create: function() {
       	console.log('MainMenu create');
 		menubg = game.add.sprite(0, 0, 'atlas', 'menubg');
@@ -151,18 +119,6 @@ statesObject.MainMenu =  {
 		menutreesback.tilePosition.x += 0.5;
 		menutreesfore.tilePosition.x += 1.0;
 	}
-=======
-   create: function() {
-      console.log('MainMenu create');
-      game.add.sprite(game.width/2, 40, 'atlas', 'Strands').anchor.setTo(0.5, 0); //placeholder logo and maybe button text, who knows
-      game.add.sprite(game.width/2, 125, 'atlas', 'Of').anchor.setTo(0.5, 0);
-      game.add.sprite(game.width/2, 230, 'atlas', 'Existence').anchor.setTo(0.5, 0);
-      game.add.button(150, 350, 'atlas', function() {game.state.start('InstructionScreen')}, this, 'ButtonInst', 'ButtonInst', 'ButtonInst');
-      game.add.button(150, 475, 'atlas', function() {game.state.start('GameLoop')}, this, 'ButtonPlay', 'ButtonPlay', 'ButtonPlay');
-
-
-   }
->>>>>>> 6ffdead58a413e0579e4a18dcf4b581d583686c6
 }
 
 statesObject.InstructionScreen = {
@@ -264,7 +220,7 @@ statesObject.GameLoop = {
 		background.inputEnabled = true;
 	},
 	update: function(){
-<<<<<<< HEAD
+
 		//fadout menu music
         truthbgm.fadeOut(700);
 		
@@ -275,22 +231,6 @@ statesObject.GameLoop = {
 			silverbgm.play('', 0, 0.75, true);
 			flag = flag + 1;
 		}
-=======
-
-        //fadout menu music
-        truthbgm.fadeOut(700);
- 
-        //play game music
-        if (flag == 0){
-            console.log('GameLoop flag in'); 
-            silverbgm = game.add.audio('Silverbgm');
-            silverbgm.play('', 0, 0.75, true);
-            flag = flag + 1;
-        }
-
-		//text.text = 'phase: ' + phaseCounter + ' turn: ' + turnCounter
-
->>>>>>> 6ffdead58a413e0579e4a18dcf4b581d583686c6
 		p1Grid.players.forEach(function(p){
 			p.bar.update();
 		});

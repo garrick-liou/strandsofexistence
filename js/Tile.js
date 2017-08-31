@@ -122,7 +122,7 @@ Tile.prototype.constructor = Tile;
 
 
 function Button(parent){
-    Phaser.Button.call(this, game, parent.x, parent.y, 'atlas', function(){buttonClick(parent)}, parent, 'ButtonNorm', 'ButtonHover', 'ButtonHover');
+    Phaser.Button.call(this, game, parent.x, parent.y, 'atlas', function(){buttonClick(parent)}, parent, 'ButtonHover', 'ButtonNorm', 'ButtonHover');
     game.add.existing(this);
     parent.parent.buttonG.add(this);
     this.kill();

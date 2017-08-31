@@ -21,7 +21,7 @@ function Player(grid, pNum){
       this.scale.x = 0.5 + this.square.tile.scale.x/2;
       this.scale.y = 0.5 + this.square.tile.scale.y/2;
       this.x = this.square.x + this.square.tile.width*3/8;
-      this.y = this.square.y - this.square.tile.height/6;
+      this.y = this.square.y - this.square.tile.height/3;
       
       game.physics.enable(this);
       game.add.existing(this);
